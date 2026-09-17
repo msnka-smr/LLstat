@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "idLobby": 11822304,
+    "firstSeenAt": 1789641037221
+  },
+  {
+    "idLobby": 11824873,
+    "firstSeenAt": 1789641039710
+  },
+  {
+    "idLobby": 11826620,
+    "firstSeenAt": 1789641042241
+  },
+  {
+    "idLobby": 11829543,
+    "firstSeenAt": 1789641044751
+  }
+]

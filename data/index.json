@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "idLobby": 11817269,
+    "map": "de_dust2",
+    "playedAt": 1789574282,
+    "statsTier": "full",
+    "status": "finished"
+  },
+  {
+    "idLobby": 11818759,
+    "map": "de_mirage",
+    "playedAt": 1789576409,
+    "statsTier": "full",
+    "status": "finished"
+  },
+  {
+    "idLobby": 11820488,
+    "map": "de_inferno",
+    "playedAt": 1789578381,
+    "statsTier": "full",
+    "status": "finished"
+  }
+]
