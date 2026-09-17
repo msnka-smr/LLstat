@@ -1,0 +1,128 @@
+// Превращает сырой ответ lobbys/info в один или несколько объектов «нормализованная карта».
+// full-tier берётся из match_more_stats.maps[N].stats (для BO-серий — по одному на карту).
+// basic-tier — из match_stats.base + data.players[].match_stats.live, ровно один mapIndex=1.
+export function normalizeLobby(raw) {
+  const data = raw?.data;
+  if (!data) return [];
+
+  const playedAtFallback =
+    data.dates?.unixtime_match_end ?? data.dates?.unixtime_start_match ?? null;
+
+  const mmsStats = data.match_more_stats?.stats;
+  const mmsMaps = data.match_more_stats?.maps;
+
+  if (mmsStats?.status === "finished" && mmsMaps) {
+    return Object.entries(mmsMaps)
+      .map(([mapIndexStr, mapEntry]) =>
+        normalizeFullMap({
+          lobbyId: data.id_lobby,
+          mapIndex: Number(mapIndexStr),
+          stats: mapEntry.stats,
+          playedAtFallback,
+        })
+      )
+      .filter(Boolean);
+  }
+
+  return [normalizeBasicMap({ lobbyId: data.id_lobby, data, playedAtFallback })];
+}
+
+function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback }) {
+  if (!stats) return null;
+  const teams = ["team1", "team2"].map((key) => ({
+    key,
+    name: stats[key]?.name ?? null,
+    score: stats[key]?.score ?? null,
+    isWinner: !!stats[key]?.isWinner,
+  }));
+
+  const players = [];
+  for (const teamKey of ["team1", "team2"]) {
+    const teamIsWinner = !!stats[teamKey]?.isWinner;
+    for (const p of stats[teamKey]?.players ?? []) {
+      const rounds = p.roundsPlayed || stats.totalRounds || 0;
+      players.push({
+        steamid64: String(p.steamid64),
+        name: p.name,
+        team: teamKey,
+        won: teamIsWinner,
+        rounds,
+        k: p.kills ?? 0,
+        d: p.deaths ?? 0,
+        a: p.assists ?? 0,
+        adr: p.adr ?? 0,
+        kast: p.kast ?? 0,
+        hsKills: p.hsKills ?? 0,
+        fk: p.entries?.fk ?? 0,
+        fd: p.entries?.fd ?? 0,
+        mvp: p.mvp ?? 0,
+        multikills: p.multikills ?? { k1: 0, k2: 0, k3: 0, k4: 0, k5: 0 },
+        clutchesWon: p.clutchTotals?.won ?? 0,
+        clutchSituations: p.clutchTotals?.situations ?? 0,
+      });
+    }
+  }
+
+  return {
+    mapId: `${lobbyId}:${mapIndex}`,
+    lobbyId,
+    mapIndex,
+    map: stats.map ?? null,
+    playedAt: playedAtFallback,
+    totalRounds: stats.totalRounds ?? null,
+    durationSec: stats.durationSec ?? null,
+    teams,
+    players,
+    statsTier: "full",
+  };
+}
+
+function normalizeBasicMap({ lobbyId, data, playedAtFallback }) {
+  const base = data.match_stats?.base ?? {};
+  const winnerSlot = base.team_winner ?? null;
+  const teamKeys = Object.keys(base).filter((k) => k.startsWith("team_") && k !== "team_winner");
+  const totalRounds = teamKeys.reduce((sum, k) => sum + (base[k]?.score ?? 0), 0) || null;
+
+  const players = Object.values(data.players ?? {}).map((p) => {
+    const live = p.match_stats?.live ?? {};
+    const slot = p.id_slot;
+    const team = teamKeys.includes(`team_${slot}`) ? `team_${slot}` : null;
+    return {
+      steamid64: String(p.steamid64),
+      name: p.name,
+      team,
+      won: team != null && winnerSlot != null ? slot === winnerSlot : null,
+      rounds: null,
+      k: live.kills ?? 0,
+      d: live.deaths ?? 0,
+      a: live.assists ?? 0,
+      adr: null,
+      kast: null,
+      hsKills: live.headshots ?? 0,
+      fk: null,
+      fd: null,
+      mvp: null,
+      multikills: null,
+      clutchesWon: null,
+      clutchSituations: null,
+    };
+  });
+
+  return {
+    mapId: `${lobbyId}:1`,
+    lobbyId,
+    mapIndex: 1,
+    map: data.match_settings?.map_name ?? null,
+    playedAt: playedAtFallback,
+    totalRounds,
+    durationSec: null,
+    teams: teamKeys.map((k) => ({
+      key: k,
+      name: null,
+      score: base[k]?.score ?? null,
+      isWinner: k === `team_${winnerSlot}`,
+    })),
+    players,
+    statsTier: "basic",
+  };
+}

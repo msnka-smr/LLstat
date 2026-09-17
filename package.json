@@ -7,6 +7,8 @@
   },
   "scripts": {
     "collect": "node scripts/collect.mjs",
-    "add": "node scripts/collect.mjs --add"
+    "add": "node scripts/collect.mjs --add",
+    "build": "node scripts/build.mjs",
+    "test": "node --test"
   }
 }

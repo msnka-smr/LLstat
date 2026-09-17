@@ -8,6 +8,7 @@
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { extractLobbyId } from "./lib/parse-ids.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MATCHES_DIR = path.join(ROOT, "data", "matches");
@@ -93,12 +94,6 @@ async function apiPost(pathName, body, cookie) {
     return json;
   }
   throw new Error(`${pathName}: превышено число попыток из-за 429/503`);
-}
-
-function extractLobbyId(token) {
-  const found = token.match(/\d{7,}/g);
-  if (!found) return null;
-  return Number(found[found.length - 1]);
 }
 
 function stripHeavy(raw) {
