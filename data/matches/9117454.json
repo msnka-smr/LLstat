@@ -75,14 +75,10 @@
       }
     },
     "match_more_stats": {
-      "replay": null,
       "stats": null,
-      "highlights": null,
       "maps": {
         "1": {
-          "replay": null,
           "stats": null,
-          "highlights": null,
           "id_match": 9393760
         }
       }

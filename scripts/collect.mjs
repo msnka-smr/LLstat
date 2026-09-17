@@ -102,11 +102,16 @@ function extractLobbyId(token) {
 }
 
 function stripHeavy(raw) {
-  if (raw?.data?.match_more_stats?.replay) delete raw.data.match_more_stats.replay;
-  const maps = raw?.data?.match_more_stats?.maps;
+  const mms = raw?.data?.match_more_stats;
+  if (mms) {
+    delete mms.replay;
+    delete mms.highlights;
+  }
+  const maps = mms?.maps;
   if (maps) {
     for (const key of Object.keys(maps)) {
-      if (maps[key]?.replay) delete maps[key].replay;
+      delete maps[key]?.replay;
+      delete maps[key]?.highlights;
     }
   }
   return raw;
