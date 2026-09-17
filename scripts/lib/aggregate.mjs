@@ -13,6 +13,7 @@ export function aggregatePlayerMaps(mapsForPlayer) {
   let hsKills = 0;
   let fk = 0;
   let fd = 0;
+  let openingAttempts = 0;
   let mvp = 0;
   let mk3plus = 0;
   let clutchesWon = 0;
@@ -49,6 +50,7 @@ export function aggregatePlayerMaps(mapsForPlayer) {
       adrRoundsSum += m.adr * rounds;
       fk += m.fk ?? 0;
       fd += m.fd ?? 0;
+      openingAttempts += m.openingAttempts ?? 0;
       mvp += m.mvp ?? 0;
       clutchesWon += m.clutchesWon ?? 0;
       clutchSituations += m.clutchSituations ?? 0;
@@ -61,6 +63,7 @@ export function aggregatePlayerMaps(mapsForPlayer) {
   const losses = mapsPlayed - wins;
   const kd = d > 0 ? k / d : k;
   const hsPercent = k > 0 ? (hsKills / k) * 100 : null;
+  const openingSuccessRate = openingAttempts > 0 ? (fk / openingAttempts) * 100 : null;
 
   let kpr = null;
   let dpr = null;
@@ -89,6 +92,8 @@ export function aggregatePlayerMaps(mapsForPlayer) {
     hsPercent,
     fk,
     fd,
+    openingAttempts,
+    openingSuccessRate,
     mvp,
     mk3plus,
     clutchesWon,

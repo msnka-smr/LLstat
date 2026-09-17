@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CS2 Stata</title>
+<style>
+  :root {
+    --bg: #14161c;
+    --bg-panel: #1b1e26;
+    --bg-row: #1b1e26;
+    --bg-row-alt: #20232c;
+    --bg-row-hover: #262a35;
+    --border: #2c303b;
+    --text: #e6e8ef;
+    --text-dim: #9096a6;
+    --text-faint: #5b6172;
+    --accent: #6ea8ff;
+    --green: #3ecf6e;
+    --green-bg: rgba(62, 207, 110, 0.14);
+    --yellow: #e0c34c;
+    --yellow-bg: rgba(224, 195, 76, 0.12);
+    --red: #e0625c;
+    --red-bg: rgba(224, 98, 92, 0.14);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 14px;
+    padding: 16px;
+    padding-bottom: 48px;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  h1 {
+    font-size: 18px;
+    margin: 0 0 4px;
+  }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-panel);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 13px;
+    user-select: none;
+  }
+
+  .tab.active {
+    background: var(--accent);
+    color: #0c1420;
+    font-weight: 600;
+  }
+
+  .spacer { flex: 1; }
+
+  .columns-menu-wrap { position: relative; }
+
+  .btn {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .btn:hover { background: var(--bg-row-hover); }
+
+  .columns-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    z-index: 20;
+    width: 260px;
+    max-height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  .columns-panel[hidden] { display: none; }
+  .columns-group { margin-bottom: 10px; }
+  .columns-group h4 {
+    margin: 0 0 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-faint);
+  }
+  .columns-panel label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .banner {
+    background: var(--yellow-bg);
+    border: 1px solid var(--yellow);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .session-header {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .session-header .session-id {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .session-maps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-top: 8px;
+  }
+  .session-maps a { color: var(--text-dim); }
+  .session-maps a:hover { color: var(--accent); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-panel);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  thead th {
+    text-align: right;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-faint);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+  thead th:first-child { text-align: left; }
+  thead th.sorted { color: var(--accent); }
+
+  tbody td {
+    padding: 8px 10px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td:first-child { text-align: left; }
+
+  tbody tr.player-row { cursor: pointer; }
+  tbody tr.player-row:hover { background: var(--bg-row-hover); }
+  tbody tr.unqualified { color: var(--text-faint); }
+  tbody tr.unqualified .player-name { color: var(--text-dim); }
+
+  .player-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .rating-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-variant-numeric: tabular-nums;
+  }
+  .rating-strong { background: var(--green-bg); color: var(--green); }
+  .rating-mid { background: var(--yellow-bg); color: var(--yellow); }
+  .rating-weak { background: var(--red-bg); color: var(--red); }
+  .rating-na { color: var(--text-faint); }
+
+  .maps-cell small { color: var(--text-faint); font-weight: 400; }
+
+  .qual-divider td {
+    padding: 4px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: 11px;
+    background: var(--bg);
+  }
+
+  tr.detail-row td {
+    background: var(--bg);
+    padding: 12px 16px 18px;
+    cursor: default;
+  }
+  tr.detail-row[hidden] { display: none; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px 18px;
+    margin-bottom: 14px;
+  }
+  .detail-metric .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    letter-spacing: 0.03em;
+  }
+  .detail-metric .value {
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .detail-maps-table {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+  }
+  .detail-maps-table th, .detail-maps-table td {
+    padding: 4px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-maps-table th:first-child, .detail-maps-table td:first-child { text-align: left; }
+
+  .delta-pos { color: var(--green); }
+  .delta-neg { color: var(--red); }
+
+  footer {
+    margin-top: 16px;
+    color: var(--text-faint);
+    font-size: 12px;
+  }
+
+  /* На телефоне таблица сворачивается до Игрок / Рейтинг / K-D-A —
+     остальное доступно по раскрытию строки. */
+  .mobile-kda-col { display: none; }
+  @media (max-width: 640px) {
+    .opt-col, .req-collapse { display: none; }
+    .mobile-kda-col { display: table-cell; }
+    body { padding-left: 8px; padding-right: 8px; }
+    table { font-size: 13px; }
+    thead th, tbody td { padding: 8px 6px; }
+  }
+
+  .col-toggle-hidden { display: none; }
+</style>
+</head>
+<body>
+  <h1>CS2 Stata</h1>
+  <div class="subtitle" id="subtitle">Загрузка…</div>
+
+  <div id="qualBanner"></div>
+
+  <div class="toolbar">
+    <div class="tabs">
+      <div class="tab active" data-tab="allTime">За всё время</div>
+      <div class="tab" data-tab="lastSession">Последняя сессия</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="columns-menu-wrap">
+      <button class="btn" id="columnsBtn">Колонки ▾</button>
+      <div class="columns-panel" id="columnsPanel" hidden></div>
+    </div>
+  </div>
+
+  <div id="sessionHeader"></div>
+  <div id="tableWrap"></div>
+
+  <footer id="footer"></footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var COLUMN_GROUPS = [
+    {
+      id: "damage", label: "Урон", columns: [
+        { id: "adr", label: "ADR", fmt: fmt1, sessionOk: true },
+        { id: "hsPercent", label: "HS%", fmt: fmtPct0, sessionOk: true },
+      ],
+    },
+    {
+      id: "stability", label: "Стабильность", columns: [
+        { id: "kast", label: "KAST", fmt: fmtPct0, sessionOk: true },
+        { id: "kpr", label: "KPR", fmt: fmt2, sessionOk: true },
+        { id: "dpr", label: "DPR", fmt: fmt2, sessionOk: true },
+      ],
+    },
+    {
+      id: "entries", label: "Размены", columns: [
+        { id: "fk", label: "FK", fmt: fmtInt, sessionOk: true },
+        { id: "fd", label: "FD", fmt: fmtInt, sessionOk: true },
+        { id: "openingSuccessRate", label: "Опенинги", fmt: fmtPct0, sessionOk: true },
+      ],
+    },
+    {
+      id: "impact", label: "Импакт", columns: [
+        { id: "mk3plus", label: "3K+", fmt: fmtInt, sessionOk: true },
+        { id: "clutches", label: "Клатчи", fmt: fmtClutches, sessionOk: true },
+        { id: "mvp", label: "MVP", fmt: fmtInt, sessionOk: true },
+      ],
+    },
+    {
+      id: "session", label: "Сессия", columns: [
+        { id: "ratingDelta", label: "Δ рейтинг", fmt: fmtDelta, sessionOnly: true },
+      ],
+    },
+  ];
+  var ALL_OPTIONAL_COLUMNS = COLUMN_GROUPS.flatMap(function (g) { return g.columns; });
+  var DEFAULT_VISIBLE = ["adr", "kast"];
+
+  var REQUIRED_COLUMNS = [
+    { id: "name", label: "Игрок" },
+    { id: "mapsPlayed", label: "Карт", collapseMobile: true },
+    { id: "k", label: "K", collapseMobile: true },
+    { id: "d", label: "D", collapseMobile: true },
+    { id: "a", label: "A", collapseMobile: true },
+    { id: "kd", label: "K/D", fmt: fmt2, collapseMobile: true },
+    { id: "winRate", label: "WR", fmt: fmtWr, collapseMobile: true },
+    { id: "rating", label: "Рейтинг", fmt: fmtRating },
+  ];
+  // На телефоне К/D/A/K-D/WR/Карт схлопываются в одну колонку "K-D-A" —
+  // остальное доступно по раскрытию строки (см. .mobile-kda-col в CSS).
+
+  function fmt1(v) { return v == null ? "—" : v.toFixed(1); }
+  function fmt2(v) { return v == null ? "—" : v.toFixed(2); }
+  function fmtInt(v) { return v == null ? "—" : String(v); }
+  function fmtPct0(v) { return v == null ? "—" : Math.round(v) + "%"; }
+  function fmtWr(v, row) {
+    if (v == null) return "—";
+    return Math.round(v * 100) + "%";
+  }
+  function fmtRating(v) { return v == null ? "—" : v.toFixed(2); }
+  function fmtClutches(v, row) {
+    return (row.clutchesWon ?? "—") + " / " + (row.clutchSituations ?? "—");
+  }
+  function fmtDelta(v) {
+    if (v == null) return "—";
+    var s = (v >= 0 ? "+" : "") + v.toFixed(2);
+    return s;
+  }
+
+  var state = {
+    data: null,
+    tab: "allTime",
+    sortColumn: "rating",
+    sortDirection: "desc",
+    visibleColumns: loadVisibleColumns(),
+    expanded: null,
+  };
+
+  function loadVisibleColumns() {
+    var fromUrl = new URLSearchParams(location.search).get("cols");
+    if (fromUrl) return fromUrl.split(",").filter(Boolean);
+    try {
+      var raw = localStorage.getItem("cs2stata.columns");
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* хранилище недоступно — используем набор по умолчанию */ }
+    return DEFAULT_VISIBLE.slice();
+  }
+
+  function saveVisibleColumns() {
+    try {
+      localStorage.setItem("cs2stata.columns", JSON.stringify(state.visibleColumns));
+    } catch (e) { /* недоступно — просто не сохраняем между визитами */ }
+    var params = new URLSearchParams(location.search);
+    params.set("cols", state.visibleColumns.join(","));
+    history.replaceState(null, "", location.pathname + "?" + params.toString());
+  }
+
+  fetch("data/stats.json")
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      state.data = data;
+      render();
+    })
+    .catch(function (err) {
+      document.getElementById("subtitle").textContent = "Не удалось загрузить data/stats.json: " + err.message;
+    });
+
+  var tabEls = document.querySelectorAll(".tab");
+  tabEls.forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      state.tab = tab.dataset.tab;
+      state.expanded = null;
+      tabEls.forEach(function (t) { t.classList.toggle("active", t === tab); });
+      render();
+    });
+  });
+
+  var columnsBtn = document.getElementById("columnsBtn");
+  var columnsPanel = document.getElementById("columnsPanel");
+  columnsBtn.addEventListener("click", function () {
+    columnsPanel.hidden = !columnsPanel.hidden;
+  });
+  document.addEventListener("click", function (e) {
+    if (!columnsPanel.hidden && !columnsPanel.contains(e.target) && e.target !== columnsBtn) {
+      columnsPanel.hidden = true;
+    }
+  });
+
+  function render() {
+    if (!state.data) return;
+    renderSubtitle();
+    renderBanner();
+    renderColumnsPanel();
+    renderSessionHeader();
+    renderTable();
+    renderFooter();
+  }
+
+  function renderSubtitle() {
+    document.getElementById("subtitle").textContent =
+      "Карт учтено: " + state.data.totalMapsCollected + " · обновлено " + formatDateTime(state.data.generatedAt);
+  }
+
+  function renderBanner() {
+    var el = document.getElementById("qualBanner");
+    var drop = state.data.qualification.qualificationDrop;
+    if (!drop) { el.innerHTML = ""; return; }
+    el.innerHTML =
+      '<div class="banner">Порог квалификации вырос до ' + drop.threshold + ' карт — вне рейтинга: ' +
+      drop.droppedNames.map(escapeHtml).join(", ") + "</div>";
+  }
+
+  function currentColumns() {
+    return ALL_OPTIONAL_COLUMNS.filter(function (c) {
+      if (state.tab === "allTime" && c.sessionOnly) return false;
+      return state.visibleColumns.indexOf(c.id) !== -1;
+    });
+  }
+
+  function renderColumnsPanel() {
+    var groups = COLUMN_GROUPS.filter(function (g) {
+      return state.tab === "allTime" ? g.id !== "session" : true;
+    });
+    columnsPanel.innerHTML = groups.map(function (g) {
+      var boxes = g.columns.map(function (c) {
+        if (state.tab === "allTime" && c.sessionOnly) return "";
+        var checked = state.visibleColumns.indexOf(c.id) !== -1 ? "checked" : "";
+        return '<label><input type="checkbox" data-col="' + c.id + '" ' + checked + "> " + c.label + "</label>";
+      }).join("");
+      if (!boxes) return "";
+      return '<div class="columns-group"><h4>' + g.label + "</h4>" + boxes + "</div>";
+    }).join("");
+
+    columnsPanel.querySelectorAll("input[type=checkbox]").forEach(function (box) {
+      box.addEventListener("change", function () {
+        var id = box.dataset.col;
+        var idx = state.visibleColumns.indexOf(id);
+        if (box.checked && idx === -1) state.visibleColumns.push(id);
+        if (!box.checked && idx !== -1) state.visibleColumns.splice(idx, 1);
+        saveVisibleColumns();
+        render();
+      });
+    });
+  }
+
+  function renderSessionHeader() {
+    var el = document.getElementById("sessionHeader");
+    if (state.tab !== "lastSession" || !state.data.lastSession) {
+      el.innerHTML = state.tab === "lastSession"
+        ? '<div class="session-header">Сессий пока нет.</div>'
+        : "";
+      return;
+    }
+    var s = state.data.lastSession;
+    var hours = s.lastPlayedAt && s.firstPlayedAt
+      ? Math.max(1, Math.round((s.lastPlayedAt - s.firstPlayedAt) / 3600))
+      : null;
+    var mapsHtml = s.maps.map(function (m) {
+      var score = m.teams && m.teams.length === 2
+        ? m.teams[0].score + ":" + m.teams[1].score
+        : "";
+      var tierNote = m.statsTier === "basic" ? " (basic)" : "";
+      return '<a href="' + m.url + '" target="_blank" rel="noopener">' +
+        escapeHtml(m.map || "?") + " " + score + tierNote + "</a>";
+    }).join("");
+    el.innerHTML =
+      '<div class="session-header"><span class="session-id">Сессия ' + escapeHtml(s.id) + "</span> · " +
+      s.maps.length + " карт" + (hours ? " · ~" + hours + " ч" : "") +
+      '<div class="session-maps">' + mapsHtml + "</div></div>";
+  }
+
+  function renderFooter() {
+    document.getElementById("footer").textContent =
+      "Порог квалификации: " + state.data.qualification.threshold + " карт " +
+      "(" + Math.round(state.data.qualification.qualifyShare * 100) + "% от " +
+      state.data.qualification.maxMaps + " у лидера)";
+  }
+
+  function getRows() {
+    if (state.tab === "allTime") return state.data.allTime.players;
+    return state.data.lastSession ? state.data.lastSession.players : [];
+  }
+
+  function sortedRows() {
+    var rows = getRows().slice();
+    var col = state.sortColumn;
+    var dir = state.sortDirection === "asc" ? 1 : -1;
+    rows.sort(function (a, b) {
+      if (a.isQualified !== b.isQualified) return a.isQualified ? -1 : 1;
+      var av = a[col], bv = b[col];
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      if (av === bv) return 0;
+      return (av < bv ? -1 : 1) * dir;
+    });
+    return rows;
+  }
+
+  function ratingClass(row) {
+    if (row.ratingRel == null) return "rating-na";
+    var thr = state.data.colorThresholds;
+    if (state.data.colorMode === "quartile") {
+      return row._quartileClass || "rating-mid";
+    }
+    if (row.ratingRel >= thr.strong) return "rating-strong";
+    if (row.ratingRel < thr.weak) return "rating-weak";
+    return "rating-mid";
+  }
+
+  function applyQuartiles(rows) {
+    if (state.data.colorMode !== "quartile") return;
+    var rated = rows.filter(function (r) { return r.ratingRel != null && r.isQualified; })
+      .slice().sort(function (a, b) { return b.ratingRel - a.ratingRel; });
+    var n = rated.length;
+    rated.forEach(function (r, i) {
+      if (i < n * 0.25) r._quartileClass = "rating-strong";
+      else if (i >= n * 0.75) r._quartileClass = "rating-weak";
+      else r._quartileClass = "rating-mid";
+    });
+  }
+
+  function renderTable() {
+    var rows = sortedRows();
+    applyQuartiles(rows);
+    var optCols = currentColumns();
+
+    var headHtml = "<tr>";
+    REQUIRED_COLUMNS.forEach(function (c, i) {
+      headHtml += headerCell(c);
+      if (i === 0) headHtml += '<th class="mobile-kda-col">K-D-A</th>';
+    });
+    optCols.forEach(function (c) {
+      headHtml += headerCell(c, true);
+    });
+    headHtml += "</tr>";
+
+    var bodyHtml = "";
+    var thresholdShown = false;
+    rows.forEach(function (row) {
+      if (!row.isQualified && !thresholdShown) {
+        thresholdShown = true;
+        bodyHtml += '<tr class="qual-divider"><td colspan="' + (REQUIRED_COLUMNS.length + 1 + optCols.length) +
+          '">менее ' + Math.round(state.data.qualification.qualifyShare * 100) +
+          '% карт лидера (' + state.data.qualification.threshold + ')</td></tr>';
+      }
+      bodyHtml += playerRowHtml(row, optCols);
+      bodyHtml += detailRowHtml(row, optCols);
+    });
+
+    document.getElementById("tableWrap").innerHTML =
+      "<table><thead>" + headHtml + "</thead><tbody>" + bodyHtml + "</tbody></table>";
+
+    document.querySelectorAll("thead th[data-sort]").forEach(function (th) {
+      th.addEventListener("click", function () {
+        var col = th.dataset.sort;
+        if (state.sortColumn === col) {
+          state.sortDirection = state.sortDirection === "desc" ? "asc" : "desc";
+        } else {
+          state.sortColumn = col;
+          state.sortDirection = "desc";
+        }
+        render();
+      });
+    });
+
+    document.querySelectorAll("tr.player-row").forEach(function (tr) {
+      tr.addEventListener("click", function () {
+        var id = tr.dataset.steamid;
+        state.expanded = state.expanded === id ? null : id;
+        render();
+      });
+    });
+  }
+
+  function headerCell(c, optional) {
+    var sorted = state.sortColumn === c.id ? "sorted" : "";
+    var cls = (optional ? "opt-col " : "") + (c.collapseMobile ? "req-collapse " : "") + sorted;
+    return '<th class="' + cls + '" data-sort="' + c.id + '">' + escapeHtml(c.label) + "</th>";
+  }
+
+  function playerRowHtml(row, optCols) {
+    var cls = "player-row" + (row.isQualified ? "" : " unqualified");
+    var mapsCell = row.isQualified
+      ? row.mapsPlayed
+      : row.mapsPlayed + ' <small>/ ' + state.data.qualification.threshold + "</small>";
+
+    var cells = "";
+    cells += '<td><div class="player-cell"><div class="avatar"></div>' +
+      '<span class="player-name">' + escapeHtml(row.name) + "</span></div></td>";
+    cells += '<td class="mobile-kda-col">' + row.k + "-" + row.d + "-" + row.a + "</td>";
+    cells += '<td class="maps-cell req-collapse">' + mapsCell + "</td>";
+    cells += '<td class="req-collapse">' + row.k + "</td>";
+    cells += '<td class="req-collapse">' + row.d + "</td>";
+    cells += '<td class="req-collapse">' + row.a + "</td>";
+    cells += '<td class="req-collapse">' + fmt2(row.kd) + "</td>";
+    cells += '<td class="req-collapse">' + fmtWr(row.winRate) + '<br><small style="color:var(--text-faint)">' +
+      row.wins + "-" + row.losses + "</small></td>";
+    cells += '<td><span class="rating-cell ' + ratingClass(row) + '">' + fmtRating(row.rating) + "</span></td>";
+
+    optCols.forEach(function (c) {
+      cells += '<td class="opt-col">' + c.fmt(row[c.id], row) + "</td>";
+    });
+
+    return '<tr class="' + cls + '" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
+  }
+
+  function detailRowHtml(row, optCols) {
+    var expanded = state.expanded === row.steamid64;
+    var colspan = REQUIRED_COLUMNS.length + 1 + optCols.length;
+    if (!expanded) {
+      return '<tr class="detail-row" hidden><td colspan="' + colspan + '"></td></tr>';
+    }
+
+    var metrics = [
+      ["ADR", fmt1(row.adr)],
+      ["KAST", fmtPct0(row.kast)],
+      ["KPR", fmt2(row.kpr)],
+      ["DPR", fmt2(row.dpr)],
+      ["HS%", fmtPct0(row.hsPercent)],
+      ["FK / FD", (row.fk ?? "—") + " / " + (row.fd ?? "—")],
+      ["Опенинги", fmtPct0(row.openingSuccessRate)],
+      ["3K+", fmtInt(row.mk3plus)],
+      ["Клатчи", fmtClutches(null, row)],
+      ["MVP", fmtInt(row.mvp)],
+    ];
+    var metricsHtml = metrics.map(function (m) {
+      return '<div class="detail-metric"><div class="label">' + m[0] + '</div><div class="value">' + m[1] + "</div></div>";
+    }).join("");
+
+    var mapsHtml = (row.maps || []).map(function (m) {
+      return "<tr><td>" + escapeHtml(m.map || "?") + "</td><td>" + formatDate(m.playedAt) + "</td>" +
+        "<td>" + (m.won == null ? "—" : (m.won ? "W" : "L")) + "</td>" +
+        "<td>" + m.k + "/" + m.d + "/" + m.a + "</td>" +
+        "<td>" + fmt1(m.adr) + "</td><td>" + fmtPct0(m.kast) + "</td>" +
+        "<td>" + fmtRating(m.rating) + "</td></tr>";
+    }).join("");
+
+    return '<tr class="detail-row"><td colspan="' + colspan + '">' +
+      '<div class="detail-grid">' + metricsHtml + "</div>" +
+      '<table class="detail-maps-table"><thead><tr><th>Карта</th><th>Дата</th><th>W/L</th>' +
+      "<th>K/D/A</th><th>ADR</th><th>KAST</th><th>Rating</th></tr></thead><tbody>" +
+      mapsHtml + "</tbody></table></td></tr>";
+  }
+
+  function formatDateTime(iso) {
+    if (!iso) return "—";
+    var d = new Date(iso);
+    return d.toLocaleString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  }
+  function formatDate(unixSec) {
+    if (!unixSec) return "—";
+    var d = new Date(unixSec * 1000);
+    return d.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "2-digit" });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+})();
+</script>
+</body>
+</html>

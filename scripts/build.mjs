@@ -9,11 +9,13 @@ import { assignSessions } from "./lib/session.mjs";
 import { aggregatePlayerMaps } from "./lib/aggregate.mjs";
 import { computeThreshold } from "./lib/qualify.mjs";
 import { sortRows } from "./lib/sort.mjs";
+import { calculateRating } from "./lib/rating.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MATCHES_DIR = path.join(ROOT, "data", "matches");
 const CONFIG_PATH = path.join(ROOT, "data", "config.json");
 const PLAYERS_PATH = path.join(ROOT, "data", "players.json");
+const THRESHOLD_STATE_PATH = path.join(ROOT, "data", "threshold-state.json");
 const OUTPUT_PATH = path.join(ROOT, "docs", "data", "stats.json");
 
 const DEFAULT_CONFIG = {
@@ -82,6 +84,36 @@ function displayName(registry, steamid64) {
   return entry?.displayName ?? entry?.lastSeenName ?? steamid64;
 }
 
+// Разбивка рейтинга по картам для раскрытия строки на странице.
+function buildMapBreakdown(mapsForPlayer) {
+  return mapsForPlayer
+    .map((m) => {
+      const hasRatingInputs = m.rounds != null && m.kast != null && m.adr != null;
+      let rating = null;
+      if (hasRatingInputs) {
+        const kpr = m.k / m.rounds;
+        const dpr = m.d / m.rounds;
+        const apr = m.a / m.rounds;
+        rating = calculateRating({ kast: m.kast, kpr, dpr, apr, adr: m.adr });
+      }
+      return {
+        mapId: m.mapId,
+        map: m.map,
+        playedAt: m.playedAt,
+        sessionId: m.sessionId,
+        statsTier: m.statsTier,
+        won: m.won,
+        k: m.k,
+        d: m.d,
+        a: m.a,
+        adr: m.adr,
+        kast: m.kast,
+        rating,
+      };
+    })
+    .sort((x, y) => (x.playedAt ?? 0) - (y.playedAt ?? 0));
+}
+
 function buildRow(steamid64, registry, mapsForPlayer, threshold, leagueAvgRating) {
   const agg = aggregatePlayerMaps(mapsForPlayer);
   const ratingRel = agg.rating != null && leagueAvgRating ? agg.rating / leagueAvgRating : null;
@@ -103,6 +135,7 @@ function buildRow(steamid64, registry, mapsForPlayer, threshold, leagueAvgRating
     hsPercent: agg.hsPercent,
     fk: agg.fk,
     fd: agg.fd,
+    openingSuccessRate: agg.openingSuccessRate,
     mvp: agg.mvp,
     mk3plus: agg.mk3plus,
     clutchesWon: agg.clutchesWon,
@@ -112,6 +145,7 @@ function buildRow(steamid64, registry, mapsForPlayer, threshold, leagueAvgRating
     fullTierMapsPlayed: agg.fullTierMaps,
     fullTierRounds: agg.fullTierRounds,
     isQualified: agg.mapsPlayed >= threshold,
+    maps: buildMapBreakdown(mapsForPlayer),
   };
 }
 
@@ -138,7 +172,7 @@ async function main() {
   for (const map of sortedMaps) {
     for (const p of map.players) {
       const list = byPlayerAllTime.get(p.steamid64) ?? [];
-      list.push({ ...p, statsTier: map.statsTier });
+      list.push({ ...p, statsTier: map.statsTier, mapId: map.mapId, map: map.map, playedAt: map.playedAt, sessionId: map.sessionId });
       byPlayerAllTime.set(p.steamid64, list);
     }
   }
@@ -166,6 +200,27 @@ async function main() {
   );
   const allTimeRowsSorted = sortRows(allTimeRows, "rating", "desc");
 
+  // Порог плавает и нигде не запоминается (пересчитывается каждый build), но если
+  // он вырос настолько, что кто-то выпал из квалификации — молча посереть для
+  // человека выглядит как баг. Единственное, что переживает между запусками —
+  // сам факт "кто был квалифицирован при каком пороге", специально для этого баннера.
+  const prevThresholdState = await readJson(THRESHOLD_STATE_PATH, null);
+  const qualifiedNowIds = allTimeRowsSorted.filter((r) => r.isQualified).map((r) => r.steamid64);
+  let qualificationDrop = null;
+  if (prevThresholdState && threshold > prevThresholdState.threshold) {
+    const droppedIds = prevThresholdState.qualifiedSteamIds.filter(
+      (id) => !qualifiedNowIds.includes(id)
+    );
+    if (droppedIds.length) {
+      qualificationDrop = {
+        previousThreshold: prevThresholdState.threshold,
+        threshold,
+        droppedNames: droppedIds.map((id) => displayName(registry, id)),
+      };
+    }
+  }
+  await writeJson(THRESHOLD_STATE_PATH, { threshold, qualifiedSteamIds: qualifiedNowIds });
+
   const lastSession = sessions[sessions.length - 1] ?? null;
   let lastSessionOutput = null;
   if (lastSession) {
@@ -173,7 +228,7 @@ async function main() {
     for (const map of lastSession.maps) {
       for (const p of map.players) {
         const list = byPlayerSession.get(p.steamid64) ?? [];
-        list.push({ ...p, statsTier: map.statsTier });
+        list.push({ ...p, statsTier: map.statsTier, mapId: map.mapId, map: map.map, playedAt: map.playedAt, sessionId: map.sessionId });
         byPlayerSession.set(p.steamid64, list);
       }
     }
@@ -209,6 +264,7 @@ async function main() {
       maxMaps,
       qualifyShare: config.qualifyShare,
       qualifyMinMaps: config.qualifyMinMaps,
+      qualificationDrop,
     },
     colorMode: config.colorMode,
     colorThresholds: config.colorThresholds,
