@@ -34,9 +34,13 @@ export function aggregatePlayerMaps(mapsForPlayer) {
     a += m.a ?? 0;
     hsKills += m.hsKills ?? 0;
 
-    if (m.statsTier === "full") {
+    // rounds/kast/adr отсутствуют не только на basic-tier картах, но и когда
+    // демо-парсер cybershoke уронил конкретного игрока с полной full-tier карты
+    // (see normalize.mjs) — в обоих случаях рейтинг по этой карте не считаем.
+    const hasRatingInputs = m.rounds != null && m.kast != null && m.adr != null;
+    if (hasRatingInputs) {
       fullTierMaps++;
-      const rounds = m.rounds ?? 0;
+      const rounds = m.rounds;
       fullTierRounds += rounds;
       fullTierK += m.k ?? 0;
       fullTierD += m.d ?? 0;

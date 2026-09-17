@@ -19,6 +19,7 @@ export function normalizeLobby(raw) {
           mapIndex: Number(mapIndexStr),
           stats: mapEntry.stats,
           playedAtFallback,
+          roster: data.players ?? {},
         })
       )
       .filter(Boolean);
@@ -27,7 +28,7 @@ export function normalizeLobby(raw) {
   return [normalizeBasicMap({ lobbyId: data.id_lobby, data, playedAtFallback })];
 }
 
-function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback }) {
+function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }) {
   if (!stats) return null;
   const teams = ["team1", "team2"].map((key) => ({
     key,
@@ -37,10 +38,12 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback }) {
   }));
 
   const players = [];
+  const seenSteamIds = new Set();
   for (const teamKey of ["team1", "team2"]) {
     const teamIsWinner = !!stats[teamKey]?.isWinner;
     for (const p of stats[teamKey]?.players ?? []) {
       const rounds = p.roundsPlayed || stats.totalRounds || 0;
+      seenSteamIds.add(String(p.steamid64));
       players.push({
         steamid64: String(p.steamid64),
         name: p.name,
@@ -61,6 +64,46 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback }) {
         clutchSituations: p.clutchTotals?.situations ?? 0,
       });
     }
+  }
+
+  // Демо-парсер cybershoke иногда молча роняет игрока из team1/team2.players
+  // (подтверждено на живом матче), хотя тот был в лобби и его K/D/A видны на
+  // странице матча. Добираем таких из data.players[].match_stats.live по id_slot:
+  // slot игрока сверяем со slot'ами уже найденных игроков той же stats-команды,
+  // чтобы понять, к какой из team1/team2 он относится. Без демо-данных у него
+  // нет rounds/adr/kast — в рейтинг эта карта для него не идёт, но K/D/A и W/L учтены.
+  const slotToTeamKey = new Map();
+  for (const teamKey of ["team1", "team2"]) {
+    for (const p of stats[teamKey]?.players ?? []) {
+      const slot = roster[String(p.steamid64)]?.id_slot;
+      if (slot != null) slotToTeamKey.set(slot, teamKey);
+    }
+  }
+  for (const [steamid64, rp] of Object.entries(roster)) {
+    if (seenSteamIds.has(steamid64)) continue;
+    const teamKey = slotToTeamKey.get(rp.id_slot);
+    if (!teamKey) continue; // не игровой слот (спектатор и т.п.) или команду не определить
+    const live = rp.match_stats?.live;
+    if (!live) continue; // и демо, и live-статы отсутствуют — добрать нечем
+    players.push({
+      steamid64,
+      name: rp.name,
+      team: teamKey,
+      won: !!stats[teamKey]?.isWinner,
+      rounds: null,
+      k: live.kills ?? 0,
+      d: live.deaths ?? 0,
+      a: live.assists ?? 0,
+      adr: null,
+      kast: null,
+      hsKills: live.headshots ?? 0,
+      fk: null,
+      fd: null,
+      mvp: null,
+      multikills: null,
+      clutchesWon: null,
+      clutchSituations: null,
+    });
   }
 
   return {
