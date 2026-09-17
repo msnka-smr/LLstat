@@ -209,7 +209,15 @@
     border-radius: 50%;
     background: var(--border);
     flex-shrink: 0;
+    object-fit: cover;
   }
+  .player-cell a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: inherit;
+  }
+  .player-cell a:hover .player-name { text-decoration: underline; }
 
   .rating-cell {
     display: inline-flex;
@@ -646,9 +654,14 @@
       ? row.mapsPlayed
       : row.mapsPlayed + ' <small>/ ' + state.data.qualification.threshold + "</small>";
 
+    var avatarHtml = row.avatarUrl
+      ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
+      : '<div class="avatar"></div>';
+
     var cells = "";
-    cells += '<td><div class="player-cell"><div class="avatar"></div>' +
-      '<span class="player-name">' + escapeHtml(row.name) + "</span></div></td>";
+    cells += '<td><div class="player-cell">' +
+      '<a href="' + escapeHtml(row.steamProfileUrl) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' +
+      avatarHtml + '<span class="player-name">' + escapeHtml(row.name) + "</span></a></div></td>";
     cells += '<td class="mobile-kda-col">' + row.k + "-" + row.d + "-" + row.a + "</td>";
     cells += '<td class="maps-cell req-collapse">' + mapsCell + "</td>";
     cells += '<td class="req-collapse">' + row.k + "</td>";

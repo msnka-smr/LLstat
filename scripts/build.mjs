@@ -70,9 +70,11 @@ function updatePlayersRegistry(registry, maps) {
         displayName: null,
         nicknames: [],
         lastSeenName: null,
+        avatarUrl: null,
       };
       if (!entry.nicknames.includes(p.name)) entry.nicknames.push(p.name);
       entry.lastSeenName = p.name;
+      if (p.avatar) entry.avatarUrl = p.avatar;
       registry[p.steamid64] = entry;
     }
   }
@@ -120,6 +122,8 @@ function buildRow(steamid64, registry, mapsForPlayer, threshold, leagueAvgRating
   return {
     steamid64,
     name: displayName(registry, steamid64),
+    avatarUrl: registry[steamid64]?.avatarUrl ?? null,
+    steamProfileUrl: `https://steamcommunity.com/profiles/${steamid64}`,
     mapsPlayed: agg.mapsPlayed,
     wins: agg.wins,
     losses: agg.losses,

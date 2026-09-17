@@ -47,6 +47,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
       players.push({
         steamid64: String(p.steamid64),
         name: p.name,
+        avatar: roster[String(p.steamid64)]?.avatar ?? null,
         team: teamKey,
         won: teamIsWinner,
         rounds,
@@ -89,6 +90,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
     players.push({
       steamid64,
       name: rp.name,
+      avatar: rp.avatar ?? null,
       team: teamKey,
       won: !!stats[teamKey]?.isWinner,
       rounds: null,
@@ -135,6 +137,7 @@ function normalizeBasicMap({ lobbyId, data, playedAtFallback }) {
     return {
       steamid64: String(p.steamid64),
       name: p.name,
+      avatar: p.avatar ?? null,
       team,
       won: team != null && winnerSlot != null ? slot === winnerSlot : null,
       rounds: null,
