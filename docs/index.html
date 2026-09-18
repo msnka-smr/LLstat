@@ -386,6 +386,102 @@
     min-height: 20px;
   }
   .wheel-result strong { color: var(--accent); }
+
+  .draft-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .draft-hint {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin: 0 0 12px;
+  }
+  .draft-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 420px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px;
+  }
+  .draft-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .draft-row:hover { background: var(--bg-row-hover); }
+  .draft-row input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+  }
+  .draft-row .draft-name { flex: 1; font-size: 13px; }
+  .draft-row .draft-meta {
+    font-size: 12px;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .draft-counter {
+    margin: 12px 0;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .draft-counter.full { color: var(--green); font-weight: 600; }
+  .draft-teams {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+    text-align: left;
+  }
+  @media (max-width: 640px) {
+    .draft-teams { grid-template-columns: 1fr; }
+  }
+  .draft-team {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .draft-team h4 { margin: 0 0 8px; font-size: 14px; }
+  .draft-team ul { list-style: none; margin: 0 0 10px; padding: 0; font-size: 13px; }
+  .draft-team li {
+    padding: 3px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .draft-team .team-stats {
+    font-size: 12px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+  .draft-summary {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+  .draft-summary strong { color: var(--accent); }
+  .draft-again-wrap { text-align: center; margin-top: 14px; }
+  .draft-limit-note {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: center;
+  }
 </style>
 </head>
 <body>
@@ -401,6 +497,7 @@
     <div class="tabs">
       <div class="tab active" data-tab="allTime">За всё время</div>
       <div class="tab" data-tab="lastSession">Последняя сессия</div>
+      <div class="tab" data-tab="draft">Выбор составов</div>
     </div>
     <a class="rating-info-link" href="rating-info.html" target="_blank" rel="noopener">Информация о рейтинге →</a>
   </div>
@@ -409,6 +506,7 @@
   <div class="mobile-sort" id="mobileSort"></div>
   <div id="tableWrap"></div>
   <div id="wheelSection"></div>
+  <div id="draftSection"></div>
 
   <footer id="footer"></footer>
 
@@ -434,6 +532,7 @@
   function fmtDiff(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v; }
 
   var TAB_STORAGE_KEY = "llstat:selectedTab";
+  var VALID_TABS = ["allTime", "lastSession", "draft"];
   function loadSavedTab() {
     try { return localStorage.getItem(TAB_STORAGE_KEY); } catch (err) { return null; }
   }
@@ -443,7 +542,7 @@
 
   var state = {
     data: null,
-    tab: loadSavedTab() === "lastSession" ? "lastSession" : "allTime",
+    tab: VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
     sortColumn: "rating",
     sortDirection: "desc",
     expanded: null,
@@ -483,10 +582,12 @@
     renderTable();
     renderFooter();
     renderWheelSection();
+    renderDraftSection();
   }
 
   function renderMobileSort() {
     var el = document.getElementById("mobileSort");
+    if (state.tab === "draft") { el.innerHTML = ""; return; }
     var options = REQUIRED_COLUMNS.map(function (c) {
       var selected = state.sortColumn === c.id ? " selected" : "";
       return '<option value="' + c.id + '"' + selected + ">" + escapeHtml(c.label) + "</option>";
@@ -548,7 +649,9 @@
   }
 
   function renderFooter() {
-    document.getElementById("footer").textContent =
+    var el = document.getElementById("footer");
+    if (state.tab === "draft") { el.textContent = ""; return; }
+    el.textContent =
       state.tab === "allTime"
         ? "Порог квалификации: " + state.data.qualification.threshold + " карт " +
           "(" + Math.round(state.data.qualification.qualifyShare * 100) + "% от " +
@@ -557,6 +660,7 @@
   }
 
   function getRows() {
+    if (state.tab === "draft") return [];
     if (state.tab === "allTime") return state.data.allTime.players;
     return state.data.lastSession ? state.data.lastSession.players : [];
   }
@@ -608,6 +712,7 @@
   }
 
   function renderTable() {
+    if (state.tab === "draft") { document.getElementById("tableWrap").innerHTML = ""; return; }
     var rows = sortedRows();
 
     var headHtml = "<tr>";
@@ -836,6 +941,181 @@
       document.getElementById("wheelResult").innerHTML =
         escapeHtml(category.text) + ": <strong>" + escapeHtml(winner.name) + "</strong>";
     }, 5000);
+  }
+
+  // "Выбор составов": делит ровно 10 отмеченных игроков на два состава 5×5,
+  // минимизируя разницу между командами сразу по двум сигналам — рейтингу
+  // "за всё время" (вес 0.7) и K/D (вес 0.3), нормированным к разбросу среди
+  // выбранной десятки (иначе рейтинг, у которого диапазон в сотни, забил бы
+  // K/D с диапазоном порядка 1-2 — та же ошибка, что мы уже правили в весах
+  // рейтинга сессии). С 10 игроками всего 126 уникальных разбиений 5/5
+  // (C(10,5)/2) — перебираем все, без всякой эвристики, и берём точный оптимум.
+  var DRAFT_MAX = 10;
+  var DRAFT_GEN_PREFIX = "llstat:draftGen:";
+  var draftState = { selected: new Set() };
+
+  function draftKeyFor(ids) {
+    return DRAFT_GEN_PREFIX + ids.slice().sort().join(",");
+  }
+  function loadDraftGenCount(key) {
+    try { return parseInt(localStorage.getItem(key), 10) || 0; } catch (err) { return 0; }
+  }
+  function saveDraftGenCount(key, n) {
+    try { localStorage.setItem(key, String(n)); } catch (err) {}
+  }
+
+  function renderDraftSection() {
+    var el = document.getElementById("draftSection");
+    if (el.dataset.built !== "1") {
+      buildDraft(el);
+      el.dataset.built = "1";
+    }
+    el.style.display = state.tab === "draft" ? "" : "none";
+  }
+
+  function buildDraft(el) {
+    var players = state.data.allTime.players.slice().sort(function (a, b) {
+      return a.name.localeCompare(b.name, "ru");
+    });
+
+    var rowsHtml = players.map(function (p) {
+      var avatarHtml = p.avatarUrl
+        ? '<img class="avatar" src="' + escapeHtml(p.avatarUrl) + '" alt="" loading="lazy">'
+        : '<div class="avatar"></div>';
+      return '<label class="draft-row">' +
+        '<input type="checkbox" data-steamid="' + escapeHtml(p.steamid64) + '">' +
+        avatarHtml +
+        '<span class="draft-name">' + escapeHtml(p.name) + "</span>" +
+        '<span class="draft-meta">рейтинг ' + fmtRating(p.rating) + " · K/D " + fmt2(p.kd) + "</span>" +
+        "</label>";
+    }).join("");
+
+    el.innerHTML =
+      '<div class="draft-section">' +
+        '<p class="draft-hint">Выбери ровно 10 игроков — поделим на два состава 5×5 максимально балансово ' +
+        "по рейтингу и K/D.</p>" +
+        '<div class="draft-list" id="draftList">' + rowsHtml + "</div>" +
+        '<div class="draft-counter" id="draftCounter">Выбрано: 0 / ' + DRAFT_MAX + "</div>" +
+        '<button type="button" class="wheel-spin-btn" id="draftFormBtn" disabled>Сформировать состав</button>' +
+        '<div id="draftResult"></div>' +
+      "</div>";
+
+    el.querySelectorAll('#draftList input[type="checkbox"]').forEach(function (cb) {
+      cb.addEventListener("change", onDraftCheckboxChange);
+    });
+    document.getElementById("draftFormBtn").addEventListener("click", function () {
+      runDraft(false);
+    });
+  }
+
+  function onDraftCheckboxChange(e) {
+    var id = e.target.dataset.steamid;
+    if (e.target.checked) {
+      if (draftState.selected.size >= DRAFT_MAX) {
+        e.target.checked = false;
+        return;
+      }
+      draftState.selected.add(id);
+    } else {
+      draftState.selected.delete(id);
+    }
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
+  }
+
+  function updateDraftCounter() {
+    var n = draftState.selected.size;
+    var counter = document.getElementById("draftCounter");
+    counter.textContent = "Выбрано: " + n + " / " + DRAFT_MAX;
+    counter.classList.toggle("full", n === DRAFT_MAX);
+    document.getElementById("draftFormBtn").disabled = n !== DRAFT_MAX;
+
+    var atMax = n >= DRAFT_MAX;
+    document.querySelectorAll('#draftList input[type="checkbox"]').forEach(function (cb) {
+      if (!cb.checked) cb.disabled = atMax;
+    });
+  }
+
+  function draftAvgOf(list, field) {
+    return list.reduce(function (sum, p) { return sum + p[field]; }, 0) / list.length;
+  }
+
+  function computeDraftSplits(players) {
+    var ratings = players.map(function (p) { return p.rating; });
+    var kds = players.map(function (p) { return p.kd; });
+    var ratingRange = Math.max.apply(null, ratings) - Math.min.apply(null, ratings);
+    var kdRange = Math.max.apply(null, kds) - Math.min.apply(null, kds);
+
+    var splits = [];
+    for (var mask = 1; mask < 1024; mask += 2) { // нечётные маски: players[0] всегда в teamA
+      var bits = 0;
+      for (var b = 0; b < 10; b++) if (mask & (1 << b)) bits++;
+      if (bits !== 5) continue;
+
+      var teamA = [], teamB = [];
+      for (var i = 0; i < 10; i++) (mask & (1 << i) ? teamA : teamB).push(players[i]);
+
+      var avgA = draftAvgOf(teamA, "rating"), avgB = draftAvgOf(teamB, "rating");
+      var kdA = draftAvgOf(teamA, "kd"), kdB = draftAvgOf(teamB, "kd");
+      var ratingDiff = Math.abs(avgA - avgB);
+      var kdDiff = Math.abs(kdA - kdB);
+      var score = 0.7 * (ratingRange > 0 ? ratingDiff / ratingRange : 0) +
+                  0.3 * (kdRange > 0 ? kdDiff / kdRange : 0);
+
+      splits.push({ teamA: teamA, teamB: teamB, avgA: avgA, avgB: avgB, kdA: kdA, kdB: kdB, ratingDiff: ratingDiff, kdDiff: kdDiff, score: score });
+    }
+    splits.sort(function (a, b) { return a.score - b.score; });
+    return splits;
+  }
+
+  function runDraft(isAgain) {
+    if (draftState.selected.size !== DRAFT_MAX) return;
+    var ids = Array.from(draftState.selected);
+    var allPlayers = state.data.allTime.players;
+    var players = ids.map(function (id) {
+      return allPlayers.find(function (p) { return p.steamid64 === id; });
+    });
+
+    var key = draftKeyFor(ids);
+    var used = loadDraftGenCount(key);
+    var genIndex = isAgain ? 1 : 0;
+    if (genIndex === 1 && used >= 2) return; // кнопка "ещё раз" не должна быть видна в этом случае
+
+    var splits = computeDraftSplits(players);
+    saveDraftGenCount(key, Math.max(used, genIndex + 1));
+    renderDraftResult(splits[genIndex], key);
+  }
+
+  function renderDraftResult(split, key) {
+    var resultEl = document.getElementById("draftResult");
+
+    function teamHtml(title, team, avgRating, avgKd) {
+      var itemsHtml = team.map(function (p) {
+        return "<li><span>" + escapeHtml(p.name) + "</span><span>" + fmtRating(p.rating) + "</span></li>";
+      }).join("");
+      return '<div class="draft-team"><h4>' + title + "</h4><ul>" + itemsHtml + "</ul>" +
+        '<div class="team-stats">Средний рейтинг: ' + Math.round(avgRating) +
+        " · средний K/D: " + avgKd.toFixed(2) + "</div></div>";
+    }
+
+    var canRegenerate = loadDraftGenCount(key) < 2;
+
+    resultEl.innerHTML =
+      '<div class="draft-teams">' +
+        teamHtml("Состав A", split.teamA, split.avgA, split.kdA) +
+        teamHtml("Состав B", split.teamB, split.avgB, split.kdB) +
+      "</div>" +
+      '<div class="draft-summary">Разница в среднем рейтинге — <strong>' + Math.round(split.ratingDiff) +
+      "</strong>, в среднем K/D — <strong>" + split.kdDiff.toFixed(2) + "</strong>.</div>" +
+      (canRegenerate
+        ? '<div class="draft-again-wrap"><button type="button" class="wheel-spin-btn" id="draftAgainBtn">🔁 Сгенерировать ещё раз</button></div>'
+        : '<div class="draft-limit-note">Лимит генераций для этого состава достигнут — поменяй хотя бы одного игрока, чтобы попробовать снова.</div>');
+
+    if (canRegenerate) {
+      document.getElementById("draftAgainBtn").addEventListener("click", function () {
+        runDraft(true);
+      });
+    }
   }
 
   function formatDateTime(iso) {
