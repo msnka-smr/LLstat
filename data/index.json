@@ -194,5 +194,33 @@
     "playedAt": 1788379223,
     "statsTier": "full",
     "status": "finished"
+  },
+  {
+    "idLobby": 11822304,
+    "map": "de_nuke",
+    "playedAt": 1789581311,
+    "statsTier": "basic",
+    "status": "finished"
+  },
+  {
+    "idLobby": 11824873,
+    "map": "de_cache",
+    "playedAt": 1789583282,
+    "statsTier": "basic",
+    "status": "finished"
+  },
+  {
+    "idLobby": 11826620,
+    "map": "de_dust2",
+    "playedAt": 1789586601,
+    "statsTier": "basic",
+    "status": "finished"
+  },
+  {
+    "idLobby": 11829543,
+    "map": "de_mirage",
+    "playedAt": 1789588989,
+    "statsTier": "basic",
+    "status": "finished"
   }
 ]

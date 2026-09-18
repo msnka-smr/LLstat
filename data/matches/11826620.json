@@ -1,0 +1,2457 @@
+{
+  "result": "success",
+  "data": {
+    "server": {
+      "ip": null,
+      "port": null
+    },
+    "id_lobby": 11826620,
+    "lobby_status": 3,
+    "map_veto": null,
+    "location_veto": null,
+    "player_veto": null,
+    "maps_custom": [],
+    "locations_pool": [],
+    "status_match": 5,
+    "auth_steamid64_is_host": false,
+    "steamid64_host": "76561198039138241",
+    "match_settings": {
+      "id_data_center": 1,
+      "type_lobby": 1,
+      "password": "",
+      "id_mode_players_pick": 0,
+      "id_mode_map_pick": 0,
+      "id_mode_location_pick": 0,
+      "id_mode_match_ready": 0,
+      "id_type_match": 1,
+      "id_mode_voice": 0,
+      "custom_modification_who_can": 1,
+      "bo": 1,
+      "map_name": "de_dust2",
+      "maps_vote_list": [
+        {
+          "name": "de_mirage",
+          "id_workshop": null
+        },
+        {
+          "name": "de_anubis",
+          "id_workshop": null
+        },
+        {
+          "name": "de_dust2",
+          "id_workshop": null
+        },
+        {
+          "name": "de_ancient",
+          "id_workshop": null
+        },
+        {
+          "name": "de_inferno",
+          "id_workshop": null
+        },
+        {
+          "name": "de_nuke",
+          "id_workshop": null
+        },
+        {
+          "name": "de_cache",
+          "id_workshop": null
+        }
+      ],
+      "custom_modification": [],
+      "enable_lobby_custom_modification_for_all": false,
+      "players_wait_to_all_ready": false,
+      "enable_overtimes": true,
+      "enable_knife_round": true,
+      "enable_custom_modification": 2,
+      "enable_streamer_mode": false,
+      "max_players_4": 200,
+      "max_players_3": 5,
+      "max_players_2": 5,
+      "max_players_1": 10,
+      "max_match_pauses": 6,
+      "match_pause_time": 52,
+      "cvar_rounds_to_win": 13,
+      "cvar_freeztime": 15,
+      "cvar_roundtime": 115,
+      "cvar_warmuptime": 15,
+      "cvar_maxrounds": 24,
+      "cvar_count_pause_for_team": 4,
+      "cvar_money_in_overtimes": 10000,
+      "cvar_maxmoney": 16000,
+      "cvar_startmoney": 800,
+      "cvar_timeout_for_spec": 60,
+      "cvar_damage_headshot_only": false,
+      "cvar_free_armor": 0,
+      "cvar_mp_shoot_dropped_grenades": false,
+      "id_mode_random_events": 0,
+      "recreate_match": 1,
+      "cvar_friendlyfire": 1,
+      "cvar_disable_radar": 0,
+      "cvar_disable_agents": false,
+      "enable_players_switch_team": true,
+      "min_players_to_start": 2,
+      "enable_gotv_1": false,
+      "enable_backup_rounds": true,
+      "enable_search_players": false,
+      "enable_filtering": false,
+      "filtering": {},
+      "bo_data": {
+        "map_data": {
+          "1": {
+            "name": "de_dust2",
+            "id_workshop": null,
+            "img": "https://cloud.cybershoke.net/img/maps/2/de_dust2.jpg"
+          }
+        }
+      },
+      "team_3_name": "team_AlexMax",
+      "team_2_name": "team_moloko",
+      "enable_voting_map": false,
+      "mode_voting_map": 0,
+      "enable_voting_location": false,
+      "mode_voting_location": 0,
+      "mode_blackout": false,
+      "steamid64_create": "76561198039138241",
+      "unixtime_create": 1789583282,
+      "unixtime_last_action": 1789583413,
+      "is_location_set": 0,
+      "series": {
+        "maps": {
+          "1": {
+            "winner": 1,
+            "team1": 16,
+            "team2": 13
+          }
+        },
+        "score": {
+          "team1": 1,
+          "team2": 0
+        },
+        "winner": "team1"
+      }
+    },
+    "match_stats": {
+      "base": {
+        "team_3": {
+          "score": 16
+        },
+        "team_2": {
+          "score": 13
+        },
+        "team_winner": 3
+      }
+    },
+    "match_more_stats": {
+      "stats": null,
+      "maps": {
+        "1": {
+          "stats": null,
+          "id_match": 11602156
+        }
+      }
+    },
+    "dates": {
+      "unixtime_lobby_create": 1789583282,
+      "unixtime_lobby_auto_remove": 1789584013,
+      "unixtime_last_action": 1789583413,
+      "unixtime_start_match": 1789583448,
+      "unixtime_match_end": 1789586601,
+      "unixtime_match_create": 1789583413,
+      "unixtime_match_cancel": null,
+      "unixtime_start_search_server": 1789583413,
+      "unixtime_server_ready": 1789583415,
+      "unixtime_server_wait_connect_players": 1789583775,
+      "unixtime_search_server_cycle_last": 1789583414
+    },
+    "demo": {
+      "status": 2
+    },
+    "merge_status": 15,
+    "players": {
+      "76561198017244485": {
+        "steamid64": "76561198017244485",
+        "name": "moloko",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg",
+        "faceit_skill_level": 0,
+        "faceit_elo": 0,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_connect_server": false,
+          "is_bot": false,
+          "is_leader": true
+        },
+        "id_slot": 2,
+        "id_slot_unique": 0,
+        "is_leader": true,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 19,
+            "deaths": 22,
+            "assists": 4,
+            "headshots": 2
+          }
+        }
+      },
+      "76561198039138241": {
+        "steamid64": "76561198039138241",
+        "name": "AlexMax",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg",
+        "faceit_skill_level": 4,
+        "faceit_elo": 913,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_connect_server": false,
+          "is_bot": false,
+          "is_leader": true
+        },
+        "id_slot": 3,
+        "id_slot_unique": 0,
+        "is_leader": true,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 25,
+            "deaths": 18,
+            "assists": 7,
+            "headshots": 10
+          }
+        }
+      },
+      "76561198007494757": {
+        "steamid64": "76561198007494757",
+        "name": "Ooops",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/b26d79a8a530a0381fa9f36fcb0cad71cf6738ab_full.jpg",
+        "faceit_skill_level": 0,
+        "faceit_elo": 0,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_leader": false,
+          "is_connect_server": false,
+          "is_bot": false
+        },
+        "id_slot": 2,
+        "id_slot_unique": 4,
+        "is_leader": false,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 10,
+            "deaths": 21,
+            "assists": 6,
+            "headshots": 2
+          }
+        }
+      },
+      "76561198014367879": {
+        "steamid64": "76561198014367879",
+        "name": "Player",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/891fadfd3613da77999db6a383c7c86e3be7549a_full.jpg",
+        "faceit_skill_level": 4,
+        "faceit_elo": 978,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_leader": false,
+          "is_connect_server": false,
+          "is_bot": false
+        },
+        "id_slot": 3,
+        "id_slot_unique": 4,
+        "is_leader": false,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 34,
+            "deaths": 18,
+            "assists": 7,
+            "headshots": 15
+          }
+        }
+      },
+      "76561198064889555": {
+        "steamid64": "76561198064889555",
+        "name": "msn",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
+        "faceit_skill_level": 0,
+        "faceit_elo": 0,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_leader": false,
+          "is_connect_server": false,
+          "is_bot": false
+        },
+        "id_slot": 3,
+        "id_slot_unique": 2,
+        "is_leader": false,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 16,
+            "deaths": 19,
+            "assists": 9,
+            "headshots": 5
+          }
+        }
+      },
+      "76561198070734509": {
+        "steamid64": "76561198070734509",
+        "name": "乃卂尺丨ㄥㄥ卂",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/9f37aeb8a2786c3c91ece677fad39430d29cc96c_full.jpg",
+        "faceit_skill_level": 0,
+        "faceit_elo": 0,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_leader": false,
+          "is_connect_server": false,
+          "is_bot": false
+        },
+        "id_slot": 2,
+        "id_slot_unique": 3,
+        "is_leader": false,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 28,
+            "deaths": 19,
+            "assists": 3,
+            "headshots": 12
+          }
+        }
+      },
+      "76561198137980826": {
+        "steamid64": "76561198137980826",
+        "name": "LetsStats",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/97dc87cbf6f9c7d5513b15c6f2f7d4f56a22dd12_full.jpg",
+        "faceit_skill_level": 4,
+        "faceit_elo": 1004,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_leader": false,
+          "is_connect_server": false,
+          "is_bot": false
+        },
+        "id_slot": 2,
+        "id_slot_unique": 1,
+        "is_leader": false,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 26,
+            "deaths": 27,
+            "assists": 5,
+            "headshots": 15
+          }
+        }
+      },
+      "76561198303379150": {
+        "steamid64": "76561198303379150",
+        "name": "MrDrolik",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/dc71b61ac0d792fec95ae5007d0bbc69aaa2b44f_full.jpg",
+        "faceit_skill_level": 0,
+        "faceit_elo": 0,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_leader": false,
+          "is_connect_server": false,
+          "is_bot": false
+        },
+        "id_slot": 2,
+        "id_slot_unique": 2,
+        "is_leader": false,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 12,
+            "deaths": 21,
+            "assists": 6,
+            "headshots": 5
+          }
+        }
+      },
+      "76561198681103731": {
+        "steamid64": "76561198681103731",
+        "name": "Анальный бур",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
+        "faceit_skill_level": 0,
+        "faceit_elo": 0,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_leader": false,
+          "is_connect_server": false,
+          "is_bot": false
+        },
+        "id_slot": 3,
+        "id_slot_unique": 3,
+        "is_leader": false,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 16,
+            "deaths": 21,
+            "assists": 6,
+            "headshots": 4
+          }
+        }
+      },
+      "76561199852434358": {
+        "steamid64": "76561199852434358",
+        "name": "Volbe",
+        "pings": {
+          "0": 108,
+          "1": 14,
+          "2": 35,
+          "3": 60,
+          "4": 53,
+          "5": 16,
+          "6": 67,
+          "7": 67,
+          "8": 52,
+          "9": 54,
+          "10": 39,
+          "11": 67,
+          "13": 96,
+          "15": 70,
+          "16": 31,
+          "17": 64,
+          "18": 126,
+          "19": 210,
+          "20": 148,
+          "21": 156,
+          "23": 25,
+          "24": 105,
+          "25": 89,
+          "26": 226,
+          "27": 225,
+          "28": 60,
+          "29": 255,
+          "30": 254,
+          "31": 145,
+          "33": 135,
+          "34": 202,
+          "35": 174,
+          "36": 49,
+          "37": 116,
+          "38": 16,
+          "39": 132,
+          "40": 141,
+          "41": 139,
+          "42": 43,
+          "43": 27,
+          "44": 83
+        },
+        "avatar": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg",
+        "faceit_skill_level": 1,
+        "faceit_elo": 0,
+        "data": {
+          "unixtime_connect": 1789583282,
+          "is_leader": false,
+          "is_connect_server": false,
+          "is_bot": false
+        },
+        "id_slot": 3,
+        "id_slot_unique": 1,
+        "is_leader": false,
+        "is_ready": false,
+        "is_bot": false,
+        "is_connect_server": false,
+        "is_player_kicked": false,
+        "is_host": false,
+        "is_player_premium": false,
+        "player_vip_group": null,
+        "accessories": {
+          "background": {
+            "enable": true,
+            "web_assets": {
+              "background": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg",
+              "background_small": "https://cloud.cybershoke.net/img/p_background/small/de_dust2_b.jpg",
+              "cell": "https://cloud.cybershoke.net/img/p_background/de_dust2_b.jpg"
+            }
+          }
+        },
+        "match_stats": {
+          "live": {
+            "kills": 14,
+            "deaths": 20,
+            "assists": 3,
+            "headshots": 4
+          }
+        }
+      }
+    },
+    "count_players_slots": {
+      "1": 0,
+      "2": 5,
+      "3": 5,
+      "4": 0
+    },
+    "players_waiting_limit": 0,
+    "available_settings": {
+      "id_data_center": [
+        {
+          "id": 1,
+          "country": "ru",
+          "country_full": "Russia",
+          "city": "Moscow",
+          "group": 1,
+          "group_priority": 1,
+          "name_websocket": "Moscow",
+          "location": "moscow"
+        },
+        {
+          "id": 23,
+          "country": "lt",
+          "country_full": "Lithuania",
+          "city": "Vilnius",
+          "group": 23,
+          "group_priority": 1,
+          "name_websocket": "Vilnius",
+          "location": "lithuania"
+        },
+        {
+          "id": 37,
+          "country": "ru",
+          "country_full": "Russia",
+          "city": "Yakutsk",
+          "group": 33,
+          "group_priority": 1,
+          "name_websocket": "YAKUTSK",
+          "location": "yakutsk"
+        },
+        {
+          "id": 6,
+          "country": "kz",
+          "country_full": "Kazakhstan",
+          "city": "Almaty",
+          "group": 6,
+          "group_priority": 1,
+          "name_websocket": "Almaty",
+          "location": "kazakhstan"
+        },
+        {
+          "id": 5,
+          "country": "ru",
+          "country_full": "Russia",
+          "city": "Ekaterinburg",
+          "group": 5,
+          "group_priority": 1,
+          "name_websocket": "Ekaterinburg",
+          "location": "ekaterinburg"
+        },
+        {
+          "id": 16,
+          "country": "se",
+          "country_full": "Sweden",
+          "city": "Stockholm",
+          "group": 16,
+          "group_priority": 1,
+          "name_websocket": "Stockholm",
+          "location": "sweden"
+        },
+        {
+          "id": 17,
+          "country": "nl",
+          "country_full": "Netherlands",
+          "city": "Amsterdam",
+          "group": 17,
+          "group_priority": 1,
+          "name_websocket": "AMSTERDAM",
+          "location": "amsterdam"
+        },
+        {
+          "id": 36,
+          "country": "kz",
+          "country_full": "Kazakhstan",
+          "city": "Astana",
+          "group": 32,
+          "group_priority": 1,
+          "name_websocket": "ASTANA",
+          "location": "astana"
+        },
+        {
+          "id": 39,
+          "country": "mn",
+          "country_full": "Mongolia",
+          "city": "Ulaanbaatar",
+          "group": 34,
+          "group_priority": 1,
+          "name_websocket": "Ulaanbaatar",
+          "location": "ulaanbaatar"
+        },
+        {
+          "id": 40,
+          "country": "uz",
+          "country_full": "Uzbekistan",
+          "city": "Tashkent",
+          "group": 35,
+          "group_priority": 1,
+          "name_websocket": "Tashkent",
+          "location": "tashkent"
+        },
+        {
+          "id": 8,
+          "country": "de",
+          "country_full": "Germany",
+          "city": "Falkenstein",
+          "group": 8,
+          "group_priority": 1,
+          "name_websocket": "Frankfurt",
+          "location": "germany"
+        },
+        {
+          "id": 41,
+          "country": "lu",
+          "country_full": "Luxembourg",
+          "city": "Luxembourg",
+          "group": 36,
+          "group_priority": 1,
+          "name_websocket": "Luxembourg",
+          "location": "luxembourg"
+        },
+        {
+          "id": 42,
+          "country": "dk",
+          "country_full": "Denmark ",
+          "city": "Copenhagen",
+          "group": 37,
+          "group_priority": 1,
+          "name_websocket": "Copenhagen",
+          "location": "copenhagen"
+        },
+        {
+          "id": 2,
+          "country": "ru",
+          "country_full": "Russia",
+          "city": "Novosibirsk",
+          "group": 2,
+          "group_priority": 1,
+          "name_websocket": "Novosibirsk",
+          "location": "novosibirsk"
+        },
+        {
+          "id": 11,
+          "country": "ua",
+          "country_full": "Ukraine",
+          "city": "Kiev",
+          "group": 11,
+          "group_priority": 1,
+          "name_websocket": "Kiev",
+          "location": "kiev"
+        },
+        {
+          "id": 3,
+          "country": "fr",
+          "country_full": "France",
+          "city": "Gravelines",
+          "group": 3,
+          "group_priority": 1,
+          "name_websocket": "France",
+          "location": "france"
+        },
+        {
+          "id": 9,
+          "country": "de",
+          "country_full": "Germany",
+          "city": "Limburg",
+          "group": 9,
+          "group_priority": 1,
+          "name_websocket": "Limburg",
+          "location": "limburg"
+        },
+        {
+          "id": 13,
+          "country": "ge",
+          "country_full": "Georgia",
+          "city": "Tbilisi",
+          "group": 13,
+          "group_priority": 1,
+          "name_websocket": "Tbilisi",
+          "location": "georgia"
+        },
+        {
+          "id": 4,
+          "country": "pl",
+          "country_full": "Poland",
+          "city": "Warsaw",
+          "group": 4,
+          "group_priority": 1,
+          "name_websocket": "Warsaw",
+          "location": "warsaw"
+        },
+        {
+          "id": 10,
+          "country": "fi",
+          "country_full": "Finland",
+          "city": "Helsinki",
+          "group": 10,
+          "group_priority": 1,
+          "name_websocket": "Helsinki",
+          "location": "finland"
+        },
+        {
+          "id": 33,
+          "country": "us",
+          "country_full": "USA",
+          "city": "New York",
+          "group": 18,
+          "group_priority": 2,
+          "name_websocket": "NEW-YORK",
+          "location": "new-york"
+        },
+        {
+          "id": 31,
+          "country": "us",
+          "country_full": "USA",
+          "city": "Chicago",
+          "group": 29,
+          "group_priority": 1,
+          "name_websocket": "CHICAGO",
+          "location": "chicago"
+        },
+        {
+          "id": 34,
+          "country": "us",
+          "country_full": "USA",
+          "city": "Los Angeles",
+          "group": 30,
+          "group_priority": 1,
+          "name_websocket": "LOS-ANGELES",
+          "location": "los-angeles"
+        },
+        {
+          "id": 25,
+          "country": "tr",
+          "country_full": "Turkey",
+          "city": "Istanbul",
+          "group": 24,
+          "group_priority": 1,
+          "name_websocket": "ISTANBUL",
+          "location": "turkey"
+        },
+        {
+          "id": 44,
+          "country": "ro",
+          "country_full": "Romania",
+          "city": "Bucharest",
+          "group": 39,
+          "group_priority": 1,
+          "name_websocket": "Bucharest",
+          "location": "bucharest"
+        },
+        {
+          "id": 43,
+          "country": "ru",
+          "country_full": "Russia",
+          "city": "Saint-Petersburg",
+          "group": 38,
+          "group_priority": 1,
+          "name_websocket": "Saint-Petersburg",
+          "location": "saintpetersburg"
+        },
+        {
+          "id": 30,
+          "country": "br",
+          "country_full": "Brazil",
+          "city": "Sao Paulo",
+          "group": 28,
+          "group_priority": 1,
+          "name_websocket": "SAO-PAULO",
+          "location": "sao-paulo"
+        },
+        {
+          "id": 28,
+          "country": "gb",
+          "country_full": "Great Britain",
+          "city": "London",
+          "group": 15,
+          "group_priority": 1,
+          "name_websocket": "London",
+          "location": "gb"
+        },
+        {
+          "id": 35,
+          "country": "us",
+          "country_full": "USA",
+          "city": "Dallas",
+          "group": 31,
+          "group_priority": 1,
+          "name_websocket": "DALLAS",
+          "location": "dallas"
+        }
+      ],
+      "type_lobby": [
+        {
+          "id": 0,
+          "name": "{{OPEN-2}}",
+          "need_password": false,
+          "searches": true
+        },
+        {
+          "id": 1,
+          "name": "{{CLOSED-2}}",
+          "need_password": true,
+          "searches": true
+        },
+        {
+          "id": 2,
+          "name": "{{PRIVATE-2}}",
+          "need_password": true,
+          "searches": false
+        }
+      ],
+      "password": {
+        "type": "str",
+        "min": 1,
+        "max": 12
+      },
+      "id_mode_players_pick": [
+        {
+          "id": 0,
+          "name": "Без пика игроков",
+          "is_default": true
+        },
+        {
+          "id": 1,
+          "name": "Пик игроков лидерами"
+        }
+      ],
+      "id_mode_match_ready": [
+        {
+          "id": 0,
+          "name": "{{HOST-S-M}}",
+          "is_default": true
+        },
+        {
+          "id": 1,
+          "name": "{{MATCH-S-IS-A-R}}"
+        }
+      ],
+      "id_mode_voice": [
+        {
+          "id": 0,
+          "name": "{{VOICE-ONLY-TEAMS}}",
+          "is_default": true
+        },
+        {
+          "id": 1,
+          "name": "{{VOICE-ALL}}"
+        }
+      ],
+      "id_mode_map_pick": [
+        {
+          "id": 0,
+          "name": "Хост выбирает карту",
+          "is_default": true
+        },
+        {
+          "id": 1,
+          "name": "Голосование командиров"
+        },
+        {
+          "id": 2,
+          "name": "Голосование большинства игроков"
+        }
+      ],
+      "id_mode_location_pick": [
+        {
+          "id": 0,
+          "name": "Хост выбирает локацию",
+          "is_default": true
+        },
+        {
+          "id": 1,
+          "name": "Голосование командиров"
+        },
+        {
+          "id": 2,
+          "name": "Голосование большинства игроков"
+        }
+      ],
+      "custom_modification": [
+        {
+          "id": 3,
+          "title": "{{RANDOMIZED-MODELS}}",
+          "name": "{{RANDOMIZED-MODELS}}",
+          "desc": "{{RANDOMIZED-MODELS-D}}",
+          "command": "!mskins",
+          "unique_name": "funrounds.random_models",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/random_models.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/random_models.png"
+        },
+        {
+          "id": 4,
+          "title": "{{PARACHUTE}}",
+          "name": "{{PARACHUTE}}",
+          "desc": "{{PARACHUTE-D}}",
+          "command": "!parachute",
+          "unique_name": "funrounds.parachute",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/parachute.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/parachute.png"
+        },
+        {
+          "id": 5,
+          "title": "{{BHOP-1}}",
+          "name": "{{BHOP-1}}",
+          "desc": "{{BHOP-1-D}}",
+          "command": "!bhop",
+          "unique_name": "funrounds.bhop",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/bhop.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/bhop.png"
+        },
+        {
+          "id": 6,
+          "title": "{{LOBBY-MOD-MDMG-T}}",
+          "name": "{{LOBBY-MOD-MDMG-T}}",
+          "desc": "{{LOBBY-MOD-MDMG-D}}",
+          "unique_name": "damage_scaler",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/shotkill.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/shotkill.png"
+        },
+        {
+          "id": 7,
+          "title": "{{LOBBY-MOD-TPP-T}}",
+          "name": "{{LOBBY-MOD-TPP-T}}",
+          "desc": "{{LOBBY-MOD-TPP-D}}",
+          "unique_name": "teleport_on_ping",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/tp_ping.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/tp_ping.png"
+        },
+        {
+          "id": 8,
+          "title": "{{LOBBY-MOD-TPK-T}}",
+          "name": "{{LOBBY-MOD-TPK-T}}",
+          "desc": "{{LOBBY-MOD-TPK-D}}",
+          "unique_name": "swap_death",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/tp_kill.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/tp_kill.png"
+        },
+        {
+          "id": 9,
+          "title": "{{LOBBY-MOD-NSPR-T}}",
+          "name": "{{LOBBY-MOD-NSPR-T}}",
+          "desc": "{{LOBBY-MOD-NSPR-D}}",
+          "unique_name": "nospread",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/no_recoil.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/no_recoil.png"
+        },
+        {
+          "id": 10,
+          "title": "{{LOBBY-MOD-SPH-T}}",
+          "name": "{{LOBBY-MOD-SPH-T}}",
+          "desc": "{{LOBBY-MOD-SPH-D}}",
+          "unique_name": "speed",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/speedhack.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/speedhack.png"
+        },
+        {
+          "id": 11,
+          "title": "{{LOBBY-MOD-MJ-T}}",
+          "name": "{{LOBBY-MOD-MJ-T}}",
+          "desc": "{{LOBBY-MOD-MJ-D}}",
+          "unique_name": "multijumps",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/multijump.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/multijump.png"
+        },
+        {
+          "id": 12,
+          "title": "{{LOBBY-MOD-HST-T}}",
+          "name": "{{LOBBY-MOD-HST-T}}",
+          "desc": "{{LOBBY-MOD-HST-D}}",
+          "unique_name": "healthshot",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/med.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/med.png"
+        },
+        {
+          "id": 13,
+          "title": "{{LOBBY-MOD-FFR-T}}",
+          "name": "{{LOBBY-MOD-FFR-T}}",
+          "desc": "{{LOBBY-MOD-FFR-D}}",
+          "unique_name": "fire_rate",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/fastfire.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/fastfire.png"
+        },
+        {
+          "id": 14,
+          "title": "{{LOBBY-MOD-CL-T}}",
+          "name": "{{LOBBY-MOD-CL-T}}",
+          "desc": "{{LOBBY-MOD-CL-D}}",
+          "unique_name": "clones",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/clone.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/clone.png"
+        },
+        {
+          "id": 15,
+          "title": "{{LOBBY-MOD-GM-T}}",
+          "name": "{{LOBBY-MOD-GM-T}}",
+          "desc": "{{LOBBY-MOD-GM-D}}",
+          "unique_name": "give_money",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/16k.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/16k.png"
+        },
+        {
+          "id": 16,
+          "title": "{{LOBBY-MOD-RP-T}}",
+          "name": "{{LOBBY-MOD-RP-T}}",
+          "desc": "{{LOBBY-MOD-RP-D}}",
+          "unique_name": "knockback",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/kick.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/kick.png"
+        }
+      ],
+      "enable_filtering": {
+        "type": "bool",
+        "default": false
+      },
+      "filtering": [
+        {
+          "id": 1,
+          "title": "{{MINIMUM-FACEIT-ELO}}",
+          "name": "{{MINIMUM-FACEIT-ELO}}",
+          "unique_name": "filtering.minimum_faceit_elo",
+          "type": "number",
+          "min": 0,
+          "max": 6000,
+          "default": 0
+        },
+        {
+          "id": 4,
+          "title": "{{MAXIMUM-PING}}",
+          "name": "{{MAXIMUM-PING}}",
+          "unique_name": "filtering.maximum_ping",
+          "type": "number",
+          "min": 5,
+          "max": 255,
+          "default": 255
+        },
+        {
+          "id": 8,
+          "title": "{{ONLY-PRIME}}",
+          "name": "{{ONLY-PRIME}}",
+          "unique_name": "filtering.only_prime",
+          "type": "bool",
+          "default": false
+        },
+        {
+          "id": 5,
+          "title": "{{ONLY-LITE}}",
+          "name": "{{ONLY-LITE}}",
+          "unique_name": "filtering.only_lite",
+          "type": "bool",
+          "default": false
+        },
+        {
+          "id": 6,
+          "title": "{{ONLY-PREMIUM}}",
+          "name": "{{ONLY-PREMIUM}}",
+          "unique_name": "filtering.only_premium",
+          "type": "bool",
+          "default": false
+        },
+        {
+          "id": 7,
+          "title": "{{ONLY-PRO-TALENT}}",
+          "name": "{{ONLY-PRO-TALENT}}",
+          "unique_name": "filtering.only_pro_talent",
+          "type": "bool",
+          "default": false
+        },
+        {
+          "id": 2,
+          "title": "{{MINIMUM-CYBERSHOKE-HOURS}}",
+          "name": "{{MINIMUM-CYBERSHOKE-HOURS}}",
+          "unique_name": "filtering.minimum_cybershoke_hours",
+          "type": "number",
+          "min": 0,
+          "max": 5000,
+          "default": 0
+        },
+        {
+          "id": 3,
+          "title": "{{MINIMUM-STREAK-DAYS}}",
+          "name": "{{MINIMUM-STREAK-DAYS}}",
+          "unique_name": "filtering.minimum_streak_days",
+          "type": "number",
+          "min": 0,
+          "max": 5000,
+          "default": 0
+        },
+        {
+          "id": 0,
+          "title": "{{FRIENDS-OF-FRIENDS}}",
+          "name": "{{FRIENDS-OF-FRIENDS}}",
+          "unique_name": "filtering.friends_of_friends",
+          "type": "bool",
+          "default": false
+        },
+        {
+          "id": 9,
+          "title": "{{ONLY-WITHOUT-BANS}}",
+          "name": "{{ONLY-WITHOUT-BANS}}",
+          "unique_name": "filtering.only_without_bans",
+          "type": "bool",
+          "default": false
+        }
+      ],
+      "id_type_match": [
+        {
+          "id": 1,
+          "name": "5x5",
+          "maps": [
+            "de_mirage",
+            "de_overpass",
+            "de_dust2",
+            "de_train",
+            "de_ancient",
+            "de_inferno",
+            "de_nuke",
+            "de_anubis",
+            "de_cache",
+            "cs_shelter",
+            "de_boulder",
+            "de_fachwerk"
+          ],
+          "is_default": true
+        },
+        {
+          "id": 3,
+          "name": "1x1 - Classic",
+          "maps": [
+            "de_mirage",
+            "de_dust2",
+            "de_inferno",
+            "de_nuke",
+            "de_vertigo",
+            "de_ancient",
+            "de_anubis",
+            "de_overpass",
+            "cs_office",
+            "cs_shelter",
+            "de_boulder",
+            "de_fachwerk"
+          ]
+        },
+        {
+          "id": 4,
+          "name": "1x1 - AIM",
+          "maps": [
+            "aim_map_s2",
+            "aim_map_carton",
+            "aim_redline_carton",
+            "aim_studio",
+            "aim_ramps",
+            "aim_awp_row",
+            "aim_allpistols_s2",
+            "aim_japan",
+            "aim_kingdom",
+            "aim_map_deadlock",
+            "awp_lego_2",
+            "aim_map",
+            "awp_india_hd"
+          ]
+        },
+        {
+          "id": 7,
+          "name": "2x2 - Wingman",
+          "maps": [
+            "de_nuke",
+            "de_inferno",
+            "de_dust2_wingman",
+            "de_mirage_wingman",
+            "de_train_wingman",
+            "de_anubis_wingman",
+            "gd_rialto",
+            "de_overpass",
+            "de_vertigo",
+            "de_lake",
+            "de_eldorado",
+            "de_debris"
+          ]
+        }
+      ],
+      "team_2_name": {
+        "type": "str",
+        "min": 1,
+        "max": 18,
+        "access_null": true
+      },
+      "team_3_name": {
+        "type": "str",
+        "min": 1,
+        "max": 18,
+        "access_null": true
+      },
+      "enable_overtimes": {
+        "type": "bool",
+        "default": true
+      },
+      "enable_streamer_mode": {
+        "type": "bool",
+        "default": false
+      },
+      "enable_knife_round": {
+        "type": "bool",
+        "default": true
+      },
+      "enable_custom_modification": [
+        {
+          "id": 0,
+          "name": "{{DISABLED-2}}"
+        },
+        {
+          "id": 1,
+          "name": "{{SELECTS-HOST}}",
+          "only_premium_host": false
+        },
+        {
+          "id": 2,
+          "name": "{{PLAYERS-CHOICE}}",
+          "only_premium_host": false,
+          "is_default": true
+        }
+      ],
+      "custom_modification_who_can": [
+        {
+          "id": 0,
+          "name": "{{SELECTS-HOST}}",
+          "only_premium_host": false
+        },
+        {
+          "id": 1,
+          "name": "{{PLAYERS-CHOICE}}",
+          "only_premium_host": false,
+          "is_default": true
+        }
+      ],
+      "max_players_4": {
+        "type": "number",
+        "min": 0,
+        "max": 1000,
+        "default": 200
+      },
+      "max_players_3": {
+        "type": "number",
+        "min": 1,
+        "max": 10,
+        "default": 5
+      },
+      "max_players_2": {
+        "type": "number",
+        "min": 1,
+        "max": 10,
+        "default": 5
+      },
+      "max_players_1": {
+        "type": "number",
+        "min": 0,
+        "max": 20,
+        "default": 10
+      },
+      "max_match_pauses": {
+        "type": "number",
+        "min": 0,
+        "max": 6,
+        "default": 4
+      },
+      "match_pause_time": {
+        "type": "number",
+        "min": 1,
+        "max": 90,
+        "default": 40
+      },
+      "cvar_maxrounds": {
+        "type": "number",
+        "min": 6,
+        "max": 60,
+        "default": 24
+      },
+      "cvar_maxmoney": {
+        "type": "number",
+        "min": 1,
+        "max": 60000,
+        "default": 16000
+      },
+      "cvar_startmoney": {
+        "type": "number",
+        "min": 0,
+        "max": 16000,
+        "default": 800
+      },
+      "cvar_freeztime": {
+        "type": "number",
+        "min": 0,
+        "max": 30,
+        "default": 15
+      },
+      "mode_blackout": {
+        "type": "bool",
+        "desc": "<>{{MODIFIER-BLACKOUT-DESCRIPTION}}</>",
+        "default": false
+      },
+      "cvar_disable_agents": {
+        "type": "bool",
+        "default": false
+      },
+      "cvar_roundtime": {
+        "type": "number",
+        "min": 10,
+        "max": 200,
+        "default": 115
+      },
+      "cvar_warmuptime": {
+        "type": "number",
+        "min": 0,
+        "max": 60,
+        "default": 15
+      },
+      "cvar_count_pause_for_team": {
+        "type": "number",
+        "min": 1,
+        "max": 9,
+        "default": 4
+      },
+      "cvar_money_in_overtimes": {
+        "type": "number",
+        "min": 0,
+        "max": 16000,
+        "default": 10000
+      },
+      "cvar_timeout_for_spec": {
+        "type": "number",
+        "min": 1,
+        "max": 120,
+        "default": 60
+      },
+      "cvar_damage_headshot_only": {
+        "type": "bool",
+        "default": false
+      },
+      "enable_gotv_1": {
+        "type": "bool",
+        "default": false
+      },
+      "enable_backup_rounds": {
+        "type": "bool",
+        "desc": "<>{{LOBBY-BACKUP-INFO}}</>",
+        "default": true
+      },
+      "enable_search_players": {
+        "type": "bool",
+        "default": false
+      },
+      "enable_players_switch_team": {
+        "type": "bool",
+        "default": true
+      },
+      "cvar_free_armor": [
+        {
+          "id": 0,
+          "name": "{{DEFAULT}}",
+          "is_default": true
+        },
+        {
+          "id": 1,
+          "name": "{{ARMOR}}"
+        },
+        {
+          "id": 2,
+          "name": "{{ARMOR}} + {{HELMET}}"
+        }
+      ],
+      "cvar_friendlyfire": [
+        {
+          "id": 1,
+          "name": "{{ENABLED-1}}",
+          "is_default": true
+        },
+        {
+          "id": 0,
+          "name": "{{OFF-2}}"
+        }
+      ],
+      "recreate_match": [
+        {
+          "id": 0,
+          "name": "{{OFF-2}}"
+        },
+        {
+          "id": 1,
+          "name": "{{ENABLED-1}}",
+          "is_default": true
+        }
+      ],
+      "id_mode_random_events": [
+        {
+          "id": 0,
+          "name": "{{OFF-2}}",
+          "is_default": true
+        },
+        {
+          "id": 1,
+          "name": "{{ENABLED-1}}"
+        }
+      ],
+      "cvar_disable_radar": [
+        {
+          "id": 0,
+          "name": "{{ENABLED-1}}",
+          "is_default": true
+        },
+        {
+          "id": 1,
+          "name": "{{OFF-2}}"
+        }
+      ],
+      "players_wait_to_all_ready": {
+        "type": "bool",
+        "default": false
+      },
+      "map_name": [
+        {
+          "id": "de_mirage",
+          "name": "de_mirage",
+          "is_default": true
+        },
+        {
+          "id": "de_overpass",
+          "name": "de_overpass"
+        },
+        {
+          "id": "de_dust2",
+          "name": "de_dust2"
+        },
+        {
+          "id": "de_train",
+          "name": "de_train"
+        },
+        {
+          "id": "de_ancient",
+          "name": "de_ancient"
+        },
+        {
+          "id": "de_inferno",
+          "name": "de_inferno"
+        },
+        {
+          "id": "de_nuke",
+          "name": "de_nuke"
+        },
+        {
+          "id": "de_anubis",
+          "name": "de_anubis"
+        },
+        {
+          "id": "de_cache",
+          "name": "de_cache"
+        },
+        {
+          "id": "cs_shelter",
+          "name": "cs_shelter"
+        },
+        {
+          "id": "de_boulder",
+          "name": "de_boulder"
+        },
+        {
+          "id": "de_fachwerk",
+          "name": "de_fachwerk"
+        }
+      ],
+      "map_name_all": [
+        {
+          "id": "cs_office",
+          "name": "cs_office"
+        },
+        {
+          "id": "cs_shelter",
+          "name": "cs_shelter"
+        },
+        {
+          "id": "de_ancient",
+          "name": "de_ancient"
+        },
+        {
+          "id": "de_anubis",
+          "name": "de_anubis"
+        },
+        {
+          "id": "de_basalt",
+          "name": "de_basalt"
+        },
+        {
+          "id": "de_boulder",
+          "name": "de_boulder"
+        },
+        {
+          "id": "de_cache",
+          "name": "de_cache"
+        },
+        {
+          "id": "de_debris",
+          "name": "de_debris"
+        },
+        {
+          "id": "de_dust2",
+          "name": "de_dust2"
+        },
+        {
+          "id": "de_edin",
+          "name": "de_edin"
+        },
+        {
+          "id": "de_eldorado",
+          "name": "de_eldorado"
+        },
+        {
+          "id": "de_fachwerk",
+          "name": "de_fachwerk"
+        },
+        {
+          "id": "de_inferno",
+          "name": "de_inferno"
+        },
+        {
+          "id": "de_mills",
+          "name": "de_mills"
+        },
+        {
+          "id": "de_mirage",
+          "name": "de_mirage"
+        },
+        {
+          "id": "de_nuke",
+          "name": "de_nuke"
+        },
+        {
+          "id": "de_overpass",
+          "name": "de_overpass"
+        },
+        {
+          "id": "de_thera",
+          "name": "de_thera"
+        },
+        {
+          "id": "de_train",
+          "name": "de_train"
+        },
+        {
+          "id": "de_vertigo",
+          "name": "de_vertigo"
+        }
+      ],
+      "bo": [
+        {
+          "id": 1,
+          "name": "Bo1",
+          "is_default": true
+        },
+        {
+          "id": 3,
+          "name": "Bo3"
+        },
+        {
+          "id": 5,
+          "name": "Bo5"
+        }
+      ]
+    },
+    "available_players_settings": {
+      "custom_modification": [
+        {
+          "id": 3,
+          "title": "{{RANDOMIZED-MODELS}}",
+          "name": "{{RANDOMIZED-MODELS}}",
+          "desc": "{{RANDOMIZED-MODELS-D}}",
+          "command": "!mskins",
+          "unique_name": "funrounds.random_models",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/random_models.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/random_models.png"
+        },
+        {
+          "id": 4,
+          "title": "{{PARACHUTE}}",
+          "name": "{{PARACHUTE}}",
+          "desc": "{{PARACHUTE-D}}",
+          "command": "!parachute",
+          "unique_name": "funrounds.parachute",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/parachute.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/parachute.png"
+        },
+        {
+          "id": 5,
+          "title": "{{BHOP-1}}",
+          "name": "{{BHOP-1}}",
+          "desc": "{{BHOP-1-D}}",
+          "command": "!bhop",
+          "unique_name": "funrounds.bhop",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/bhop.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/bhop.png"
+        },
+        {
+          "id": 6,
+          "title": "{{LOBBY-MOD-MDMG-T}}",
+          "name": "{{LOBBY-MOD-MDMG-T}}",
+          "desc": "{{LOBBY-MOD-MDMG-D}}",
+          "unique_name": "damage_scaler",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/shotkill.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/shotkill.png"
+        },
+        {
+          "id": 7,
+          "title": "{{LOBBY-MOD-TPP-T}}",
+          "name": "{{LOBBY-MOD-TPP-T}}",
+          "desc": "{{LOBBY-MOD-TPP-D}}",
+          "unique_name": "teleport_on_ping",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/tp_ping.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/tp_ping.png"
+        },
+        {
+          "id": 8,
+          "title": "{{LOBBY-MOD-TPK-T}}",
+          "name": "{{LOBBY-MOD-TPK-T}}",
+          "desc": "{{LOBBY-MOD-TPK-D}}",
+          "unique_name": "swap_death",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/tp_kill.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/tp_kill.png"
+        },
+        {
+          "id": 9,
+          "title": "{{LOBBY-MOD-NSPR-T}}",
+          "name": "{{LOBBY-MOD-NSPR-T}}",
+          "desc": "{{LOBBY-MOD-NSPR-D}}",
+          "unique_name": "nospread",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/no_recoil.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/no_recoil.png"
+        },
+        {
+          "id": 10,
+          "title": "{{LOBBY-MOD-SPH-T}}",
+          "name": "{{LOBBY-MOD-SPH-T}}",
+          "desc": "{{LOBBY-MOD-SPH-D}}",
+          "unique_name": "speed",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/speedhack.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/speedhack.png"
+        },
+        {
+          "id": 11,
+          "title": "{{LOBBY-MOD-MJ-T}}",
+          "name": "{{LOBBY-MOD-MJ-T}}",
+          "desc": "{{LOBBY-MOD-MJ-D}}",
+          "unique_name": "multijumps",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/multijump.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/multijump.png"
+        },
+        {
+          "id": 12,
+          "title": "{{LOBBY-MOD-HST-T}}",
+          "name": "{{LOBBY-MOD-HST-T}}",
+          "desc": "{{LOBBY-MOD-HST-D}}",
+          "unique_name": "healthshot",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/med.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/med.png"
+        },
+        {
+          "id": 13,
+          "title": "{{LOBBY-MOD-FFR-T}}",
+          "name": "{{LOBBY-MOD-FFR-T}}",
+          "desc": "{{LOBBY-MOD-FFR-D}}",
+          "unique_name": "fire_rate",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/fastfire.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/fastfire.png"
+        },
+        {
+          "id": 14,
+          "title": "{{LOBBY-MOD-CL-T}}",
+          "name": "{{LOBBY-MOD-CL-T}}",
+          "desc": "{{LOBBY-MOD-CL-D}}",
+          "unique_name": "clones",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/clone.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/clone.png"
+        },
+        {
+          "id": 15,
+          "title": "{{LOBBY-MOD-GM-T}}",
+          "name": "{{LOBBY-MOD-GM-T}}",
+          "desc": "{{LOBBY-MOD-GM-D}}",
+          "unique_name": "give_money",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/16k.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/16k.png"
+        },
+        {
+          "id": 16,
+          "title": "{{LOBBY-MOD-RP-T}}",
+          "name": "{{LOBBY-MOD-RP-T}}",
+          "desc": "{{LOBBY-MOD-RP-D}}",
+          "unique_name": "knockback",
+          "icon": "//cloud.cybershoke.net/pages/matches/modifications/kick.png",
+          "img": "//cloud.cybershoke.net/pages/matches/modifications/kick.png"
+        }
+      ]
+    },
+    "locations_data": [
+      {
+        "id_data_center": 1,
+        "country": "ru",
+        "key": "Moscow",
+        "country_full": "Russia",
+        "city": "Moscow",
+        "location": "moscow"
+      },
+      {
+        "id_data_center": 2,
+        "country": "ru",
+        "key": "Novosibirsk",
+        "country_full": "Russia",
+        "city": "Novosibirsk",
+        "location": "novosibirsk"
+      },
+      {
+        "id_data_center": 3,
+        "country": "fr",
+        "key": "France",
+        "country_full": "France",
+        "city": "Gravelines",
+        "location": "france"
+      },
+      {
+        "id_data_center": 4,
+        "country": "pl",
+        "key": "Warsaw",
+        "country_full": "Poland",
+        "city": "Warsaw",
+        "location": "warsaw"
+      },
+      {
+        "id_data_center": 5,
+        "country": "ru",
+        "key": "Ekaterinburg",
+        "country_full": "Russia",
+        "city": "Ekaterinburg",
+        "location": "ekaterinburg"
+      },
+      {
+        "id_data_center": 6,
+        "country": "kz",
+        "key": "Almaty",
+        "country_full": "Kazakhstan",
+        "city": "Almaty",
+        "location": "kazakhstan"
+      },
+      {
+        "id_data_center": 8,
+        "country": "de",
+        "key": "Frankfurt",
+        "country_full": "Germany",
+        "city": "Falkenstein",
+        "location": "germany"
+      },
+      {
+        "id_data_center": 9,
+        "country": "de",
+        "key": "Limburg",
+        "country_full": "Germany",
+        "city": "Limburg",
+        "location": "limburg"
+      },
+      {
+        "id_data_center": 10,
+        "country": "fi",
+        "key": "Helsinki",
+        "country_full": "Finland",
+        "city": "Helsinki",
+        "location": "finland"
+      },
+      {
+        "id_data_center": 11,
+        "country": "ua",
+        "key": "Kiev",
+        "country_full": "Ukraine",
+        "city": "Kiev",
+        "location": "kiev"
+      },
+      {
+        "id_data_center": 13,
+        "country": "ge",
+        "key": "Tbilisi",
+        "country_full": "Georgia",
+        "city": "Tbilisi",
+        "location": "georgia"
+      },
+      {
+        "id_data_center": 16,
+        "country": "se",
+        "key": "Stockholm",
+        "country_full": "Sweden",
+        "city": "Stockholm",
+        "location": "sweden"
+      },
+      {
+        "id_data_center": 17,
+        "country": "nl",
+        "key": "AMSTERDAM",
+        "country_full": "Netherlands",
+        "city": "Amsterdam",
+        "location": "amsterdam"
+      },
+      {
+        "id_data_center": 23,
+        "country": "lt",
+        "key": "Vilnius",
+        "country_full": "Lithuania",
+        "city": "Vilnius",
+        "location": "lithuania"
+      },
+      {
+        "id_data_center": 25,
+        "country": "tr",
+        "key": "ISTANBUL",
+        "country_full": "Turkey",
+        "city": "Istanbul",
+        "location": "turkey"
+      },
+      {
+        "id_data_center": 28,
+        "country": "gb",
+        "key": "London",
+        "country_full": "Great Britain",
+        "city": "London",
+        "location": "gb"
+      },
+      {
+        "id_data_center": 30,
+        "country": "br",
+        "key": "SAO-PAULO",
+        "country_full": "Brazil",
+        "city": "Sao Paulo",
+        "location": "sao-paulo"
+      },
+      {
+        "id_data_center": 31,
+        "country": "us",
+        "key": "CHICAGO",
+        "country_full": "USA",
+        "city": "Chicago",
+        "location": "chicago"
+      },
+      {
+        "id_data_center": 33,
+        "country": "us",
+        "key": "NEW-YORK",
+        "country_full": "USA",
+        "city": "New York",
+        "location": "new-york"
+      },
+      {
+        "id_data_center": 34,
+        "country": "us",
+        "key": "LOS-ANGELES",
+        "country_full": "USA",
+        "city": "Los Angeles",
+        "location": "los-angeles"
+      },
+      {
+        "id_data_center": 35,
+        "country": "us",
+        "key": "DALLAS",
+        "country_full": "USA",
+        "city": "Dallas",
+        "location": "dallas"
+      },
+      {
+        "id_data_center": 36,
+        "country": "kz",
+        "key": "ASTANA",
+        "country_full": "Kazakhstan",
+        "city": "Astana",
+        "location": "astana"
+      },
+      {
+        "id_data_center": 37,
+        "country": "ru",
+        "key": "YAKUTSK",
+        "country_full": "Russia",
+        "city": "Yakutsk",
+        "location": "yakutsk"
+      },
+      {
+        "id_data_center": 39,
+        "country": "mn",
+        "key": "Ulaanbaatar",
+        "country_full": "Mongolia",
+        "city": "Ulaanbaatar",
+        "location": "ulaanbaatar"
+      },
+      {
+        "id_data_center": 40,
+        "country": "uz",
+        "key": "Tashkent",
+        "country_full": "Uzbekistan",
+        "city": "Tashkent",
+        "location": "tashkent"
+      },
+      {
+        "id_data_center": 41,
+        "country": "lu",
+        "key": "Luxembourg",
+        "country_full": "Luxembourg",
+        "city": "Luxembourg",
+        "location": "luxembourg"
+      },
+      {
+        "id_data_center": 42,
+        "country": "dk",
+        "key": "Copenhagen",
+        "country_full": "Denmark ",
+        "city": "Copenhagen",
+        "location": "copenhagen"
+      },
+      {
+        "id_data_center": 43,
+        "country": "ru",
+        "key": "Saint-Petersburg",
+        "country_full": "Russia",
+        "city": "Saint-Petersburg",
+        "location": "saintpetersburg"
+      },
+      {
+        "id_data_center": 44,
+        "country": "ro",
+        "key": "Bucharest",
+        "country_full": "Romania",
+        "city": "Bucharest",
+        "location": "bucharest"
+      }
+    ],
+    "ip_pings_data_center": {}
+  }
+}

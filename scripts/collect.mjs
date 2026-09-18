@@ -4,7 +4,9 @@
 //   node scripts/collect.mjs
 //
 // Режим 2 (ручная дозагрузка): без авторизации, по id/ссылкам.
-//   node scripts/collect.mjs --add <ссылки или id> [--file links.txt] [--force]
+//   node scripts/collect.mjs --add <ссылки или id> [--file links.txt] [--force] [--basic-if-pending]
+// --basic-if-pending: не ждать разбора демки — сразу сохранить с basic-tier
+// статой из лобби (K/D/A/HS/счёт, без ADR/KAST/рейтинга).
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -201,7 +203,7 @@ async function saveMatch(idLobby, raw, index, statsTier) {
   else index.push(entry);
 }
 
-async function processLobby(idLobby, { index, pending, coreSteamIds, force }) {
+async function processLobby(idLobby, { index, pending, coreSteamIds, force, basicIfPending }) {
   const raw = await fetchLobbyInfo(idLobby);
   if (!raw?.data) {
     console.log(`  ${idLobby}: лобби не найдено или недоступно — пропускаю`);
@@ -239,13 +241,18 @@ async function processLobby(idLobby, { index, pending, coreSteamIds, force }) {
     console.log(`  ${idLobby}: мало игроков из coreSteamIds, но добавляю по --force`);
   }
 
-  const statsTier = classifyStats(raw);
+  let statsTier = classifyStats(raw);
   if (statsTier === "pending") {
-    if (!pending.find((p) => p.idLobby === idLobby)) {
-      pending.push({ idLobby, firstSeenAt: Date.now() });
+    if (basicIfPending) {
+      statsTier = "basic";
+      console.log(`  ${idLobby}: разбор демки ещё не готов — беру lobby-статы (--basic-if-pending)`);
+    } else {
+      if (!pending.find((p) => p.idLobby === idLobby)) {
+        pending.push({ idLobby, firstSeenAt: Date.now() });
+      }
+      console.log(`  ${idLobby}: разбор демки ещё не готов — отложено в pending.json`);
+      return { pending: true };
     }
-    console.log(`  ${idLobby}: разбор демки ещё не готов — отложено в pending.json`);
-    return { pending: true };
   }
 
   await saveMatch(idLobby, raw, index, statsTier);
@@ -259,14 +266,15 @@ function parseArgs(argv) {
   const isAdd = argv[0] === "--add";
   const rest = isAdd ? argv.slice(1) : argv;
   const force = rest.includes("--force");
-  let tokens = rest.filter((a) => a !== "--force");
+  const basicIfPending = rest.includes("--basic-if-pending");
+  let tokens = rest.filter((a) => a !== "--force" && a !== "--basic-if-pending");
   const fileIdx = tokens.indexOf("--file");
   let filePath = null;
   if (fileIdx >= 0) {
     filePath = tokens[fileIdx + 1];
     tokens = tokens.filter((_, i) => i !== fileIdx && i !== fileIdx + 1);
   }
-  return { isAdd, force, filePath, tokens };
+  return { isAdd, force, basicIfPending, filePath, tokens };
 }
 
 async function resolveManualIds(tokens, filePath) {
@@ -291,7 +299,7 @@ async function resolveManualIds(tokens, filePath) {
 }
 
 async function main() {
-  const { isAdd, force, filePath, tokens } = parseArgs(process.argv.slice(2));
+  const { isAdd, force, basicIfPending, filePath, tokens } = parseArgs(process.argv.slice(2));
 
   const config = await readJson(CONFIG_PATH, { coreSteamIds: [] });
   const index = await readJson(INDEX_PATH, []);
@@ -342,6 +350,7 @@ async function main() {
         pending,
         coreSteamIds: config.coreSteamIds,
         force,
+        basicIfPending,
       });
       if (result.saved) saved++;
       else if (result.pending) stillPending++;
