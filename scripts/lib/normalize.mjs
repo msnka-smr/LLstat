@@ -1,9 +1,11 @@
 // Превращает сырой ответ lobbys/info в один или несколько объектов «нормализованная карта».
-// Данные всегда берутся из лобби (счёт команд + live K/D на игрока) — по
-// демо-разбору (ADR, KAST, раунды по игроку и т.п.) больше не считаем: этот
-// источник у cybershoke прошёл нестабильным (заражённые смерти, ножевые
-// раунды, KAST выше 100%). Каждый игрок несёт только steamid64, имя, аватар,
-// команду, победу и K/D.
+// K/D всегда берётся из лобби (match_stats.live) — демо-разбор (ADR, KAST,
+// раунды по игроку и т.п.) не считаем вовсе, и даже K/D из него не доверяем
+// напрямую: на живых матчах демка иногда безвозвратно теряет чьи-то смерти
+// (см. detectPhantomKnifeRound и normalizeFullMap). Демо-статы (team1/team2)
+// используются только чтобы понять состав команд, победителя и счёт по
+// раундам. Каждый игрок несёт только steamid64, имя, аватар, команду, победу
+// и K/D.
 export function normalizeLobby(raw) {
   const data = raw?.data;
   if (!data) return [];
@@ -74,16 +76,23 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
   for (const teamKey of ["team1", "team2"]) {
     const teamIsWinner = !!stats[teamKey]?.isWinner;
     for (const p of stats[teamKey]?.players ?? []) {
-      const phantomDeaths = phantom?.deathsBySteamId.get(String(p.steamid64)) ?? 0;
-      seenSteamIds.add(String(p.steamid64));
+      const steamid64 = String(p.steamid64);
+      seenSteamIds.add(steamid64);
+      // K/D берём из лобби (match_stats.live), а не из демо-разбора: на живых
+      // матчах демка иногда теряет смерти одного игрока целиком (0 вместо
+      // 12+) и, судя по всему, приписывает их случайному соседу по команде —
+      // подтверждено скриншотом со страницы матча. Демо-числа остаются
+      // резервом на случай, если live почему-то не пришёл.
+      const live = roster[steamid64]?.match_stats?.live;
+      const phantomDeaths = phantom?.deathsBySteamId.get(steamid64) ?? 0;
       players.push({
-        steamid64: String(p.steamid64),
+        steamid64,
         name: p.name,
-        avatar: roster[String(p.steamid64)]?.avatar ?? null,
+        avatar: roster[steamid64]?.avatar ?? null,
         team: teamKey,
         won: teamIsWinner,
-        k: p.kills ?? 0,
-        d: (p.deaths ?? 0) - phantomDeaths,
+        k: live?.kills ?? p.kills ?? 0,
+        d: live?.deaths ?? (p.deaths ?? 0) - phantomDeaths,
       });
     }
   }

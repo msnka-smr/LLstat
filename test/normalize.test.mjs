@@ -61,6 +61,23 @@ test("without a drop, all three roster players come straight from teamN.players"
   assert.equal(map.players.length, 3);
 });
 
+// Регрессия на реальный случай: на матче 11399948 демо-разбор показал
+// Volbe 9 килов и 0 (!) смертей, а страница матча (и match_stats.live)
+// показывала 9/12 — демка потеряла все его смерти и, похоже, приписала их
+// соседу по команде (у того demo.deaths вышло заметно больше, чем в лобби).
+// K/D всегда должен приходить из live, а не из демо-разбора team1/team2.
+test("K/D comes from the roster's match_stats.live, not the demo-parsed team1/team2.players", () => {
+  const raw = buildRawLobby({ dropSteamId: null });
+  raw.data.match_more_stats.maps[1].stats.team1.players[0].kills = 9;
+  raw.data.match_more_stats.maps[1].stats.team1.players[0].deaths = 0; // демо ошиблась
+  raw.data.players["1"].match_stats.live = { kills: 9, deaths: 12 }; // реальные цифры со страницы матча
+
+  const [map] = normalizeLobby(raw);
+  const a = map.players.find((p) => p.steamid64 === "1");
+  assert.equal(a.k, 9);
+  assert.equal(a.d, 12, "должно быть 12 (из лобби), а не 0 (из демки)");
+});
+
 // Регрессия на реальный случай: cybershoke иногда засчитывает ножевой раунд
 // (выбор стороны) как настоящий раунд №1, добавляя +1 очко победившей его
 // команде. Признак — все килы раунда №1 оружием "Knife". Подтверждено на
