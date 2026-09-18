@@ -136,13 +136,14 @@ function buildLobbyWithPhantomKnifeRound() {
   const knifeRound = {
     winner: "team2",
     events: [
-      { weapon: "Knife" },
-      { weapon: "Knife" },
+      { weapon: "Knife", killerSteam: "2", victimSteam: "1" },
+      { weapon: "Knife", killerSteam: "2", victimSteam: "1" },
+      { weapon: "Knife", killerSteam: "1", victimSteam: "2" },
     ],
   };
   const realRound = {
     winner: "team1",
-    events: [{ weapon: "AK-47" }],
+    events: [{ weapon: "AK-47", killerSteam: "1", victimSteam: "2" }],
   };
   return {
     data: {
@@ -186,6 +187,12 @@ test("a knife round miscounted as round 1 is stripped from the score and totalRo
   assert.equal(team1.score, 13, "победитель фантомного раунда не выигрывал — его счёт не трогаем");
   assert.equal(team2.score, 3, "команда, выигравшая ножевой раунд, теряет то лишнее очко");
   assert.ok(map.players.every((p) => p.rounds === 16), "знаменатель для рейтинга тоже без фантомного раунда");
+
+  const a = map.players.find((p) => p.steamid64 === "1");
+  const b = map.players.find((p) => p.steamid64 === "2");
+  assert.equal(a.k, 10, "килы cybershoke уже сам не считает из ножевого раунда — не трогаем");
+  assert.equal(a.d, 3, "raw deaths=5 минус 2 смерти в ножевом раунде (по victimSteam)");
+  assert.equal(b.d, 14, "raw deaths=15 минус 1 смерть в ножевом раунде");
 });
 
 test("a normal round 1 (not all-knife) leaves the score untouched", () => {

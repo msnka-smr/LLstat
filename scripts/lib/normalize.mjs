@@ -34,21 +34,34 @@ export function normalizeLobby(raw) {
 // Признак: все килы раунда №1 — оружием "Knife" (обычные раунды такого не
 // дают). Проверено на трёх картах одной сессии против скриншотов из клиента
 // CS2 — расхождение исчезает ровно там и только там, где сработал этот признак.
-function detectPhantomKnifeRoundWinner(stats) {
+//
+// У cybershoke это же протекает и в личную статистику: p.kills уже сам по
+// себе не считает килы ножевого раунда (проверено на всей истории — совпадает
+// без исключений), а вот p.deaths его включает всегда — вычитаем смерть в
+// этом раунде точечно, по конкретному steamid64 из events. Ассисты этот же
+// раунд тоже иногда затрагивает (подтверждено на живом матче), но в events
+// нет поля ассиста, чтобы понять, кому именно — оставляем как есть.
+function detectPhantomKnifeRound(stats) {
   const round1 = stats.rounds?.[0];
   if (!round1?.events?.length) return null;
   const allKnife = round1.events.every((e) => e.weapon === "Knife");
-  return allKnife ? round1.winner : null;
+  if (!allKnife) return null;
+  const deathsBySteamId = new Map();
+  for (const e of round1.events) {
+    const id = String(e.victimSteam);
+    deathsBySteamId.set(id, (deathsBySteamId.get(id) ?? 0) + 1);
+  }
+  return { winner: round1.winner, deathsBySteamId };
 }
 
 function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }) {
   if (!stats) return null;
-  const phantomWinner = detectPhantomKnifeRoundWinner(stats);
-  const totalRounds = phantomWinner ? (stats.totalRounds ?? 0) - 1 : stats.totalRounds ?? 0;
+  const phantom = detectPhantomKnifeRound(stats);
+  const totalRounds = phantom ? (stats.totalRounds ?? 0) - 1 : stats.totalRounds ?? 0;
   const teams = ["team1", "team2"].map((key) => ({
     key,
     name: stats[key]?.name ?? null,
-    score: key === phantomWinner ? (stats[key]?.score ?? 0) - 1 : stats[key]?.score ?? null,
+    score: key === phantom?.winner ? (stats[key]?.score ?? 0) - 1 : stats[key]?.score ?? null,
     isWinner: !!stats[key]?.isWinner,
   }));
 
@@ -65,6 +78,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
       const rounds = totalRounds || p.roundsPlayed || 0;
       const kast =
         p.kastRounds != null && p.roundsPlayed ? (p.kastRounds / p.roundsPlayed) * 100 : p.kast ?? 0;
+      const phantomDeaths = phantom?.deathsBySteamId.get(String(p.steamid64)) ?? 0;
       seenSteamIds.add(String(p.steamid64));
       players.push({
         steamid64: String(p.steamid64),
@@ -74,7 +88,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
         won: teamIsWinner,
         rounds,
         k: p.kills ?? 0,
-        d: p.deaths ?? 0,
+        d: (p.deaths ?? 0) - phantomDeaths,
         a: p.assists ?? 0,
         adr: p.adr ?? 0,
         kast,
