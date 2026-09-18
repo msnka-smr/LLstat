@@ -94,57 +94,6 @@
     font-weight: 600;
   }
 
-  .spacer { flex: 1; }
-
-  /* margin-left: auto держит кнопку у правого края тулбара, даже когда
-     на узком экране она переносится на собственную строку без соседа-спейсера —
-     иначе панель (right:0 от этой обёртки) съезжает за левый край экрана. */
-  .columns-menu-wrap { position: relative; margin-left: auto; }
-
-  .btn {
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  .btn:hover { background: var(--bg-row-hover); }
-
-  .columns-panel {
-    position: absolute;
-    right: 0;
-    top: calc(100% + 6px);
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px;
-    z-index: 20;
-    width: 260px;
-    max-width: calc(100vw - 32px);
-    max-height: 70vh;
-    overflow-y: auto;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  }
-  .columns-panel[hidden] { display: none; }
-  .columns-group { margin-bottom: 10px; }
-  .columns-group h4 {
-    margin: 0 0 6px;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--text-faint);
-  }
-  .columns-panel label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 3px 0;
-    font-size: 13px;
-    cursor: pointer;
-  }
-
   .banner {
     background: var(--yellow-bg);
     border: 1px solid var(--yellow);
@@ -269,7 +218,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
     gap: 10px 18px;
-    margin-bottom: 14px;
   }
   .detail-metric .label {
     font-size: 10px;
@@ -282,39 +230,22 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .detail-maps-table {
-    width: 100%;
-    font-size: 12px;
-    border-collapse: collapse;
-  }
-  .detail-maps-table th, .detail-maps-table td {
-    padding: 4px 8px;
-    text-align: right;
-    border-bottom: 1px solid var(--border);
-  }
-  .detail-maps-table th:first-child, .detail-maps-table td:first-child { text-align: left; }
-
-  .delta-pos { color: var(--green); }
-  .delta-neg { color: var(--red); }
-
   footer {
     margin-top: 16px;
     color: var(--text-faint);
     font-size: 12px;
   }
 
-  /* На телефоне таблица сворачивается до Игрок / Рейтинг / K-D-A —
-     остальное доступно по раскрытию строки. */
-  .mobile-kda-col { display: none; }
+  /* На телефоне таблица сворачивается до Игрок / Рейтинг / K-D —
+     Карты/K/D/K-D по отдельности доступны по раскрытию строки. */
+  .mobile-kd-col { display: none; }
   @media (max-width: 640px) {
-    .opt-col, .req-collapse { display: none; }
-    .mobile-kda-col { display: table-cell; }
+    .req-collapse { display: none; }
+    .mobile-kd-col { display: table-cell; }
     body { padding-left: 8px; padding-right: 8px; }
     table { font-size: 13px; }
     thead th, tbody td { padding: 8px 6px; }
   }
-
-  .col-toggle-hidden { display: none; }
 </style>
 </head>
 <body>
@@ -331,11 +262,6 @@
       <div class="tab active" data-tab="allTime">За всё время</div>
       <div class="tab" data-tab="lastSession">Последняя сессия</div>
     </div>
-    <div class="spacer"></div>
-    <div class="columns-menu-wrap">
-      <button class="btn" id="columnsBtn">Колонки ▾</button>
-      <div class="columns-panel" id="columnsPanel" hidden></div>
-    </div>
   </div>
 
   <div id="sessionHeader"></div>
@@ -347,101 +273,30 @@
 (function () {
   "use strict";
 
-  var COLUMN_GROUPS = [
-    {
-      id: "damage", label: "Урон", columns: [
-        { id: "adr", label: "ADR", fmt: fmt1, sessionOk: true },
-        { id: "hsPercent", label: "HS%", fmt: fmtPct0, sessionOk: true },
-      ],
-    },
-    {
-      id: "stability", label: "Стабильность", columns: [
-        { id: "kast", label: "KAST", fmt: fmtPct0, sessionOk: true },
-        { id: "kpr", label: "KPR", fmt: fmt2, sessionOk: true },
-        { id: "dpr", label: "DPR", fmt: fmt2, sessionOk: true },
-      ],
-    },
-    {
-      id: "entries", label: "Размены", columns: [
-        { id: "fk", label: "FK", fmt: fmtInt, sessionOk: true },
-        { id: "fd", label: "FD", fmt: fmtInt, sessionOk: true },
-        { id: "openingSuccessRate", label: "Опенинги", fmt: fmtPct0, sessionOk: true },
-      ],
-    },
-    {
-      id: "impact", label: "Импакт", columns: [
-        { id: "mk3plus", label: "3K+", fmt: fmtInt, sessionOk: true },
-        { id: "clutches", label: "Клатчи", fmt: fmtClutches, sessionOk: true },
-        { id: "mvp", label: "MVP", fmt: fmtInt, sessionOk: true },
-      ],
-    },
-    {
-      id: "session", label: "Сессия", columns: [
-        { id: "ratingDelta", label: "Δ рейтинг", fmt: fmtDelta, sessionOnly: true },
-      ],
-    },
-  ];
-  var ALL_OPTIONAL_COLUMNS = COLUMN_GROUPS.flatMap(function (g) { return g.columns; });
-  var DEFAULT_VISIBLE = ["adr", "kast"];
-
   var REQUIRED_COLUMNS = [
     { id: "name", label: "Игрок" },
     { id: "mapsPlayed", label: "Карт", collapseMobile: true },
     { id: "k", label: "K", collapseMobile: true },
     { id: "d", label: "D", collapseMobile: true },
-    { id: "a", label: "A", collapseMobile: true },
     { id: "kd", label: "K/D", fmt: fmt2, collapseMobile: true },
-    { id: "winRate", label: "WR", fmt: fmtWr, collapseMobile: true },
     { id: "rating", label: "Рейтинг", fmt: fmtRating },
   ];
-  // На телефоне К/D/A/K-D/WR/Карт схлопываются в одну колонку "K-D-A" —
-  // остальное доступно по раскрытию строки (см. .mobile-kda-col в CSS).
+  // На телефоне Карт/K/D/K-D схлопываются в одну колонку "K-D" —
+  // остальное доступно по раскрытию строки (см. .mobile-kd-col в CSS).
 
-  function fmt1(v) { return v == null ? "—" : v.toFixed(1); }
   function fmt2(v) { return v == null ? "—" : v.toFixed(2); }
   function fmtInt(v) { return v == null ? "—" : String(v); }
-  function fmtPct0(v) { return v == null ? "—" : Math.round(v) + "%"; }
-  function fmtWr(v, row) {
-    if (v == null) return "—";
-    return Math.round(v * 100) + "%";
-  }
+  function fmtWr(v) { return v == null ? "—" : Math.round(v * 100) + "%"; }
   function fmtRating(v) { return v == null ? "—" : v.toFixed(2); }
-  function fmtClutches(v, row) {
-    return (row.clutchesWon ?? "—") + " / " + (row.clutchSituations ?? "—");
-  }
-  function fmtDelta(v) {
-    if (v == null) return "—";
-    var s = (v >= 0 ? "+" : "") + v.toFixed(2);
-    return s;
-  }
+  function fmtDiff(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v; }
 
   var state = {
     data: null,
     tab: "allTime",
     sortColumn: "rating",
     sortDirection: "desc",
-    visibleColumns: loadVisibleColumns(),
     expanded: null,
   };
-
-  function loadVisibleColumns() {
-    var fromUrl = new URLSearchParams(location.search).get("cols");
-    if (fromUrl) return fromUrl.split(",").filter(Boolean);
-    try {
-      var raw = localStorage.getItem("cs2stata.columns");
-      if (raw) return JSON.parse(raw);
-    } catch (e) { /* хранилище недоступно — используем набор по умолчанию */ }
-    return DEFAULT_VISIBLE.slice();
-  }
-
-  function saveVisibleColumns() {
-    try {
-      localStorage.setItem("cs2stata.columns", JSON.stringify(state.visibleColumns));
-    } catch (e) { /* недоступно — просто не сохраняем между визитами */ }
-    var params = new URLSearchParams(location.search);
-    params.set("cols", state.visibleColumns.join(","));
-    history.replaceState(null, "", location.pathname + "?" + params.toString());
-  }
 
   fetch("data/stats.json")
     .then(function (r) { return r.json(); })
@@ -463,22 +318,10 @@
     });
   });
 
-  var columnsBtn = document.getElementById("columnsBtn");
-  var columnsPanel = document.getElementById("columnsPanel");
-  columnsBtn.addEventListener("click", function () {
-    columnsPanel.hidden = !columnsPanel.hidden;
-  });
-  document.addEventListener("click", function (e) {
-    if (!columnsPanel.hidden && !columnsPanel.contains(e.target) && e.target !== columnsBtn) {
-      columnsPanel.hidden = true;
-    }
-  });
-
   function render() {
     if (!state.data) return;
     renderSubtitle();
     renderBanner();
-    renderColumnsPanel();
     renderSessionHeader();
     renderTable();
     renderFooter();
@@ -496,39 +339,6 @@
     el.innerHTML =
       '<div class="banner">Порог квалификации вырос до ' + drop.threshold + ' карт — вне рейтинга: ' +
       drop.droppedNames.map(escapeHtml).join(", ") + "</div>";
-  }
-
-  function currentColumns() {
-    return ALL_OPTIONAL_COLUMNS.filter(function (c) {
-      if (state.tab === "allTime" && c.sessionOnly) return false;
-      return state.visibleColumns.indexOf(c.id) !== -1;
-    });
-  }
-
-  function renderColumnsPanel() {
-    var groups = COLUMN_GROUPS.filter(function (g) {
-      return state.tab === "allTime" ? g.id !== "session" : true;
-    });
-    columnsPanel.innerHTML = groups.map(function (g) {
-      var boxes = g.columns.map(function (c) {
-        if (state.tab === "allTime" && c.sessionOnly) return "";
-        var checked = state.visibleColumns.indexOf(c.id) !== -1 ? "checked" : "";
-        return '<label><input type="checkbox" data-col="' + c.id + '" ' + checked + "> " + c.label + "</label>";
-      }).join("");
-      if (!boxes) return "";
-      return '<div class="columns-group"><h4>' + g.label + "</h4>" + boxes + "</div>";
-    }).join("");
-
-    columnsPanel.querySelectorAll("input[type=checkbox]").forEach(function (box) {
-      box.addEventListener("change", function () {
-        var id = box.dataset.col;
-        var idx = state.visibleColumns.indexOf(id);
-        if (box.checked && idx === -1) state.visibleColumns.push(id);
-        if (!box.checked && idx !== -1) state.visibleColumns.splice(idx, 1);
-        saveVisibleColumns();
-        render();
-      });
-    });
   }
 
   function renderSessionHeader() {
@@ -616,15 +426,11 @@
   function renderTable() {
     var rows = sortedRows();
     applyQuartiles(rows);
-    var optCols = currentColumns();
 
     var headHtml = "<tr>";
     REQUIRED_COLUMNS.forEach(function (c, i) {
       headHtml += headerCell(c);
-      if (i === 0) headHtml += '<th class="mobile-kda-col">K-D-A</th>';
-    });
-    optCols.forEach(function (c) {
-      headHtml += headerCell(c, true);
+      if (i === 0) headHtml += '<th class="mobile-kd-col">K-D</th>';
     });
     headHtml += "</tr>";
 
@@ -634,12 +440,12 @@
     rows.forEach(function (row) {
       if (showQualification && !row.isQualified && !thresholdShown) {
         thresholdShown = true;
-        bodyHtml += '<tr class="qual-divider"><td colspan="' + (REQUIRED_COLUMNS.length + 1 + optCols.length) +
+        bodyHtml += '<tr class="qual-divider"><td colspan="' + (REQUIRED_COLUMNS.length + 1) +
           '">менее ' + Math.round(state.data.qualification.qualifyShare * 100) +
           '% карт лидера (' + state.data.qualification.threshold + ')</td></tr>';
       }
-      bodyHtml += playerRowHtml(row, optCols, showQualification);
-      bodyHtml += detailRowHtml(row, optCols);
+      bodyHtml += playerRowHtml(row, showQualification);
+      bodyHtml += detailRowHtml(row);
     });
 
     document.getElementById("tableWrap").innerHTML =
@@ -667,13 +473,13 @@
     });
   }
 
-  function headerCell(c, optional) {
+  function headerCell(c) {
     var sorted = state.sortColumn === c.id ? "sorted" : "";
-    var cls = (optional ? "opt-col " : "") + (c.collapseMobile ? "req-collapse " : "") + sorted;
+    var cls = (c.collapseMobile ? "req-collapse " : "") + sorted;
     return '<th class="' + cls + '" data-sort="' + c.id + '">' + escapeHtml(c.label) + "</th>";
   }
 
-  function playerRowHtml(row, optCols, showQualification) {
+  function playerRowHtml(row, showQualification) {
     var isUnqualified = showQualification && !row.isQualified;
     var cls = "player-row" + (isUnqualified ? " unqualified" : "");
     var mapsCell = !isUnqualified
@@ -688,70 +494,40 @@
     cells += '<td><div class="player-cell">' +
       '<a href="' + escapeHtml(row.steamProfileUrl) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' +
       avatarHtml + '<span class="player-name">' + escapeHtml(row.name) + "</span></a></div></td>";
-    cells += '<td class="mobile-kda-col">' + row.k + "-" + row.d + "-" + row.a + "</td>";
+    cells += '<td class="mobile-kd-col">' + row.k + "-" + row.d + "</td>";
     cells += '<td class="maps-cell req-collapse">' + mapsCell + "</td>";
     cells += '<td class="req-collapse">' + row.k + "</td>";
     cells += '<td class="req-collapse">' + row.d + "</td>";
-    cells += '<td class="req-collapse">' + row.a + "</td>";
     cells += '<td class="req-collapse">' + fmt2(row.kd) + "</td>";
-    cells += '<td class="req-collapse">' + fmtWr(row.winRate) + '<br><small style="color:var(--text-faint)">' +
-      row.wins + "-" + row.losses + "</small></td>";
     cells += '<td><span class="rating-cell ' + ratingClass(row) + '">' + fmtRating(row.rating) + "</span></td>";
-
-    optCols.forEach(function (c) {
-      cells += '<td class="opt-col">' + c.fmt(row[c.id], row) + "</td>";
-    });
 
     return '<tr class="' + cls + '" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
   }
 
-  function detailRowHtml(row, optCols) {
+  function detailRowHtml(row) {
     var expanded = state.expanded === row.steamid64;
-    var colspan = REQUIRED_COLUMNS.length + 1 + optCols.length;
+    var colspan = REQUIRED_COLUMNS.length + 1;
     if (!expanded) {
       return '<tr class="detail-row" hidden><td colspan="' + colspan + '"></td></tr>';
     }
 
     var metrics = [
-      ["ADR", fmt1(row.adr)],
-      ["KAST", fmtPct0(row.kast)],
-      ["KPR", fmt2(row.kpr)],
-      ["DPR", fmt2(row.dpr)],
-      ["HS%", fmtPct0(row.hsPercent)],
-      ["FK / FD", (row.fk ?? "—") + " / " + (row.fd ?? "—")],
-      ["Опенинги", fmtPct0(row.openingSuccessRate)],
-      ["3K+", fmtInt(row.mk3plus)],
-      ["Клатчи", fmtClutches(null, row)],
-      ["MVP", fmtInt(row.mvp)],
+      ["Раунды", fmtInt(row.totalRounds)],
+      ["K-D", fmtDiff(row.k - row.d)],
+      ["WR", fmtWr(row.winRate) + " (" + row.wins + "-" + row.losses + ")"],
     ];
     var metricsHtml = metrics.map(function (m) {
       return '<div class="detail-metric"><div class="label">' + m[0] + '</div><div class="value">' + m[1] + "</div></div>";
     }).join("");
 
-    var mapsHtml = (row.maps || []).map(function (m) {
-      return "<tr><td>" + escapeHtml(m.map || "?") + "</td><td>" + formatDate(m.playedAt) + "</td>" +
-        "<td>" + (m.won == null ? "—" : (m.won ? "W" : "L")) + "</td>" +
-        "<td>" + m.k + "/" + m.d + "/" + m.a + "</td>" +
-        "<td>" + fmt1(m.adr) + "</td><td>" + fmtPct0(m.kast) + "</td>" +
-        "<td>" + fmtRating(m.rating) + "</td></tr>";
-    }).join("");
-
     return '<tr class="detail-row"><td colspan="' + colspan + '">' +
-      '<div class="detail-grid">' + metricsHtml + "</div>" +
-      '<table class="detail-maps-table"><thead><tr><th>Карта</th><th>Дата</th><th>W/L</th>' +
-      "<th>K/D/A</th><th>ADR</th><th>KAST</th><th>Rating</th></tr></thead><tbody>" +
-      mapsHtml + "</tbody></table></td></tr>";
+      '<div class="detail-grid">' + metricsHtml + "</div></td></tr>";
   }
 
   function formatDateTime(iso) {
     if (!iso) return "—";
     var d = new Date(iso);
     return d.toLocaleString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
-  }
-  function formatDate(unixSec) {
-    if (!unixSec) return "—";
-    var d = new Date(unixSec * 1000);
-    return d.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "2-digit" });
   }
 
   function escapeHtml(s) {

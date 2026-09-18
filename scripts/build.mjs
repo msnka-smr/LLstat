@@ -121,11 +121,16 @@ function buildMapBreakdown(mapsForPlayer) {
 function buildRow(steamid64, registry, mapsForPlayer, threshold, leagueAvgRating) {
   const agg = aggregatePlayerMaps(mapsForPlayer);
   const ratingRel = agg.rating != null && leagueAvgRating ? agg.rating / leagueAvgRating : null;
+  // Раунды по всем картам независимо от тира (в отличие от agg.fullTierRounds,
+  // который считает только карты с demo-статой) — для лобби-карт это
+  // totalRounds самой карты, а не что-то за конкретного игрока.
+  const totalRounds = mapsForPlayer.reduce((sum, m) => sum + (m.mapTotalRounds ?? 0), 0);
   return {
     steamid64,
     name: displayName(registry, steamid64),
     avatarUrl: registry[steamid64]?.avatarUrl ?? null,
     steamProfileUrl: `https://steamcommunity.com/profiles/${steamid64}`,
+    totalRounds,
     mapsPlayed: agg.mapsPlayed,
     wins: agg.wins,
     losses: agg.losses,
@@ -178,7 +183,7 @@ async function main() {
   for (const map of sortedMaps) {
     for (const p of map.players) {
       const list = byPlayerAllTime.get(p.steamid64) ?? [];
-      list.push({ ...p, statsTier: map.statsTier, mapId: map.mapId, map: map.map, playedAt: map.playedAt, sessionId: map.sessionId });
+      list.push({ ...p, statsTier: map.statsTier, mapId: map.mapId, map: map.map, playedAt: map.playedAt, sessionId: map.sessionId, mapTotalRounds: map.totalRounds });
       byPlayerAllTime.set(p.steamid64, list);
     }
   }
@@ -234,7 +239,7 @@ async function main() {
     for (const map of lastSession.maps) {
       for (const p of map.players) {
         const list = byPlayerSession.get(p.steamid64) ?? [];
-        list.push({ ...p, statsTier: map.statsTier, mapId: map.mapId, map: map.map, playedAt: map.playedAt, sessionId: map.sessionId });
+        list.push({ ...p, statsTier: map.statsTier, mapId: map.mapId, map: map.map, playedAt: map.playedAt, sessionId: map.sessionId, mapTotalRounds: map.totalRounds });
         byPlayerSession.set(p.steamid64, list);
       }
     }
