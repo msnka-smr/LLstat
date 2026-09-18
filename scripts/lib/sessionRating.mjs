@@ -1,6 +1,7 @@
 // Рейтинг "последняя сессия" — статический, считается один раз по всем
 // картам сессии. Входы: K/D ratio (60%), средний K-D diff за карту,
-// нормированный к тому же порядку величины (40%), винрейт (10%).
+// нормированный к тому же порядку величины (30%), винрейт (10%) — веса
+// в сумме дают 100% (раньше было 60/40/10 = 110%, что не имело смысла).
 //
 // avg_K_D_diff — «сырая» разница килл-смертей за карту (может быть от -15
 // до +15), а K/D ratio и WR — величины порядка 0-2 и 0-1. Без нормализации
@@ -14,7 +15,7 @@
 const MIN_RATING = 1;
 const MAX_RATING = 3500;
 const DIFF_NORMALIZER = 10;
-const BASELINE_SCORE = 1.0 * 0.6 + 0 * 0.4 + 0.5 * 0.1; // = 0.65
+const BASELINE_SCORE = 1.0 * 0.6 + 0 * 0.3 + 0.5 * 0.1; // = 0.65
 const SCALE = 350;
 const CENTER = 500;
 
@@ -32,7 +33,7 @@ export function calcSessionRating(matches) {
   const wins = matches.filter((m) => m.won).length;
   const wr = wins / matches.length;
 
-  const score = kdRatio * 0.6 + diffNorm * 0.4 + wr * 0.1;
+  const score = kdRatio * 0.6 + diffNorm * 0.3 + wr * 0.1;
   const rating = CENTER + (score - BASELINE_SCORE) * SCALE;
   return Math.max(MIN_RATING, Math.min(MAX_RATING, Math.round(rating)));
 }
