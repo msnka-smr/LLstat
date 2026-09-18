@@ -431,12 +431,34 @@
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
-  .draft-counter {
+  .draft-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
     margin: 12px 0;
+  }
+  .draft-counter {
     font-size: 13px;
     color: var(--text-dim);
   }
   .draft-counter.full { color: var(--green); font-weight: 600; }
+  .draft-clear-btn {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .draft-clear-btn:hover { color: var(--text); border-color: var(--text-dim); }
+  .draft-variant-note {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: center;
+  }
   .draft-teams {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -953,7 +975,7 @@
   // без всякой эвристики, и берём точный оптимум.
   var DRAFT_MAX = 10;
   var DRAFT_GEN_PREFIX = "llstat:draftGen:";
-  var draftState = { selected: new Set() };
+  var draftState = { selected: new Set(), lastKey: null, lastSplits: null, currentView: 0 };
 
   function draftKeyFor(ids) {
     return DRAFT_GEN_PREFIX + ids.slice().sort().join(",");
@@ -996,7 +1018,10 @@
         '<p class="draft-hint">Выбери ровно 10 игроков — поделим на два состава 5×5 максимально балансово ' +
         "по рейтингу, K-D и K/D.</p>" +
         '<div class="draft-list" id="draftList">' + rowsHtml + "</div>" +
-        '<div class="draft-counter" id="draftCounter">Выбрано: 0 / ' + DRAFT_MAX + "</div>" +
+        '<div class="draft-toolbar">' +
+          '<div class="draft-counter" id="draftCounter">Выбрано: 0 / ' + DRAFT_MAX + "</div>" +
+          '<button type="button" class="draft-clear-btn" id="draftClearBtn">Очистить всё</button>' +
+        "</div>" +
         '<button type="button" class="wheel-spin-btn" id="draftFormBtn" disabled>Сформировать состав</button>' +
         '<div id="draftResult"></div>' +
       "</div>";
@@ -1007,6 +1032,17 @@
     document.getElementById("draftFormBtn").addEventListener("click", function () {
       runDraft(false);
     });
+    document.getElementById("draftClearBtn").addEventListener("click", clearDraftSelection);
+  }
+
+  function clearDraftSelection() {
+    draftState.selected.clear();
+    document.querySelectorAll('#draftList input[type="checkbox"]').forEach(function (cb) {
+      cb.checked = false;
+      cb.disabled = false;
+    });
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
   }
 
   function onDraftCheckboxChange(e) {
@@ -1078,25 +1114,39 @@
     return splits;
   }
 
+  // Оба варианта (лучший и второй по качеству) считаются один раз и кэшируются
+  // в draftState — переключение между ними после этого бесплатное и не тратит
+  // лимит генераций, лимит защищает только от появления третьего варианта.
   function runDraft(isAgain) {
     if (draftState.selected.size !== DRAFT_MAX) return;
     var ids = Array.from(draftState.selected);
-    var allPlayers = state.data.allTime.players;
-    var players = ids.map(function (id) {
-      return allPlayers.find(function (p) { return p.steamid64 === id; });
-    });
-
     var key = draftKeyFor(ids);
     var used = loadDraftGenCount(key);
-    var genIndex = isAgain ? 1 : 0;
-    if (genIndex === 1 && used >= 2) return; // кнопка "ещё раз" не должна быть видна в этом случае
 
-    var splits = computeDraftSplits(players);
-    saveDraftGenCount(key, Math.max(used, genIndex + 1));
-    renderDraftResult(splits[genIndex], key);
+    if (isAgain) {
+      if (used < 2) saveDraftGenCount(key, 2);
+      showDraftVariant(1);
+      return;
+    }
+
+    if (draftState.lastKey !== key) {
+      var allPlayers = state.data.allTime.players;
+      var players = ids.map(function (id) {
+        return allPlayers.find(function (p) { return p.steamid64 === id; });
+      });
+      draftState.lastKey = key;
+      draftState.lastSplits = computeDraftSplits(players);
+    }
+    saveDraftGenCount(key, Math.max(used, 1));
+    showDraftVariant(0);
   }
 
-  function renderDraftResult(split, key) {
+  function showDraftVariant(index) {
+    draftState.currentView = index;
+    renderDraftResult(draftState.lastSplits[index], draftState.lastKey, index);
+  }
+
+  function renderDraftResult(split, key, variantIndex) {
     var resultEl = document.getElementById("draftResult");
 
     function teamHtml(title, team, avgRating, avgKdDiff, avgKd) {
@@ -1109,7 +1159,11 @@
         " · средний K/D: " + avgKd.toFixed(2) + "</div></div>";
     }
 
-    var canRegenerate = loadDraftGenCount(key) < 2;
+    var used = loadDraftGenCount(key);
+    var switchButtonHtml = variantIndex === 0
+      ? '<button type="button" class="wheel-spin-btn" id="draftSwitchBtn">' +
+        (used < 2 ? "🔁 Сгенерировать ещё раз" : "➡️ Показать 2-й вариант") + "</button>"
+      : '<button type="button" class="wheel-spin-btn" id="draftSwitchBtn">⬅️ Показать 1-й вариант</button>';
 
     resultEl.innerHTML =
       '<div class="draft-teams">' +
@@ -1119,15 +1173,12 @@
       '<div class="draft-summary">Разница в среднем рейтинге — <strong>' + Math.round(split.ratingDiff) +
       "</strong>, в среднем K-D — <strong>" + split.kdDiffDiff.toFixed(1) +
       "</strong>, в среднем K/D — <strong>" + split.kdDiff.toFixed(2) + "</strong>.</div>" +
-      (canRegenerate
-        ? '<div class="draft-again-wrap"><button type="button" class="wheel-spin-btn" id="draftAgainBtn">🔁 Сгенерировать ещё раз</button></div>'
-        : '<div class="draft-limit-note">Лимит генераций для этого состава достигнут — поменяй хотя бы одного игрока, чтобы попробовать снова.</div>');
+      '<div class="draft-again-wrap">' + switchButtonHtml + "</div>" +
+      '<div class="draft-variant-note">Вариант ' + (variantIndex + 1) + " из 2 — больше вариантов для этой десятки не будет.</div>";
 
-    if (canRegenerate) {
-      document.getElementById("draftAgainBtn").addEventListener("click", function () {
-        runDraft(true);
-      });
-    }
+    document.getElementById("draftSwitchBtn").addEventListener("click", function () {
+      runDraft(variantIndex === 0);
+    });
   }
 
   function formatDateTime(iso) {
