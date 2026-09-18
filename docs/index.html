@@ -306,6 +306,87 @@
       cursor: pointer;
     }
   }
+
+  .wheel-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .wheel-category {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    min-height: 20px;
+  }
+  .wheel-stage {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 0 auto 16px;
+  }
+  .wheel-pointer {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    line-height: 1;
+    color: var(--accent);
+    z-index: 2;
+  }
+  .wheel-dial {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: transform 5s cubic-bezier(0.12, 0.65, 0.18, 1);
+  }
+  .wheel-seg-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 64px;
+    margin-left: -32px;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.2;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wheel-seg-label img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 2px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    object-fit: cover;
+  }
+  .wheel-spin-btn {
+    background: var(--accent);
+    color: #0c1420;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .wheel-spin-btn:disabled { opacity: 0.5; cursor: default; }
+  .wheel-result {
+    margin-top: 14px;
+    font-size: 14px;
+    min-height: 20px;
+  }
+  .wheel-result strong { color: var(--accent); }
 </style>
 </head>
 <body>
@@ -328,6 +409,7 @@
   <div id="sessionHeader"></div>
   <div class="mobile-sort" id="mobileSort"></div>
   <div id="tableWrap"></div>
+  <div id="wheelSection"></div>
 
   <footer id="footer"></footer>
 
@@ -401,6 +483,7 @@
     renderMobileSort();
     renderTable();
     renderFooter();
+    renderWheelSection();
   }
 
   function renderMobileSort() {
@@ -626,6 +709,112 @@
 
     return '<tr class="detail-row"><td colspan="' + colspan + '">' +
       '<div class="detail-grid">' + metricsHtml + "</div></td></tr>";
+  }
+
+  // Чисто for fun: колесо фортуны на вкладке "Последняя сессия". Категории
+  // "random" разыгрываются честным случайным выбором среди участников сессии
+  // (специально не завязаны на статистику, чтобы никого не обижать), а
+  // "best"/"worst" всегда указывают на реального лидера/последнего по
+  // рейтингу этой сессии — players уже отсортирован по рейтингу (см. build.mjs).
+  var WHEEL_CATEGORIES = [
+    { text: "Кто покупает всем пивасик?", type: "random" },
+    { text: "Кого баним на следующую сессию?", type: "random" },
+    { text: "Титул: Отец-Доминатор", type: "random" },
+    { text: "Лучше бы остался дома <3", type: "random" },
+    { text: "Тащер вечера", type: "best" },
+    { text: "Посмотрю пару стримов и в следующий раз всех нагну", type: "worst" },
+  ];
+  var WHEEL_COLORS = ["#6ea8ff", "#3ecf6e", "#e0c34c", "#e0923e", "#e0625c", "#9b6bff", "#4cd2e0", "#e05c9e"];
+  var wheelState = { rotation: 0, spinning: false };
+
+  function wheelShortName(name) {
+    return name.length > 9 ? name.slice(0, 8) + "…" : name;
+  }
+
+  function renderWheelSection() {
+    var el = document.getElementById("wheelSection");
+    var session = state.data.lastSession;
+    var hasSession = session && session.players.length > 0;
+    if (!hasSession) {
+      el.innerHTML = "";
+      el.dataset.built = "";
+      return;
+    }
+    if (el.dataset.built !== session.id) {
+      buildWheel(el, session.players);
+      el.dataset.built = session.id;
+    }
+    el.style.display = state.tab === "lastSession" ? "" : "none";
+  }
+
+  function buildWheel(el, players) {
+    var n = players.length;
+    var seg = 360 / n;
+
+    var gradientParts = players.map(function (p, i) {
+      var color = WHEEL_COLORS[i % WHEEL_COLORS.length];
+      return color + " " + (i * seg) + "deg " + ((i + 1) * seg) + "deg";
+    }).join(", ");
+
+    var labelsHtml = players.map(function (p, i) {
+      var ci = i * seg + seg / 2;
+      var avatarHtml = p.avatarUrl ? '<img src="' + escapeHtml(p.avatarUrl) + '" alt="">' : "";
+      return '<div class="wheel-seg-label" style="transform: rotate(' + ci + 'deg) translate(0, -92px) rotate(' + (-ci) + 'deg);">' +
+        avatarHtml + "<span>" + escapeHtml(wheelShortName(p.name)) + "</span></div>";
+    }).join("");
+
+    el.innerHTML =
+      '<div class="wheel-section">' +
+        '<div class="wheel-category" id="wheelCategory">Крути колесо!</div>' +
+        '<div class="wheel-stage">' +
+          '<div class="wheel-pointer">▼</div>' +
+          '<div class="wheel-dial" id="wheelDial" style="background: conic-gradient(' + gradientParts + ');">' + labelsHtml + "</div>" +
+        "</div>" +
+        '<button type="button" class="wheel-spin-btn" id="wheelSpinBtn">🎡 Крутить колесо</button>' +
+        '<div class="wheel-result" id="wheelResult"></div>' +
+      "</div>";
+
+    wheelState.rotation = 0;
+    wheelState.spinning = false;
+    document.getElementById("wheelSpinBtn").addEventListener("click", spinWheel);
+  }
+
+  function spinWheel() {
+    if (wheelState.spinning || !state.data.lastSession) return;
+    var players = state.data.lastSession.players;
+    var n = players.length;
+    var seg = 360 / n;
+
+    var category = WHEEL_CATEGORIES[Math.floor(Math.random() * WHEEL_CATEGORIES.length)];
+    var winnerIndex;
+    if (category.type === "best") {
+      winnerIndex = 0;
+    } else if (category.type === "worst") {
+      winnerIndex = n - 1;
+    } else {
+      winnerIndex = Math.floor(Math.random() * n);
+    }
+    var winner = players[winnerIndex];
+
+    var ci = winnerIndex * seg + seg / 2;
+    var curMod = wheelState.rotation % 360;
+    var targetMod = (360 - ci) % 360;
+    var delta = (targetMod - curMod + 360) % 360;
+    var extraSpins = 5;
+    wheelState.rotation += extraSpins * 360 + delta;
+
+    wheelState.spinning = true;
+    document.getElementById("wheelCategory").textContent = category.text;
+    document.getElementById("wheelResult").textContent = "";
+    document.getElementById("wheelSpinBtn").disabled = true;
+    document.getElementById("wheelDial").style.transform = "rotate(" + wheelState.rotation + "deg)";
+
+    setTimeout(function () {
+      wheelState.spinning = false;
+      document.getElementById("wheelSpinBtn").disabled = false;
+      document.getElementById("wheelResult").innerHTML =
+        escapeHtml(category.text) + ": <strong>" + escapeHtml(winner.name) + "</strong>";
+    }, 5000);
   }
 
   function formatDateTime(iso) {
