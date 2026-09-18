@@ -1,19 +1,12 @@
 {
-  "generatedAt": "2026-09-18T12:33:42.441Z",
+  "generatedAt": "2026-09-18T12:40:55.264Z",
   "totalMapsCollected": 32,
   "qualification": {
     "threshold": 13,
     "maxMaps": 32,
     "qualifyShare": 0.4,
     "qualifyMinMaps": 5,
-    "qualificationDrop": {
-      "previousThreshold": 10,
-      "threshold": 13,
-      "droppedNames": [
-        "Пикулинни Браветти.",
-        "SKU4NO"
-      ]
-    }
+    "qualificationDrop": null
   },
   "allTime": {
     "players": [
