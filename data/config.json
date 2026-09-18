@@ -14,6 +14,6 @@
   },
   "sessionGapHours": 6,
   "sessionTimezone": "Europe/Samara",
-  "qualifyShare": 0.30,
+  "qualifyShare": 0.40,
   "qualifyMinMaps": 5
 }

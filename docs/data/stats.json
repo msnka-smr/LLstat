@@ -1,12 +1,19 @@
 {
-  "generatedAt": "2026-09-18T12:28:27.715Z",
+  "generatedAt": "2026-09-18T12:33:42.441Z",
   "totalMapsCollected": 32,
   "qualification": {
-    "threshold": 10,
+    "threshold": 13,
     "maxMaps": 32,
-    "qualifyShare": 0.3,
+    "qualifyShare": 0.4,
     "qualifyMinMaps": 5,
-    "qualificationDrop": null
+    "qualificationDrop": {
+      "previousThreshold": 10,
+      "threshold": 13,
+      "droppedNames": [
+        "Пикулинни Браветти.",
+        "SKU4NO"
+      ]
+    }
   },
   "allTime": {
     "players": [
@@ -88,38 +95,6 @@
         "d": 580,
         "kd": 0.6293103448275862,
         "rating": 510,
-        "isQualified": true
-      },
-      {
-        "steamid64": "76561198272167310",
-        "name": "Пикулинни Браветти.",
-        "avatarUrl": "https://avatars.steamstatic.com/2153439125bf63fe9ffb1b07920ddd6d9ded0fc2_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198272167310",
-        "totalRounds": 241,
-        "mapsPlayed": 11,
-        "wins": 4,
-        "losses": 7,
-        "winRate": 0.36363636363636365,
-        "k": 279,
-        "d": 162,
-        "kd": 1.7222222222222223,
-        "rating": 486,
-        "isQualified": true
-      },
-      {
-        "steamid64": "76561198048534904",
-        "name": "SKU4NO",
-        "avatarUrl": "https://avatars.steamstatic.com/7b3bf09a1a529b13453f4aa8948230762a046c1c_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198048534904",
-        "totalRounds": 252,
-        "mapsPlayed": 12,
-        "wins": 3,
-        "losses": 9,
-        "winRate": 0.25,
-        "k": 245,
-        "d": 188,
-        "kd": 1.303191489361702,
-        "rating": 469,
         "isQualified": true
       },
       {
@@ -296,6 +271,38 @@
         "d": 90,
         "kd": 1.4,
         "rating": 490,
+        "isQualified": false
+      },
+      {
+        "steamid64": "76561198272167310",
+        "name": "Пикулинни Браветти.",
+        "avatarUrl": "https://avatars.steamstatic.com/2153439125bf63fe9ffb1b07920ddd6d9ded0fc2_full.jpg",
+        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198272167310",
+        "totalRounds": 241,
+        "mapsPlayed": 11,
+        "wins": 4,
+        "losses": 7,
+        "winRate": 0.36363636363636365,
+        "k": 279,
+        "d": 162,
+        "kd": 1.7222222222222223,
+        "rating": 486,
+        "isQualified": false
+      },
+      {
+        "steamid64": "76561198048534904",
+        "name": "SKU4NO",
+        "avatarUrl": "https://avatars.steamstatic.com/7b3bf09a1a529b13453f4aa8948230762a046c1c_full.jpg",
+        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198048534904",
+        "totalRounds": 252,
+        "mapsPlayed": 12,
+        "wins": 3,
+        "losses": 9,
+        "winRate": 0.25,
+        "k": 245,
+        "d": 188,
+        "kd": 1.303191489361702,
+        "rating": 469,
         "isQualified": false
       }
     ]
