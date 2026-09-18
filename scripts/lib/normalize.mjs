@@ -28,12 +28,27 @@ export function normalizeLobby(raw) {
   return [normalizeBasicMap({ lobbyId: data.id_lobby, data, playedAtFallback })];
 }
 
+// Лобби с enable_knife_round периодически заводят ножевой раунд (выбор
+// стороны) прямо в demo — cybershoke иногда засчитывает его как настоящий
+// раунд №1, добавляя +1 очко победившей его команде и +1 к totalRounds.
+// Признак: все килы раунда №1 — оружием "Knife" (обычные раунды такого не
+// дают). Проверено на трёх картах одной сессии против скриншотов из клиента
+// CS2 — расхождение исчезает ровно там и только там, где сработал этот признак.
+function detectPhantomKnifeRoundWinner(stats) {
+  const round1 = stats.rounds?.[0];
+  if (!round1?.events?.length) return null;
+  const allKnife = round1.events.every((e) => e.weapon === "Knife");
+  return allKnife ? round1.winner : null;
+}
+
 function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }) {
   if (!stats) return null;
+  const phantomWinner = detectPhantomKnifeRoundWinner(stats);
+  const totalRounds = phantomWinner ? (stats.totalRounds ?? 0) - 1 : stats.totalRounds ?? 0;
   const teams = ["team1", "team2"].map((key) => ({
     key,
     name: stats[key]?.name ?? null,
-    score: stats[key]?.score ?? null,
+    score: key === phantomWinner ? (stats[key]?.score ?? 0) - 1 : stats[key]?.score ?? null,
     isWinner: !!stats[key]?.isWinner,
   }));
 
@@ -42,12 +57,12 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
   for (const teamKey of ["team1", "team2"]) {
     const teamIsWinner = !!stats[teamKey]?.isWinner;
     for (const p of stats[teamKey]?.players ?? []) {
-      // stats.totalRounds — надёжное число раундов карты. p.roundsPlayed у
-      // некоторых игроков (похоже, из-за реконнектов) бывает кратно больше
-      // totalRounds — используем его только для реконструкции kast (числитель
-      // kastRounds страдает тем же искажением, так что оно взаимно гасится),
-      // а не как знаменатель для KPR/DPR/APR.
-      const rounds = stats.totalRounds || p.roundsPlayed || 0;
+      // totalRounds (уже без фантомного ножевого раунда, см. выше) — надёжное
+      // число раундов карты. p.roundsPlayed у некоторых игроков (похоже,
+      // из-за реконнектов) бывает кратно больше — используем его только для
+      // реконструкции kast (числитель kastRounds страдает тем же искажением,
+      // так что оно взаимно гасится), а не как знаменатель для KPR/DPR/APR.
+      const rounds = totalRounds || p.roundsPlayed || 0;
       const kast =
         p.kastRounds != null && p.roundsPlayed ? (p.kastRounds / p.roundsPlayed) * 100 : p.kast ?? 0;
       seenSteamIds.add(String(p.steamid64));
@@ -123,7 +138,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
     mapIndex,
     map: stats.map ?? null,
     playedAt: playedAtFallback,
-    totalRounds: stats.totalRounds ?? null,
+    totalRounds: totalRounds || null,
     durationSec: stats.durationSec ?? null,
     teams,
     players,
