@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Как считается рейтинг</title>
+<link rel="icon" type="image/png" href="favicon.png" />
+<style>
+  :root {
+    --bg: #14161c;
+    --bg-panel: #1b1e26;
+    --bg-panel-alt: #20232c;
+    --border: #2c303b;
+    --text: #e6e8ef;
+    --text-dim: #9096a6;
+    --text-faint: #5b6172;
+    --accent: #6ea8ff;
+    --accent-bg: rgba(110, 168, 255, 0.14);
+    --green: #3ecf6e;
+    --green-bg: rgba(62, 207, 110, 0.14);
+    --yellow: #e0c34c;
+    --yellow-bg: rgba(224, 195, 76, 0.12);
+    --orange: #e0923e;
+    --orange-bg: rgba(224, 146, 62, 0.14);
+    --red: #e0625c;
+    --red-bg: rgba(224, 98, 92, 0.14);
+    --neutral: #9096a6;
+    --neutral-bg: rgba(144, 150, 166, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    padding: 20px 16px 64px;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin: 0 0 32px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin: 40px 0 12px;
+    padding-top: 4px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+
+  h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-dim);
+    margin: 24px 0 10px;
+  }
+
+  p { margin: 0 0 14px; color: var(--text); }
+  ul { margin: 0 0 14px; padding-left: 20px; }
+  li { margin-bottom: 6px; }
+
+  .formula {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 14px 0;
+    font-family: "SF Mono", Consolas, Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    overflow-x: auto;
+  }
+  .formula .hl { color: var(--accent); }
+
+  .example {
+    background: var(--bg-panel-alt);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  .example .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14px;
+    background: var(--bg-panel);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 9px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-faint);
+  }
+  tr:last-child td { border-bottom: none; }
+
+  .tier-pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .tier-green { background: var(--green-bg); color: var(--green); }
+  .tier-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .tier-orange { background: var(--orange-bg); color: var(--orange); }
+  .tier-red { background: var(--red-bg); color: var(--red); }
+  .tier-neutral { background: var(--neutral-bg); color: var(--neutral); }
+  .tier-accent { background: var(--accent-bg); color: var(--accent); }
+
+  .table-scroll { overflow-x: auto; }
+
+  .faq-item { margin-bottom: 18px; }
+  .faq-item .q { font-weight: 600; margin-bottom: 4px; }
+  .faq-item .a { color: var(--text-dim); margin: 0; }
+
+  .note {
+    font-size: 13px;
+    color: var(--text-faint);
+    margin: 8px 0 0;
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <a class="back-link" href="index.html">← К таблице</a>
+    <h1>Как считается рейтинг</h1>
+    <p class="subtitle">Два разных числа — «Последняя сессия» и «За всё время» — и почему они не обязаны совпадать.</p>
+
+    <h2>Общий принцип</h2>
+    <p>Оба рейтинга живут на одной шкале — от <strong>1 до 10000</strong>. Верхняя граница взята с большим запасом:
+    цель не в том, чтобы кто-то быстро упёрся в потолок, а в том, чтобы шкале было куда расти вместе с историей матчей.
+    Плохая карта или сессия опускает рейтинг, но не уводит его в ноль или в минус.</p>
+    <p>Дальше формулы расходятся — они отвечают на разные вопросы.</p>
+
+    <h2>«Последняя сессия»</h2>
+    <p>Отвечает на вопрос: <strong>как ты играл именно сегодня</strong>. Считается заново с нуля по картам одного вечера
+    (обычно 5-7 карт) — прошлые сессии на этот результат не влияют вообще.</p>
+
+    <p>Три входа с разным весом:</p>
+    <ul>
+      <li><strong>K/D ratio</strong> (60% веса) — сколько килов на одну смерть за сессию.</li>
+      <li><strong>Средняя разница килы-смерти за карту</strong> (40%) — насколько уверенно ты выигрывал обмены, а не просто соотношение.</li>
+      <li><strong>Win rate</strong> (10%) — процент выигранных карт.</li>
+    </ul>
+
+    <div class="formula">
+K_D_ratio  = ΣK / ΣD  (или ΣK, если ΣD = 0)<br>
+avg_diff   = Σ(K−D за карту) / число карт<br>
+diff_norm  = avg_diff / 10&nbsp;&nbsp;<span class="hl">// приводим к тому же порядку, что и K/D ratio</span><br>
+WR         = побед / карт<br>
+<br>
+score      = K_D_ratio × 0.6 + diff_norm × 0.4 + WR × 0.1<br>
+<span class="hl">рейтинг    = 500 + (score − 0.65) × 350</span>&nbsp;&nbsp;<span class="hl">// 0.65 — score среднего игрока</span>
+    </div>
+
+    <div class="example">
+      <div class="label">Пример</div>
+      5 карт, суммарно 65 килов и 45 смертей (K/D 1.44), в среднем +4 фрага за карту, 3 победы из 5 (WR 60%).<br>
+      score = 1.44×0.6 + 0.4×0.4 + 0.6×0.1 = 1.086 → рейтинг = 500 + (1.086 − 0.65) × 350 ≈ <strong>653</strong>
+    </div>
+
+    <p class="note">Почему делим разницу на 10: она может доходить до ±15 за карту, а K/D ratio и WR — величины порядка
+    0-2 и 0-1. Без нормализации разница целиком перекрывала бы два других слагаемых.</p>
+
+    <h3>Что значит цифра</h3>
+    <div class="table-scroll">
+    <table>
+      <tr><th>Рейтинг</th><th>Оценка</th></tr>
+      <tr><td><span class="tier-pill tier-green">800-10000</span></td><td>Отличная сессия</td></tr>
+      <tr><td><span class="tier-pill tier-yellow">600-799</span></td><td>Хорошая сессия</td></tr>
+      <tr><td><span class="tier-pill tier-orange">400-599</span></td><td>Средняя сессия</td></tr>
+      <tr><td><span class="tier-pill tier-red">1-399</span></td><td>Плохая сессия</td></tr>
+    </table>
+    </div>
+
+    <h2>«За всё время»</h2>
+    <p>Отвечает на другой вопрос: <strong>как ты играешь в целом</strong>, с учётом всей истории. Начинается с 500
+    у нового игрока и меняется после <em>каждой</em> сыгранной карты — не только последней сессии.</p>
+
+    <p>После карты рейтинг двигается на дельту, которая зависит от результата (победа/поражение) и от того, насколько
+    твой K/D в этой карте отличается от твоего же среднего K/D за последние 30 карт:</p>
+
+    <div class="formula">
+avg_K_D    = средний K/D за последние 30 карт (1.0, если карт ещё нет)<br>
+match_K_D  = K / D этой карты (или K, если D = 0)<br>
+result     = +1 победа, −1 поражение<br>
+bonus      = (match_K_D − avg_K_D) × 0.5<br>
+<br>
+K_coef     = 8 для первых 5 карт игрока, дальше 5<br>
+<span class="hl">delta      = K_coef × (result + bonus)</span><br>
+новый рейтинг = текущий рейтинг + delta&nbsp;&nbsp;<span class="hl">// зажат в границы 1-10000</span>
+    </div>
+
+    <div class="example">
+      <div class="label">Пример</div>
+      Текущий рейтинг 520. В этой карте K/D = 2.0, средний K/D за 30 карт — 1.2, победа.<br>
+      bonus = (2.0 − 1.2) × 0.5 = 0.4 → delta = 5 × (1 + 0.4) = 7 → новый рейтинг = <strong>527</strong>
+    </div>
+
+    <p>Смысл поправки на «средний K/D за 30 карт»: рейтинг растёт не просто за победу, а за игру <em>лучше своего же
+    обычного уровня</em>. Ровная игра на своём уровне почти не двигает рейтинг — двигает то, что заметно выше или
+    ниже привычного.</p>
+
+    <p class="note">Первые 5 карт нового игрока считаются с повышенным коэффициентом (8 вместо 5) — чтобы рейтинг
+    быстрее нашёл его настоящий уровень, а не тащился к нему полсезона.</p>
+
+    <h3>Что значит цифра</h3>
+    <div class="table-scroll">
+    <table>
+      <tr><th>Рейтинг</th><th>Оценка</th></tr>
+      <tr><td><span class="tier-pill tier-green">800-10000</span></td><td>Топ-игрок</td></tr>
+      <tr><td><span class="tier-pill tier-yellow">700-799</span></td><td>Сильный игрок</td></tr>
+      <tr><td><span class="tier-pill tier-orange">600-699</span></td><td>Средний+</td></tr>
+      <tr><td><span class="tier-pill tier-neutral">500-599</span></td><td>Средний</td></tr>
+      <tr><td><span class="tier-pill tier-accent">400-499</span></td><td>Новичок / растёт</td></tr>
+      <tr><td><span class="tier-pill tier-red">1-399</span></td><td>Нужна практика</td></tr>
+    </table>
+    </div>
+
+    <h2>В чём разница между ними</h2>
+    <div class="table-scroll">
+    <table>
+      <tr><th>Критерий</th><th>Последняя сессия</th><th>За всё время</th></tr>
+      <tr><td>Период</td><td>Один вечер (5-7 карт)</td><td>Вся история</td></tr>
+      <tr><td>Считается</td><td>С нуля по формуле, каждый раз заново</td><td>Накопительно, картой за картой</td></tr>
+      <tr><td>Прошлые сессии</td><td>Не влияют</td><td>Полностью определяют текущее значение</td></tr>
+      <tr><td>Показывает</td><td>Текущую форму</td><td>Уровень в целом</td></tr>
+    </table>
+    </div>
+
+    <p>Пример: у игрока может быть высокий рейтинг «за всё время» (стабильно хорошо играет много сессий подряд) и
+    низкий рейтинг «последней сессии» (сегодня был не его вечер). Это не противоречие — второе число просто про
+    сегодня, а первое про всё остальное время.</p>
+
+    <h2>Частые вопросы</h2>
+
+    <div class="faq-item">
+      <p class="q">Почему рейтинг «за всё время» упал, хотя я выиграл карту?</p>
+      <p class="a">Потому что твой K/D в этой карте был ниже твоего собственного среднего за последние 30 карт — бонус
+      за игру ушёл в минус и перекрыл +1 за победу.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="q">Я новый игрок, у меня 500. Это плохо?</p>
+      <p class="a">Нет, это стартовая точка для всех без исключения. Первые пять карт считаются с повышенным
+      коэффициентом, чтобы рейтинг быстро нашёл твой реальный уровень.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="q">Почему рейтинг сессии и рейтинг за всё время такие разные?</p>
+      <p class="a">Это два независимых расчёта на разных данных — сессия смотрит только на сегодняшний вечер, «за всё
+      время» на всю историю. Разница между ними — это и есть показатель того, лучше или хуже обычного ты играл сегодня.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="q">Если я не играю какое-то время, рейтинг «за всё время» падает?</p>
+      <p class="a">Нет. Он меняется только от сыгранных карт. Не играешь — значение просто стоит на месте.</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -17,12 +17,17 @@
     --text-dim: #9096a6;
     --text-faint: #5b6172;
     --accent: #6ea8ff;
+    --accent-bg: rgba(110, 168, 255, 0.14);
     --green: #3ecf6e;
     --green-bg: rgba(62, 207, 110, 0.14);
     --yellow: #e0c34c;
     --yellow-bg: rgba(224, 195, 76, 0.12);
+    --orange: #e0923e;
+    --orange-bg: rgba(224, 146, 62, 0.14);
     --red: #e0625c;
     --red-bg: rgba(224, 98, 92, 0.14);
+    --neutral: #9096a6;
+    --neutral-bg: rgba(144, 150, 166, 0.12);
   }
 
   * { box-sizing: border-box; }
@@ -93,6 +98,17 @@
     color: #0c1420;
     font-weight: 600;
   }
+
+  /* margin-left: auto держит ссылку у правого края тулбара (над колонкой
+     "Рейтинг"), даже когда на узком экране она переносится на свою строку. */
+  .rating-info-link {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--text-dim);
+    align-self: center;
+    white-space: nowrap;
+  }
+  .rating-info-link:hover { color: var(--accent); }
 
   .banner {
     background: var(--yellow-bg);
@@ -192,9 +208,12 @@
     border-radius: 5px;
     font-variant-numeric: tabular-nums;
   }
-  .rating-strong { background: var(--green-bg); color: var(--green); }
-  .rating-mid { background: var(--yellow-bg); color: var(--yellow); }
-  .rating-weak { background: var(--red-bg); color: var(--red); }
+  .tier-green { background: var(--green-bg); color: var(--green); }
+  .tier-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .tier-orange { background: var(--orange-bg); color: var(--orange); }
+  .tier-red { background: var(--red-bg); color: var(--red); }
+  .tier-neutral { background: var(--neutral-bg); color: var(--neutral); }
+  .tier-accent { background: var(--accent-bg); color: var(--accent); }
   .rating-na { color: var(--text-faint); }
 
   .maps-cell small { color: var(--text-faint); font-weight: 400; }
@@ -262,6 +281,7 @@
       <div class="tab active" data-tab="allTime">За всё время</div>
       <div class="tab" data-tab="lastSession">Последняя сессия</div>
     </div>
+    <a class="rating-info-link" href="rating-info.html" target="_blank" rel="noopener">Информация о рейтинге →</a>
   </div>
 
   <div id="sessionHeader"></div>
@@ -287,7 +307,7 @@
   function fmt2(v) { return v == null ? "—" : v.toFixed(2); }
   function fmtInt(v) { return v == null ? "—" : String(v); }
   function fmtWr(v) { return v == null ? "—" : Math.round(v * 100) + "%"; }
-  function fmtRating(v) { return v == null ? "—" : v.toFixed(2); }
+  function fmtRating(v) { return v == null ? "—" : String(Math.round(v)); }
   function fmtDiff(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v; }
 
   var state = {
@@ -400,32 +420,35 @@
     return rows;
   }
 
-  function ratingClass(row) {
-    if (row.ratingRel == null) return "rating-na";
-    var thr = state.data.colorThresholds;
-    if (state.data.colorMode === "quartile") {
-      return row._quartileClass || "rating-mid";
-    }
-    if (row.ratingRel >= thr.strong) return "rating-strong";
-    if (row.ratingRel < thr.weak) return "rating-weak";
-    return "rating-mid";
-  }
+  // Абсолютные пороги (см. "Информация о рейтинге") — разные для двух вкладок,
+  // потому что у них разные шкалы: сессия почти никогда не доходит до 800+,
+  // "за всё время" считается вокруг базы 500.
+  var SESSION_TIERS = [
+    { min: 800, cls: "tier-green" },
+    { min: 600, cls: "tier-yellow" },
+    { min: 400, cls: "tier-orange" },
+    { min: -Infinity, cls: "tier-red" },
+  ];
+  var ALLTIME_TIERS = [
+    { min: 800, cls: "tier-green" },
+    { min: 700, cls: "tier-yellow" },
+    { min: 600, cls: "tier-orange" },
+    { min: 500, cls: "tier-neutral" },
+    { min: 400, cls: "tier-accent" },
+    { min: -Infinity, cls: "tier-red" },
+  ];
 
-  function applyQuartiles(rows) {
-    if (state.data.colorMode !== "quartile") return;
-    var rated = rows.filter(function (r) { return r.ratingRel != null && r.isQualified; })
-      .slice().sort(function (a, b) { return b.ratingRel - a.ratingRel; });
-    var n = rated.length;
-    rated.forEach(function (r, i) {
-      if (i < n * 0.25) r._quartileClass = "rating-strong";
-      else if (i >= n * 0.75) r._quartileClass = "rating-weak";
-      else r._quartileClass = "rating-mid";
-    });
+  function ratingClass(row) {
+    if (row.rating == null) return "rating-na";
+    var tiers = state.tab === "allTime" ? ALLTIME_TIERS : SESSION_TIERS;
+    for (var i = 0; i < tiers.length; i++) {
+      if (row.rating >= tiers[i].min) return tiers[i].cls;
+    }
+    return "tier-red";
   }
 
   function renderTable() {
     var rows = sortedRows();
-    applyQuartiles(rows);
 
     var headHtml = "<tr>";
     REQUIRED_COLUMNS.forEach(function (c, i) {

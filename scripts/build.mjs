@@ -10,6 +10,8 @@ import { assignSessions } from "./lib/session.mjs";
 import { aggregatePlayerMaps } from "./lib/aggregate.mjs";
 import { computeThreshold } from "./lib/qualify.mjs";
 import { sortRows } from "./lib/sort.mjs";
+import { calcSessionRating } from "./lib/sessionRating.mjs";
+import { computeAllTimeRating } from "./lib/allTimeRating.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MATCHES_DIR = path.join(ROOT, "data", "matches");
@@ -25,8 +27,6 @@ const DEFAULT_CONFIG = {
   sessionTimezone: "Europe/Samara",
   qualifyShare: 0.3,
   qualifyMinMaps: 5,
-  colorMode: "threshold",
-  colorThresholds: { strong: 1.08, weak: 0.92 },
 };
 
 async function readJson(filePath, fallback) {
@@ -87,7 +87,7 @@ function displayName(registry, steamid64) {
   return entry?.displayName ?? entry?.lastSeenName ?? steamid64;
 }
 
-function buildRow(steamid64, registry, mapsForPlayer, threshold) {
+function buildRow(steamid64, registry, mapsForPlayer, threshold, rating) {
   const agg = aggregatePlayerMaps(mapsForPlayer);
   const totalRounds = mapsForPlayer.reduce((sum, m) => sum + (m.mapTotalRounds ?? 0), 0);
   return {
@@ -103,10 +103,7 @@ function buildRow(steamid64, registry, mapsForPlayer, threshold) {
     k: agg.k,
     d: agg.d,
     kd: agg.kd,
-    // Формула рейтинга ещё не пересобрана под lobby-данные — колонка
-    // остаётся в схеме, но пока всегда пустая.
-    rating: null,
-    ratingRel: null,
+    rating,
     isQualified: agg.mapsPlayed >= threshold,
   };
 }
@@ -145,9 +142,12 @@ async function main() {
   );
   const maxMaps = Math.max(0, ...[...byPlayerAllTime.values()].map((maps) => maps.length));
 
-  const allTimeRows = [...byPlayerAllTime.entries()].map(([steamid64, mapsForPlayer]) =>
-    buildRow(steamid64, registry, mapsForPlayer, threshold)
-  );
+  // byPlayerAllTime уже хронологический: sortedMaps идёт по playedAt, и мы
+  // только добавляем в список каждого игрока по ходу этого же перебора.
+  const allTimeRows = [...byPlayerAllTime.entries()].map(([steamid64, mapsForPlayer]) => {
+    const { rating } = computeAllTimeRating(mapsForPlayer);
+    return buildRow(steamid64, registry, mapsForPlayer, threshold, Math.round(rating));
+  });
   const allTimeRowsSorted = sortRows(allTimeRows, "rating", "desc");
 
   // Порог плавает и нигде не запоминается (пересчитывается каждый build), но если
@@ -182,9 +182,10 @@ async function main() {
         byPlayerSession.set(p.steamid64, list);
       }
     }
-    const sessionRows = [...byPlayerSession.entries()].map(([steamid64, mapsForPlayer]) =>
-      buildRow(steamid64, registry, mapsForPlayer, threshold)
-    );
+    const sessionRows = [...byPlayerSession.entries()].map(([steamid64, mapsForPlayer]) => {
+      const rating = calcSessionRating(mapsForPlayer);
+      return buildRow(steamid64, registry, mapsForPlayer, threshold, rating);
+    });
 
     lastSessionOutput = {
       id: lastSession.id,
@@ -212,8 +213,6 @@ async function main() {
       qualifyMinMaps: config.qualifyMinMaps,
       qualificationDrop,
     },
-    colorMode: config.colorMode,
-    colorThresholds: config.colorThresholds,
     allTime: { players: allTimeRowsSorted },
     lastSession: lastSessionOutput,
   };
