@@ -352,15 +352,26 @@
   function fmtRating(v) { return v == null ? "—" : String(Math.round(v)); }
   function fmtDiff(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v; }
 
+  var TAB_STORAGE_KEY = "llstat:selectedTab";
+  function loadSavedTab() {
+    try { return localStorage.getItem(TAB_STORAGE_KEY); } catch (err) { return null; }
+  }
+  function saveTab(tab) {
+    try { localStorage.setItem(TAB_STORAGE_KEY, tab); } catch (err) {}
+  }
+
   var state = {
     data: null,
-    tab: "allTime",
+    tab: loadSavedTab() === "lastSession" ? "lastSession" : "allTime",
     sortColumn: "rating",
     sortDirection: "desc",
     expanded: null,
   };
 
-  fetch("data/stats.json")
+  // GitHub Pages отдаёт data/stats.json с Cache-Control: max-age=600 — без
+  // no-store обычный F5 в течение 10 минут после последнего визита получает
+  // старую версию из кэша браузера, даже если на сервере уже новые цифры.
+  fetch("data/stats.json", { cache: "no-store" })
     .then(function (r) { return r.json(); })
     .then(function (data) {
       state.data = data;
@@ -372,9 +383,11 @@
 
   var tabEls = document.querySelectorAll(".tab");
   tabEls.forEach(function (tab) {
+    tab.classList.toggle("active", tab.dataset.tab === state.tab);
     tab.addEventListener("click", function () {
       state.tab = tab.dataset.tab;
       state.expanded = null;
+      saveTab(state.tab);
       tabEls.forEach(function (t) { t.classList.toggle("active", t === tab); });
       render();
     });
