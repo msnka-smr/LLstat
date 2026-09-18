@@ -265,6 +265,7 @@
      именем) / Рейтинг — сами колонки Карт/K/D/K-D прячутся, но их значения
      не пропадают, а переезжают во вторую строку под именем игрока. */
   .player-meta { display: none; }
+  .mobile-sort { display: none; }
   @media (max-width: 640px) {
     .req-collapse { display: none; }
     .player-meta {
@@ -277,6 +278,33 @@
     body { padding-left: 8px; padding-right: 8px; }
     table { font-size: 13px; }
     thead th, tbody td { padding: 8px 6px; }
+
+    /* На телефоне заголовки Карт/K/D/K-D скрыты вместе с колонками (см. выше),
+       а вместе с ними пропадает и клик для сортировки по ним — этот блок
+       отдаёт то же самое через выпадающий список + кнопку направления. */
+    .mobile-sort {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .mobile-sort select {
+      flex: 1;
+      background: var(--bg-panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 13px;
+    }
+    .mobile-sort button {
+      background: var(--bg-panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
   }
 </style>
 </head>
@@ -298,6 +326,7 @@
   </div>
 
   <div id="sessionHeader"></div>
+  <div class="mobile-sort" id="mobileSort"></div>
   <div id="tableWrap"></div>
 
   <footer id="footer"></footer>
@@ -356,8 +385,31 @@
     renderSubtitle();
     renderBanner();
     renderSessionHeader();
+    renderMobileSort();
     renderTable();
     renderFooter();
+  }
+
+  function renderMobileSort() {
+    var el = document.getElementById("mobileSort");
+    var options = REQUIRED_COLUMNS.map(function (c) {
+      var selected = state.sortColumn === c.id ? " selected" : "";
+      return '<option value="' + c.id + '"' + selected + ">" + escapeHtml(c.label) + "</option>";
+    }).join("");
+    var dirLabel = state.sortDirection === "desc" ? "↓" : "↑";
+    el.innerHTML =
+      '<select id="mobileSortSelect" aria-label="Сортировать по">' + options + "</select>" +
+      '<button type="button" id="mobileSortDir" aria-label="Сменить направление сортировки">' + dirLabel + "</button>";
+
+    document.getElementById("mobileSortSelect").addEventListener("change", function (e) {
+      state.sortColumn = e.target.value;
+      state.sortDirection = "desc";
+      render();
+    });
+    document.getElementById("mobileSortDir").addEventListener("click", function () {
+      state.sortDirection = state.sortDirection === "desc" ? "asc" : "desc";
+      render();
+    });
   }
 
   function renderSubtitle() {
