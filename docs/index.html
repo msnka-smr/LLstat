@@ -552,7 +552,7 @@
 
     var metrics = [
       ["Раунды", fmtInt(row.totalRounds)],
-      ["K-D", fmtDiff(row.k - row.d)],
+      ["K-D (разница)", fmtDiff(row.k - row.d)],
       ["WR", fmtWr(row.winRate) + " (" + row.wins + "-" + row.losses + ")"],
     ];
     var metricsHtml = metrics.map(function (m) {
