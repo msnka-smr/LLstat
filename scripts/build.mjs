@@ -10,7 +10,6 @@ import { assignSessions } from "./lib/session.mjs";
 import { aggregatePlayerMaps } from "./lib/aggregate.mjs";
 import { computeThreshold } from "./lib/qualify.mjs";
 import { sortRows } from "./lib/sort.mjs";
-import { calculateRating } from "./lib/rating.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MATCHES_DIR = path.join(ROOT, "data", "matches");
@@ -88,42 +87,8 @@ function displayName(registry, steamid64) {
   return entry?.displayName ?? entry?.lastSeenName ?? steamid64;
 }
 
-// Разбивка рейтинга по картам для раскрытия строки на странице.
-function buildMapBreakdown(mapsForPlayer) {
-  return mapsForPlayer
-    .map((m) => {
-      const hasRatingInputs = m.rounds != null && m.kast != null && m.adr != null;
-      let rating = null;
-      if (hasRatingInputs) {
-        const kpr = m.k / m.rounds;
-        const dpr = m.d / m.rounds;
-        const apr = m.a / m.rounds;
-        rating = calculateRating({ kast: m.kast, kpr, dpr, apr, adr: m.adr });
-      }
-      return {
-        mapId: m.mapId,
-        map: m.map,
-        playedAt: m.playedAt,
-        sessionId: m.sessionId,
-        statsTier: m.statsTier,
-        won: m.won,
-        k: m.k,
-        d: m.d,
-        a: m.a,
-        adr: m.adr,
-        kast: m.kast,
-        rating,
-      };
-    })
-    .sort((x, y) => (x.playedAt ?? 0) - (y.playedAt ?? 0));
-}
-
-function buildRow(steamid64, registry, mapsForPlayer, threshold, leagueAvgRating) {
+function buildRow(steamid64, registry, mapsForPlayer, threshold) {
   const agg = aggregatePlayerMaps(mapsForPlayer);
-  const ratingRel = agg.rating != null && leagueAvgRating ? agg.rating / leagueAvgRating : null;
-  // Раунды по всем картам независимо от тира (в отличие от agg.fullTierRounds,
-  // который считает только карты с demo-статой) — для лобби-карт это
-  // totalRounds самой карты, а не что-то за конкретного игрока.
   const totalRounds = mapsForPlayer.reduce((sum, m) => sum + (m.mapTotalRounds ?? 0), 0);
   return {
     steamid64,
@@ -137,26 +102,12 @@ function buildRow(steamid64, registry, mapsForPlayer, threshold, leagueAvgRating
     winRate: agg.mapsPlayed ? agg.wins / agg.mapsPlayed : null,
     k: agg.k,
     d: agg.d,
-    a: agg.a,
     kd: agg.kd,
-    adr: agg.adr,
-    kast: agg.kast,
-    kpr: agg.kpr,
-    dpr: agg.dpr,
-    hsPercent: agg.hsPercent,
-    fk: agg.fk,
-    fd: agg.fd,
-    openingSuccessRate: agg.openingSuccessRate,
-    mvp: agg.mvp,
-    mk3plus: agg.mk3plus,
-    clutchesWon: agg.clutchesWon,
-    clutchSituations: agg.clutchSituations,
-    rating: agg.rating,
-    ratingRel,
-    fullTierMapsPlayed: agg.fullTierMaps,
-    fullTierRounds: agg.fullTierRounds,
+    // Формула рейтинга ещё не пересобрана под lobby-данные — колонка
+    // остаётся в схеме, но пока всегда пустая.
+    rating: null,
+    ratingRel: null,
     isQualified: agg.mapsPlayed >= threshold,
-    maps: buildMapBreakdown(mapsForPlayer),
   };
 }
 
@@ -183,7 +134,7 @@ async function main() {
   for (const map of sortedMaps) {
     for (const p of map.players) {
       const list = byPlayerAllTime.get(p.steamid64) ?? [];
-      list.push({ ...p, statsTier: map.statsTier, mapId: map.mapId, map: map.map, playedAt: map.playedAt, sessionId: map.sessionId, mapTotalRounds: map.totalRounds });
+      list.push({ ...p, mapTotalRounds: map.totalRounds });
       byPlayerAllTime.set(p.steamid64, list);
     }
   }
@@ -194,20 +145,8 @@ async function main() {
   );
   const maxMaps = Math.max(0, ...[...byPlayerAllTime.values()].map((maps) => maps.length));
 
-  // средний рейтинг лиги, взвешенный по full-tier раундам — используется только для ratingRel
-  let ratingRoundsSum = 0;
-  let roundsSum = 0;
-  for (const [steamid64, mapsForPlayer] of byPlayerAllTime) {
-    const agg = aggregatePlayerMaps(mapsForPlayer);
-    if (agg.rating != null) {
-      ratingRoundsSum += agg.rating * agg.fullTierRounds;
-      roundsSum += agg.fullTierRounds;
-    }
-  }
-  const leagueAvgRating = roundsSum ? ratingRoundsSum / roundsSum : null;
-
   const allTimeRows = [...byPlayerAllTime.entries()].map(([steamid64, mapsForPlayer]) =>
-    buildRow(steamid64, registry, mapsForPlayer, threshold, leagueAvgRating)
+    buildRow(steamid64, registry, mapsForPlayer, threshold)
   );
   const allTimeRowsSorted = sortRows(allTimeRows, "rating", "desc");
 
@@ -239,17 +178,13 @@ async function main() {
     for (const map of lastSession.maps) {
       for (const p of map.players) {
         const list = byPlayerSession.get(p.steamid64) ?? [];
-        list.push({ ...p, statsTier: map.statsTier, mapId: map.mapId, map: map.map, playedAt: map.playedAt, sessionId: map.sessionId, mapTotalRounds: map.totalRounds });
+        list.push({ ...p, mapTotalRounds: map.totalRounds });
         byPlayerSession.set(p.steamid64, list);
       }
     }
-    const sessionRows = [...byPlayerSession.entries()].map(([steamid64, mapsForPlayer]) => {
-      const row = buildRow(steamid64, registry, mapsForPlayer, threshold, leagueAvgRating);
-      const allTimeRow = allTimeRows.find((r) => r.steamid64 === steamid64);
-      row.ratingDelta =
-        row.rating != null && allTimeRow?.rating != null ? row.rating - allTimeRow.rating : null;
-      return row;
-    });
+    const sessionRows = [...byPlayerSession.entries()].map(([steamid64, mapsForPlayer]) =>
+      buildRow(steamid64, registry, mapsForPlayer, threshold)
+    );
 
     lastSessionOutput = {
       id: lastSession.id,
@@ -279,25 +214,13 @@ async function main() {
     },
     colorMode: config.colorMode,
     colorThresholds: config.colorThresholds,
-    leagueAvgRating,
     allTime: { players: allTimeRowsSorted },
     lastSession: lastSessionOutput,
   };
 
   await writeJson(OUTPUT_PATH, output);
 
-  const ratedRows = allTimeRows.filter((r) => r.ratingRel != null && r.fullTierRounds > 0);
-  const weightedRatingRel = ratedRows.length
-    ? ratedRows.reduce((s, r) => s + r.ratingRel * r.fullTierRounds, 0) /
-      ratedRows.reduce((s, r) => s + r.fullTierRounds, 0)
-    : null;
-
   console.log(`Карт учтено: ${sortedMaps.length}, сессий: ${sessions.length}, порог: ${threshold} карт (максимум ${maxMaps}).`);
-  console.log(
-    `Средний ratingRel по лиге, взвешенный по раундам (должен быть 1.00 ± 0.01): ${
-      weightedRatingRel != null ? weightedRatingRel.toFixed(4) : "н/д (нет полных карт)"
-    }`
-  );
   console.log(`Записано в ${path.relative(ROOT, OUTPUT_PATH)}`);
 }
 

@@ -1,6 +1,9 @@
 // Превращает сырой ответ lobbys/info в один или несколько объектов «нормализованная карта».
-// full-tier берётся из match_more_stats.maps[N].stats (для BO-серий — по одному на карту).
-// basic-tier — из match_stats.base + data.players[].match_stats.live, ровно один mapIndex=1.
+// Данные всегда берутся из лобби (счёт команд + live K/D на игрока) — по
+// демо-разбору (ADR, KAST, раунды по игроку и т.п.) больше не считаем: этот
+// источник у cybershoke прошёл нестабильным (заражённые смерти, ножевые
+// раунды, KAST выше 100%). Каждый игрок несёт только steamid64, имя, аватар,
+// команду, победу и K/D.
 export function normalizeLobby(raw) {
   const data = raw?.data;
   if (!data) return [];
@@ -11,6 +14,9 @@ export function normalizeLobby(raw) {
   const mmsStats = data.match_more_stats?.stats;
   const mmsMaps = data.match_more_stats?.maps;
 
+  // Полный разбор демки (когда он есть) всё равно содержит счёт по картам и
+  // K/D — берём их оттуда тем же способом, что и из лобби, с той же
+  // поправкой на фантомный ножевой раунд.
   if (mmsStats?.status === "finished" && mmsMaps) {
     return Object.entries(mmsMaps)
       .map(([mapIndexStr, mapEntry]) =>
@@ -38,9 +44,7 @@ export function normalizeLobby(raw) {
 // У cybershoke это же протекает и в личную статистику: p.kills уже сам по
 // себе не считает килы ножевого раунда (проверено на всей истории — совпадает
 // без исключений), а вот p.deaths его включает всегда — вычитаем смерть в
-// этом раунде точечно, по конкретному steamid64 из events. Ассисты этот же
-// раунд тоже иногда затрагивает (подтверждено на живом матче), но в events
-// нет поля ассиста, чтобы понять, кому именно — оставляем как есть.
+// этом раунде точечно, по конкретному steamid64 из events.
 function detectPhantomKnifeRound(stats) {
   const round1 = stats.rounds?.[0];
   if (!round1?.events?.length) return null;
@@ -70,14 +74,6 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
   for (const teamKey of ["team1", "team2"]) {
     const teamIsWinner = !!stats[teamKey]?.isWinner;
     for (const p of stats[teamKey]?.players ?? []) {
-      // totalRounds (уже без фантомного ножевого раунда, см. выше) — надёжное
-      // число раундов карты. p.roundsPlayed у некоторых игроков (похоже,
-      // из-за реконнектов) бывает кратно больше — используем его только для
-      // реконструкции kast (числитель kastRounds страдает тем же искажением,
-      // так что оно взаимно гасится), а не как знаменатель для KPR/DPR/APR.
-      const rounds = totalRounds || p.roundsPlayed || 0;
-      const kast =
-        p.kastRounds != null && p.roundsPlayed ? (p.kastRounds / p.roundsPlayed) * 100 : p.kast ?? 0;
       const phantomDeaths = phantom?.deathsBySteamId.get(String(p.steamid64)) ?? 0;
       seenSteamIds.add(String(p.steamid64));
       players.push({
@@ -86,30 +82,17 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
         avatar: roster[String(p.steamid64)]?.avatar ?? null,
         team: teamKey,
         won: teamIsWinner,
-        rounds,
         k: p.kills ?? 0,
         d: (p.deaths ?? 0) - phantomDeaths,
-        a: p.assists ?? 0,
-        adr: p.adr ?? 0,
-        kast,
-        hsKills: p.hsKills ?? 0,
-        fk: p.entries?.fk ?? 0,
-        fd: p.entries?.fd ?? 0,
-        openingAttempts: p.entries?.attempts ?? 0,
-        mvp: p.mvp ?? 0,
-        multikills: p.multikills ?? { k1: 0, k2: 0, k3: 0, k4: 0, k5: 0 },
-        clutchesWon: p.clutchTotals?.won ?? 0,
-        clutchSituations: p.clutchTotals?.situations ?? 0,
       });
     }
   }
 
   // Демо-парсер cybershoke иногда молча роняет игрока из team1/team2.players
-  // (подтверждено на живом матче), хотя тот был в лобби и его K/D/A видны на
-  // странице матча. Добираем таких из data.players[].match_stats.live по id_slot:
-  // slot игрока сверяем со slot'ами уже найденных игроков той же stats-команды,
-  // чтобы понять, к какой из team1/team2 он относится. Без демо-данных у него
-  // нет rounds/adr/kast — в рейтинг эта карта для него не идёт, но K/D/A и W/L учтены.
+  // (подтверждено на живом матче), хотя тот был в лобби и его K/D видны на
+  // странице матча. Добираем таких из data.players[].match_stats.live по
+  // id_slot: slot игрока сверяем со slot'ами уже найденных игроков той же
+  // stats-команды, чтобы понять, к какой из team1/team2 он относится.
   const slotToTeamKey = new Map();
   for (const teamKey of ["team1", "team2"]) {
     for (const p of stats[teamKey]?.players ?? []) {
@@ -129,20 +112,8 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
       avatar: rp.avatar ?? null,
       team: teamKey,
       won: !!stats[teamKey]?.isWinner,
-      rounds: null,
       k: live.kills ?? 0,
       d: live.deaths ?? 0,
-      a: live.assists ?? 0,
-      adr: null,
-      kast: null,
-      hsKills: live.headshots ?? 0,
-      fk: null,
-      fd: null,
-      openingAttempts: null,
-      mvp: null,
-      multikills: null,
-      clutchesWon: null,
-      clutchSituations: null,
     });
   }
 
@@ -153,7 +124,6 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
     map: stats.map ?? null,
     playedAt: playedAtFallback,
     totalRounds: totalRounds || null,
-    durationSec: stats.durationSec ?? null,
     teams,
     players,
     statsTier: "full",
@@ -176,20 +146,8 @@ function normalizeBasicMap({ lobbyId, data, playedAtFallback }) {
       avatar: p.avatar ?? null,
       team,
       won: team != null && winnerSlot != null ? slot === winnerSlot : null,
-      rounds: null,
       k: live.kills ?? 0,
       d: live.deaths ?? 0,
-      a: live.assists ?? 0,
-      adr: null,
-      kast: null,
-      hsKills: live.headshots ?? 0,
-      fk: null,
-      fd: null,
-      openingAttempts: null,
-      mvp: null,
-      multikills: null,
-      clutchesWon: null,
-      clutchSituations: null,
     };
   });
 
@@ -200,7 +158,6 @@ function normalizeBasicMap({ lobbyId, data, playedAtFallback }) {
     map: data.match_settings?.map_name ?? null,
     playedAt: playedAtFallback,
     totalRounds,
-    durationSec: null,
     teams: teamKeys.map((k) => ({
       key: k,
       name: null,
