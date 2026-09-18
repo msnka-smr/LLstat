@@ -944,12 +944,13 @@
   }
 
   // "Выбор составов": делит ровно 10 отмеченных игроков на два состава 5×5,
-  // минимизируя разницу между командами сразу по двум сигналам — рейтингу
-  // "за всё время" (вес 0.7) и K/D (вес 0.3), нормированным к разбросу среди
-  // выбранной десятки (иначе рейтинг, у которого диапазон в сотни, забил бы
-  // K/D с диапазоном порядка 1-2 — та же ошибка, что мы уже правили в весах
-  // рейтинга сессии). С 10 игроками всего 126 уникальных разбиений 5/5
-  // (C(10,5)/2) — перебираем все, без всякой эвристики, и берём точный оптимум.
+  // минимизируя разницу между командами сразу по трём сигналам — рейтингу
+  // "за всё время" (вес 0.3), суммарной K-D разнице (вес 0.3) и K/D (вес 0.4),
+  // каждый нормирован к своему разбросу среди выбранной десятки (иначе
+  // рейтинг, у которого диапазон в сотни, забил бы K/D с диапазоном порядка
+  // 1-2 — та же ошибка, что мы уже правили в весах рейтинга сессии). С 10
+  // игроками всего 126 уникальных разбиений 5/5 (C(10,5)/2) — перебираем все,
+  // без всякой эвристики, и берём точный оптимум.
   var DRAFT_MAX = 10;
   var DRAFT_GEN_PREFIX = "llstat:draftGen:";
   var draftState = { selected: new Set() };
@@ -993,7 +994,7 @@
     el.innerHTML =
       '<div class="draft-section">' +
         '<p class="draft-hint">Выбери ровно 10 игроков — поделим на два состава 5×5 максимально балансово ' +
-        "по рейтингу и K/D.</p>" +
+        "по рейтингу, K-D и K/D.</p>" +
         '<div class="draft-list" id="draftList">' + rowsHtml + "</div>" +
         '<div class="draft-counter" id="draftCounter">Выбрано: 0 / ' + DRAFT_MAX + "</div>" +
         '<button type="button" class="wheel-spin-btn" id="draftFormBtn" disabled>Сформировать состав</button>' +
@@ -1036,14 +1037,17 @@
     });
   }
 
-  function draftAvgOf(list, field) {
-    return list.reduce(function (sum, p) { return sum + p[field]; }, 0) / list.length;
+  function draftAvgOf(list, accessor) {
+    var get = typeof accessor === "function" ? accessor : function (p) { return p[accessor]; };
+    return list.reduce(function (sum, p) { return sum + get(p); }, 0) / list.length;
   }
 
   function computeDraftSplits(players) {
     var ratings = players.map(function (p) { return p.rating; });
+    var kdDiffs = players.map(function (p) { return p.k - p.d; });
     var kds = players.map(function (p) { return p.kd; });
     var ratingRange = Math.max.apply(null, ratings) - Math.min.apply(null, ratings);
+    var kdDiffRange = Math.max.apply(null, kdDiffs) - Math.min.apply(null, kdDiffs);
     var kdRange = Math.max.apply(null, kds) - Math.min.apply(null, kds);
 
     var splits = [];
@@ -1057,12 +1061,18 @@
 
       var avgA = draftAvgOf(teamA, "rating"), avgB = draftAvgOf(teamB, "rating");
       var kdA = draftAvgOf(teamA, "kd"), kdB = draftAvgOf(teamB, "kd");
+      var diffA = draftAvgOf(teamA, function (p) { return p.k - p.d; }), diffB = draftAvgOf(teamB, function (p) { return p.k - p.d; });
       var ratingDiff = Math.abs(avgA - avgB);
       var kdDiff = Math.abs(kdA - kdB);
-      var score = 0.7 * (ratingRange > 0 ? ratingDiff / ratingRange : 0) +
-                  0.3 * (kdRange > 0 ? kdDiff / kdRange : 0);
+      var kdDiffDiff = Math.abs(diffA - diffB);
+      var score = 0.3 * (ratingRange > 0 ? ratingDiff / ratingRange : 0) +
+                  0.3 * (kdDiffRange > 0 ? kdDiffDiff / kdDiffRange : 0) +
+                  0.4 * (kdRange > 0 ? kdDiff / kdRange : 0);
 
-      splits.push({ teamA: teamA, teamB: teamB, avgA: avgA, avgB: avgB, kdA: kdA, kdB: kdB, ratingDiff: ratingDiff, kdDiff: kdDiff, score: score });
+      splits.push({
+        teamA: teamA, teamB: teamB, avgA: avgA, avgB: avgB, kdA: kdA, kdB: kdB,
+        diffA: diffA, diffB: diffB, ratingDiff: ratingDiff, kdDiff: kdDiff, kdDiffDiff: kdDiffDiff, score: score,
+      });
     }
     splits.sort(function (a, b) { return a.score - b.score; });
     return splits;
@@ -1089,12 +1099,13 @@
   function renderDraftResult(split, key) {
     var resultEl = document.getElementById("draftResult");
 
-    function teamHtml(title, team, avgRating, avgKd) {
+    function teamHtml(title, team, avgRating, avgKdDiff, avgKd) {
       var itemsHtml = team.map(function (p) {
         return "<li><span>" + escapeHtml(p.name) + "</span><span>" + fmtRating(p.rating) + "</span></li>";
       }).join("");
       return '<div class="draft-team"><h4>' + title + "</h4><ul>" + itemsHtml + "</ul>" +
         '<div class="team-stats">Средний рейтинг: ' + Math.round(avgRating) +
+        " · средний K-D: " + fmtDiff(Math.round(avgKdDiff)) +
         " · средний K/D: " + avgKd.toFixed(2) + "</div></div>";
     }
 
@@ -1102,10 +1113,11 @@
 
     resultEl.innerHTML =
       '<div class="draft-teams">' +
-        teamHtml("Состав A", split.teamA, split.avgA, split.kdA) +
-        teamHtml("Состав B", split.teamB, split.avgB, split.kdB) +
+        teamHtml("Состав A", split.teamA, split.avgA, split.diffA, split.kdA) +
+        teamHtml("Состав B", split.teamB, split.avgB, split.diffB, split.kdB) +
       "</div>" +
       '<div class="draft-summary">Разница в среднем рейтинге — <strong>' + Math.round(split.ratingDiff) +
+      "</strong>, в среднем K-D — <strong>" + split.kdDiffDiff.toFixed(1) +
       "</strong>, в среднем K/D — <strong>" + split.kdDiff.toFixed(2) + "</strong>.</div>" +
       (canRegenerate
         ? '<div class="draft-again-wrap"><button type="button" class="wheel-spin-btn" id="draftAgainBtn">🔁 Сгенерировать ещё раз</button></div>'
