@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { normalizeLobby } from "./lib/normalize.mjs";
+import { applyAliases } from "./lib/aliases.mjs";
 import { assignSessions } from "./lib/session.mjs";
 import { aggregatePlayerMaps } from "./lib/aggregate.mjs";
 import { computeThreshold } from "./lib/qualify.mjs";
@@ -20,6 +21,7 @@ const OUTPUT_PATH = path.join(ROOT, "docs", "data", "stats.json");
 
 const DEFAULT_CONFIG = {
   coreSteamIds: [],
+  steamAliases: {},
   sessionGapHours: 6,
   sessionTimezone: "Europe/Samara",
   qualifyShare: 0.3,
@@ -157,7 +159,7 @@ async function main() {
   const config = { ...DEFAULT_CONFIG, ...(await readJson(CONFIG_PATH, {})) };
   const registry = await readJson(PLAYERS_PATH, {});
 
-  const allMaps = await loadAllMaps();
+  const allMaps = applyAliases(await loadAllMaps(), config.steamAliases);
 
   const includedMaps = allMaps.filter((m) => {
     const coreCount = countCorePlayers(m, config.coreSteamIds);
