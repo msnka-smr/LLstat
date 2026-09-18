@@ -559,9 +559,11 @@
 
   function renderFooter() {
     document.getElementById("footer").textContent =
-      "Порог квалификации: " + state.data.qualification.threshold + " карт " +
-      "(" + Math.round(state.data.qualification.qualifyShare * 100) + "% от " +
-      state.data.qualification.maxMaps + " у лидера)";
+      state.tab === "allTime"
+        ? "Порог квалификации: " + state.data.qualification.threshold + " карт " +
+          "(" + Math.round(state.data.qualification.qualifyShare * 100) + "% от " +
+          state.data.qualification.maxMaps + " у лидера)"
+        : "Карт учтено всего: " + state.data.totalMapsCollected;
   }
 
   function getRows() {
@@ -573,8 +575,11 @@
     var rows = getRows().slice();
     var col = state.sortColumn;
     var dir = state.sortDirection === "asc" ? 1 : -1;
+    // Порог квалификации считается по всей истории и не имеет смысла для
+    // одной сессии из 3-7 карт — там сортируем только по колонке.
+    var useQualification = state.tab === "allTime";
     rows.sort(function (a, b) {
-      if (a.isQualified !== b.isQualified) return a.isQualified ? -1 : 1;
+      if (useQualification && a.isQualified !== b.isQualified) return a.isQualified ? -1 : 1;
       var av = a[col], bv = b[col];
       if (av == null && bv == null) return 0;
       if (av == null) return 1;
@@ -625,14 +630,15 @@
 
     var bodyHtml = "";
     var thresholdShown = false;
+    var showQualification = state.tab === "allTime";
     rows.forEach(function (row) {
-      if (!row.isQualified && !thresholdShown) {
+      if (showQualification && !row.isQualified && !thresholdShown) {
         thresholdShown = true;
         bodyHtml += '<tr class="qual-divider"><td colspan="' + (REQUIRED_COLUMNS.length + 1 + optCols.length) +
           '">менее ' + Math.round(state.data.qualification.qualifyShare * 100) +
           '% карт лидера (' + state.data.qualification.threshold + ')</td></tr>';
       }
-      bodyHtml += playerRowHtml(row, optCols);
+      bodyHtml += playerRowHtml(row, optCols, showQualification);
       bodyHtml += detailRowHtml(row, optCols);
     });
 
@@ -667,9 +673,10 @@
     return '<th class="' + cls + '" data-sort="' + c.id + '">' + escapeHtml(c.label) + "</th>";
   }
 
-  function playerRowHtml(row, optCols) {
-    var cls = "player-row" + (row.isQualified ? "" : " unqualified");
-    var mapsCell = row.isQualified
+  function playerRowHtml(row, optCols, showQualification) {
+    var isUnqualified = showQualification && !row.isQualified;
+    var cls = "player-row" + (isUnqualified ? " unqualified" : "");
+    var mapsCell = !isUnqualified
       ? row.mapsPlayed
       : row.mapsPlayed + ' <small>/ ' + state.data.qualification.threshold + "</small>";
 
