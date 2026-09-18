@@ -344,31 +344,30 @@
     border: 3px solid var(--border);
     position: relative;
     overflow: hidden;
-    transition: transform 5s cubic-bezier(0.12, 0.65, 0.18, 1);
+    transition: transform 5s cubic-bezier(0.12, 0.65, 0.18, 1), background 0.4s ease;
   }
+  /* Подпись идёт вдоль своего радиуса (от центра к краю) — pivot прижат к
+     центру колеса (left:50%, transform-origin: 0 50%), а сама подпись
+     центрируется внутри сектора отступом слева и flex-центрированием текста. */
   .wheel-seg-label {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 64px;
-    margin-left: -32px;
-    text-align: center;
-    font-size: 10px;
-    line-height: 1.2;
+    width: 108px;
+    height: 20px;
+    margin-top: -10px;
+    transform-origin: 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 30px;
+    font-size: 11px;
+    font-weight: 600;
     color: #fff;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  .wheel-seg-label img {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: block;
-    margin: 0 auto 2px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    object-fit: cover;
   }
   .wheel-spin-btn {
     background: var(--accent);
@@ -725,10 +724,11 @@
     { text: "Посмотрю пару стримов и в следующий раз всех нагну", type: "worst" },
   ];
   var WHEEL_COLORS = ["#6ea8ff", "#3ecf6e", "#e0c34c", "#e0923e", "#e0625c", "#9b6bff", "#4cd2e0", "#e05c9e"];
-  var wheelState = { rotation: 0, spinning: false };
+  var WHEEL_GRAY = "#454a56";
+  var wheelState = { rotation: 0, spinning: false, lastCategoryIndex: -1, segments: [] };
 
   function wheelShortName(name) {
-    return name.length > 9 ? name.slice(0, 8) + "…" : name;
+    return name.length > 12 ? name.slice(0, 11) + "…" : name;
   }
 
   function renderWheelSection() {
@@ -747,20 +747,31 @@
     el.style.display = state.tab === "lastSession" ? "" : "none";
   }
 
+  // conic-gradient со всеми секторами в цвете, или, если передан winnerIndex,
+  // все, кроме его сектора, перекрашены в серый (см. п.2 правки — победитель
+  // остаётся выделенным цветом, остальные гаснут).
+  function wheelBackground(winnerIndex) {
+    return "conic-gradient(" + wheelState.segments.map(function (s, i) {
+      var color = winnerIndex == null || i === winnerIndex ? s.color : WHEEL_GRAY;
+      return color + " " + s.from + "deg " + s.to + "deg";
+    }).join(", ") + ")";
+  }
+
   function buildWheel(el, players) {
     var n = players.length;
     var seg = 360 / n;
 
-    var gradientParts = players.map(function (p, i) {
-      var color = WHEEL_COLORS[i % WHEEL_COLORS.length];
-      return color + " " + (i * seg) + "deg " + ((i + 1) * seg) + "deg";
-    }).join(", ");
+    wheelState.segments = players.map(function (p, i) {
+      return { color: WHEEL_COLORS[i % WHEEL_COLORS.length], from: i * seg, to: (i + 1) * seg };
+    });
 
+    // Подпись читается вдоль своего радиуса, от центра к краю: pivot стоит в
+    // центре колеса, а rotate(ci - 90) разворачивает локальную ось "вправо"
+    // (куда растёт текст) точно в сторону сектора ci.
     var labelsHtml = players.map(function (p, i) {
       var ci = i * seg + seg / 2;
-      var avatarHtml = p.avatarUrl ? '<img src="' + escapeHtml(p.avatarUrl) + '" alt="">' : "";
-      return '<div class="wheel-seg-label" style="transform: rotate(' + ci + 'deg) translate(0, -92px) rotate(' + (-ci) + 'deg);">' +
-        avatarHtml + "<span>" + escapeHtml(wheelShortName(p.name)) + "</span></div>";
+      return '<div class="wheel-seg-label" style="transform: rotate(' + (ci - 90) + 'deg);">' +
+        "<span>" + escapeHtml(wheelShortName(p.name)) + "</span></div>";
     }).join("");
 
     el.innerHTML =
@@ -768,7 +779,7 @@
         '<div class="wheel-category" id="wheelCategory">Крути колесо!</div>' +
         '<div class="wheel-stage">' +
           '<div class="wheel-pointer">▼</div>' +
-          '<div class="wheel-dial" id="wheelDial" style="background: conic-gradient(' + gradientParts + ');">' + labelsHtml + "</div>" +
+          '<div class="wheel-dial" id="wheelDial" style="background: ' + wheelBackground(null) + ';">' + labelsHtml + "</div>" +
         "</div>" +
         '<button type="button" class="wheel-spin-btn" id="wheelSpinBtn">🎡 Крутить колесо</button>' +
         '<div class="wheel-result" id="wheelResult"></div>' +
@@ -776,6 +787,7 @@
 
     wheelState.rotation = 0;
     wheelState.spinning = false;
+    wheelState.lastCategoryIndex = -1;
     document.getElementById("wheelSpinBtn").addEventListener("click", spinWheel);
   }
 
@@ -785,7 +797,14 @@
     var n = players.length;
     var seg = 360 / n;
 
-    var category = WHEEL_CATEGORIES[Math.floor(Math.random() * WHEEL_CATEGORIES.length)];
+    // Та же категория два раза подряд не выпадает — исключаем прошлый индекс
+    // из пула перед случайным выбором.
+    var categoryPool = WHEEL_CATEGORIES.map(function (c, i) { return i; })
+      .filter(function (i) { return i !== wheelState.lastCategoryIndex; });
+    var categoryIndex = categoryPool[Math.floor(Math.random() * categoryPool.length)];
+    wheelState.lastCategoryIndex = categoryIndex;
+    var category = WHEEL_CATEGORIES[categoryIndex];
+
     var winnerIndex;
     if (category.type === "best") {
       winnerIndex = 0;
@@ -807,11 +826,13 @@
     document.getElementById("wheelCategory").textContent = category.text;
     document.getElementById("wheelResult").textContent = "";
     document.getElementById("wheelSpinBtn").disabled = true;
+    document.getElementById("wheelDial").style.background = wheelBackground(null);
     document.getElementById("wheelDial").style.transform = "rotate(" + wheelState.rotation + "deg)";
 
     setTimeout(function () {
       wheelState.spinning = false;
       document.getElementById("wheelSpinBtn").disabled = false;
+      document.getElementById("wheelDial").style.background = wheelBackground(winnerIndex);
       document.getElementById("wheelResult").innerHTML =
         escapeHtml(category.text) + ": <strong>" + escapeHtml(winner.name) + "</strong>";
     }, 5000);
