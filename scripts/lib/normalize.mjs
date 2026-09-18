@@ -42,7 +42,14 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
   for (const teamKey of ["team1", "team2"]) {
     const teamIsWinner = !!stats[teamKey]?.isWinner;
     for (const p of stats[teamKey]?.players ?? []) {
-      const rounds = p.roundsPlayed || stats.totalRounds || 0;
+      // stats.totalRounds — надёжное число раундов карты. p.roundsPlayed у
+      // некоторых игроков (похоже, из-за реконнектов) бывает кратно больше
+      // totalRounds — используем его только для реконструкции kast (числитель
+      // kastRounds страдает тем же искажением, так что оно взаимно гасится),
+      // а не как знаменатель для KPR/DPR/APR.
+      const rounds = stats.totalRounds || p.roundsPlayed || 0;
+      const kast =
+        p.kastRounds != null && p.roundsPlayed ? (p.kastRounds / p.roundsPlayed) * 100 : p.kast ?? 0;
       seenSteamIds.add(String(p.steamid64));
       players.push({
         steamid64: String(p.steamid64),
@@ -55,7 +62,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
         d: p.deaths ?? 0,
         a: p.assists ?? 0,
         adr: p.adr ?? 0,
-        kast: p.kast ?? 0,
+        kast,
         hsKills: p.hsKills ?? 0,
         fk: p.entries?.fk ?? 0,
         fd: p.entries?.fd ?? 0,

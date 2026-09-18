@@ -72,3 +72,55 @@ test("without a drop, all three roster players come straight from teamN.players"
   assert.equal(map.players.length, 3);
   assert.ok(map.players.every((p) => p.rounds === 16));
 });
+
+// Регрессия на реальную аномалию: у некоторых игроков cybershoke отдаёт
+// roundsPlayed кратно больше totalRounds (похоже на баг с реконнектами) —
+// из-за этого его собственное поле p.kast может показывать больше 100%.
+// Найдено на живых матчах (10552874, 11393084 и другие — kastRounds=34,
+// roundsPlayed=42, totalRounds=21 → p.kast=162).
+test("rounds comes from stats.totalRounds, not the inflated p.roundsPlayed", () => {
+  const raw = {
+    data: {
+      id_lobby: 999,
+      players: {},
+      dates: { unixtime_match_end: 1700000000 },
+      match_more_stats: {
+        stats: { status: "finished" },
+        maps: {
+          1: {
+            stats: {
+              status: "finished",
+              map: "de_inferno",
+              totalRounds: 21,
+              team1: {
+                name: "t1",
+                score: 13,
+                isWinner: true,
+                players: [
+                  {
+                    steamid64: "1",
+                    name: "reconnected",
+                    kills: 20,
+                    deaths: 15,
+                    assists: 3,
+                    roundsPlayed: 42, // 2x totalRounds — раздутое значение
+                    kastRounds: 34, // тоже раздутое тем же множителем
+                    kast: 162, // 34/21*100 — то самое кривое значение из raw API
+                    adr: 85,
+                  },
+                ],
+              },
+              team2: { name: "t2", score: 8, isWinner: false, players: [] },
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const [map] = normalizeLobby(raw);
+  const p = map.players[0];
+  assert.equal(p.rounds, 21, "должны использоваться totalRounds карты, а не раздутый roundsPlayed");
+  assert.ok(Math.abs(p.kast - 80.95) < 0.01, `kast должен быть пересчитан как kastRounds/roundsPlayed*100, получили ${p.kast}`);
+  assert.ok(p.kast <= 100, "kast не может быть больше 100%");
+});
