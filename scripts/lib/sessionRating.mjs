@@ -13,7 +13,7 @@
 // игрок: K/D=1, нейтральный диф, WR=50%) — так разброс входов предсказуемо
 // ложится на шкалу вокруг центра, а не улетает в один из краёв.
 const MIN_RATING = 1;
-const MAX_RATING = 3500;
+const MAX_RATING = 1500;
 const DIFF_NORMALIZER = 10;
 const BASELINE_SCORE = 1.0 * 0.6 + 0 * 0.3 + 0.5 * 0.1; // = 0.65
 const SCALE = 350;

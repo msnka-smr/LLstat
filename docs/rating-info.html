@@ -176,7 +176,7 @@
     <p class="subtitle">Два разных числа — «Последняя сессия» и «За всё время» — и почему они не обязаны совпадать.</p>
 
     <h2>Общий принцип</h2>
-    <p>Оба рейтинга живут на одной шкале — от <strong>1 до 3500</strong>. Верхняя граница взята с запасом:
+    <p>Оба рейтинга живут на одной шкале — от <strong>1 до 1500</strong>. Верхняя граница взята с запасом:
     цель не в том, чтобы кто-то быстро упёрся в потолок, а в том, чтобы шкале было куда расти вместе с историей матчей.
     Плохая карта или сессия опускает рейтинг, но не уводит его в ноль или в минус.</p>
     <p>Дальше формулы расходятся — они отвечают на разные вопросы.</p>
@@ -215,7 +215,7 @@ score      = K_D_ratio × 0.6 + diff_norm × 0.3 + WR × 0.1<br>
     <div class="table-scroll">
     <table>
       <tr><th>Рейтинг</th><th>Оценка</th></tr>
-      <tr><td><span class="tier-pill tier-green">800-3500</span></td><td>Отличная сессия</td></tr>
+      <tr><td><span class="tier-pill tier-green">800-1500</span></td><td>Отличная сессия</td></tr>
       <tr><td><span class="tier-pill tier-yellow">600-799</span></td><td>Хорошая сессия</td></tr>
       <tr><td><span class="tier-pill tier-orange">400-599</span></td><td>Средняя сессия</td></tr>
       <tr><td><span class="tier-pill tier-red">1-399</span></td><td>Плохая сессия</td></tr>
@@ -236,7 +236,7 @@ bonus      = (match_K_D − 1.0) × 0.8&nbsp;&nbsp;<span class="hl">// отно�
 <br>
 K_coef     = 8 для первых 5 карт игрока, дальше 5<br>
 <span class="hl">delta      = K_coef × (result × 0.3 + bonus)</span><br>
-новый рейтинг = текущий рейтинг + delta&nbsp;&nbsp;<span class="hl">// зажат в границы 1-3500</span>
+новый рейтинг = текущий рейтинг + delta&nbsp;&nbsp;<span class="hl">// зажат в границы 1-1500</span>
     </div>
 
     <div class="example">
@@ -256,7 +256,7 @@ K_coef     = 8 для первых 5 карт игрока, дальше 5<br>
     <div class="table-scroll">
     <table>
       <tr><th>Рейтинг</th><th>Оценка</th></tr>
-      <tr><td><span class="tier-pill tier-green">800-3500</span></td><td>Топ-игрок</td></tr>
+      <tr><td><span class="tier-pill tier-green">800-1500</span></td><td>Топ-игрок</td></tr>
       <tr><td><span class="tier-pill tier-yellow">700-799</span></td><td>Сильный игрок</td></tr>
       <tr><td><span class="tier-pill tier-orange">600-699</span></td><td>Средний+</td></tr>
       <tr><td><span class="tier-pill tier-neutral">500-599</span></td><td>Средний</td></tr>

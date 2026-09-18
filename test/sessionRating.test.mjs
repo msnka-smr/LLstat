@@ -36,12 +36,12 @@ test("K/D falls back to raw kills when deaths are zero", () => {
   assert.ok(rating > 500);
 });
 
-test("clamps to [1, 3500], never goes negative or past the new ceiling", () => {
+test("clamps to [1, 1500], never goes negative or past the new ceiling", () => {
   const disastrous = calcSessionRating(Array(10).fill({ k: 0, d: 30, won: false }));
   assert.equal(disastrous, 1);
 
   const godlike = calcSessionRating(Array(10).fill({ k: 60, d: 0, won: true }));
-  assert.ok(godlike <= 3500);
+  assert.ok(godlike <= 1500);
 });
 
 test("returns null when there are no maps", () => {
