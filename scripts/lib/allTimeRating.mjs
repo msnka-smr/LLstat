@@ -17,7 +17,7 @@
 // более удачливого по составу игрока.
 const START_RATING = 500;
 const MIN_RATING = 1;
-const MAX_RATING = 10000;
+const MAX_RATING = 3500;
 const K_NEW_PLAYER = 8;
 const K_ESTABLISHED = 5;
 const NEW_PLAYER_MATCHES = 5;

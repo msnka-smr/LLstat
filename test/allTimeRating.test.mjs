@@ -27,14 +27,14 @@ test("first 5 matches use K=8, matches after use K=5", () => {
   assert.equal(history[9].delta, 5 * 0.3);
 });
 
-test("rating never leaves the 1-10000 range", () => {
+test("rating never leaves the 1-3500 range", () => {
   const badStreak = Array(200).fill({ k: 0, d: 20, won: false });
   const { rating } = computeAllTimeRating(badStreak);
   assert.ok(rating >= 1);
 
   const greatStreak = Array(200).fill({ k: 40, d: 1, won: true });
   const { rating: highRating } = computeAllTimeRating(greatStreak);
-  assert.ok(highRating <= 10000);
+  assert.ok(highRating <= 3500);
 });
 
 // Регрессия на тот самый реальный кейс, который заставил пересмотреть формулу:
