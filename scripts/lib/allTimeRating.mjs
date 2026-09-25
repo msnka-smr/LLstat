@@ -53,3 +53,17 @@ export function computeAllTimeRating(matches) {
 
   return { rating, history };
 }
+
+// Изменение рейтинга "за всё время" за карты последней сессии (игрового
+// вечера) конкретного игрока — используется для бейджа-дельты рядом с
+// рейтингом на вкладке "За всё время". matches и history должны быть той же
+// парой, что передавалась/вернулась из computeAllTimeRating (тот же порядок,
+// matches[i] несёт sessionId). Игрок, не сыгравший последнюю сессию, получает 0.
+export function computeRatingDelta(matches, history, lastSessionId) {
+  if (!lastSessionId) return 0;
+  const idx = matches.findIndex((m) => m.sessionId === lastSessionId);
+  if (idx === -1) return 0;
+  const before = Math.round(history[idx].before);
+  const after = Math.round(history[history.length - 1].after);
+  return after - before;
+}

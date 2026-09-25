@@ -11,7 +11,7 @@ import { aggregatePlayerMaps } from "./lib/aggregate.mjs";
 import { computeThreshold } from "./lib/qualify.mjs";
 import { sortRows } from "./lib/sort.mjs";
 import { calcSessionRating } from "./lib/sessionRating.mjs";
-import { computeAllTimeRating } from "./lib/allTimeRating.mjs";
+import { computeAllTimeRating, computeRatingDelta } from "./lib/allTimeRating.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MATCHES_DIR = path.join(ROOT, "data", "matches");
@@ -126,12 +126,13 @@ async function main() {
     gapHours: config.sessionGapHours,
     timezone: config.sessionTimezone,
   });
+  const lastSession = sessions[sessions.length - 1] ?? null;
 
   const byPlayerAllTime = new Map();
   for (const map of sortedMaps) {
     for (const p of map.players) {
       const list = byPlayerAllTime.get(p.steamid64) ?? [];
-      list.push({ ...p, mapTotalRounds: map.totalRounds });
+      list.push({ ...p, mapTotalRounds: map.totalRounds, sessionId: map.sessionId });
       byPlayerAllTime.set(p.steamid64, list);
     }
   }
@@ -145,8 +146,10 @@ async function main() {
   // byPlayerAllTime уже хронологический: sortedMaps идёт по playedAt, и мы
   // только добавляем в список каждого игрока по ходу этого же перебора.
   const allTimeRows = [...byPlayerAllTime.entries()].map(([steamid64, mapsForPlayer]) => {
-    const { rating } = computeAllTimeRating(mapsForPlayer);
-    return buildRow(steamid64, registry, mapsForPlayer, threshold, Math.round(rating));
+    const { rating, history } = computeAllTimeRating(mapsForPlayer);
+    const row = buildRow(steamid64, registry, mapsForPlayer, threshold, Math.round(rating));
+    row.ratingDelta = computeRatingDelta(mapsForPlayer, history, lastSession?.id ?? null);
+    return row;
   });
   const allTimeRowsSorted = sortRows(allTimeRows, "rating", "desc");
 
@@ -171,7 +174,6 @@ async function main() {
   }
   await writeJson(THRESHOLD_STATE_PATH, { threshold, qualifiedSteamIds: qualifiedNowIds });
 
-  const lastSession = sessions[sessions.length - 1] ?? null;
   let lastSessionOutput = null;
   if (lastSession) {
     const byPlayerSession = new Map();

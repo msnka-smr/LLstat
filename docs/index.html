@@ -222,6 +222,40 @@
   .tier-accent { background: var(--red-bg); color: var(--red); }
   .rating-na { color: var(--text-faint); }
 
+  .rating-with-delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rating-delta {
+    display: inline-flex;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 26px;
+    height: 22px;
+    font-size: 10px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--bg);
+  }
+  .rating-delta-up {
+    align-items: flex-end;
+    padding-bottom: 2px;
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    background: var(--green);
+  }
+  .rating-delta-down {
+    align-items: flex-start;
+    padding-top: 2px;
+    clip-path: polygon(50% 100%, 100% 0%, 0% 0%);
+    background: var(--red);
+  }
+  .rating-delta-flat {
+    align-items: center;
+    border-radius: 4px;
+    background: var(--accent);
+  }
+
   .maps-cell small { color: var(--text-faint); font-weight: 400; }
 
   .qual-divider td {
@@ -552,6 +586,8 @@
   function fmtWr(v) { return v == null ? "—" : Math.round(v * 100) + "%"; }
   function fmtRating(v) { return v == null ? "—" : String(Math.round(v)); }
   function fmtDiff(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v; }
+  function fmtRatingDelta(v) { return v > 0 ? "+" + v : v < 0 ? String(v) : "+0"; }
+  function ratingDeltaClass(v) { return v > 0 ? "rating-delta-up" : v < 0 ? "rating-delta-down" : "rating-delta-flat"; }
 
   var TAB_STORAGE_KEY = "llstat:selectedTab";
   var VALID_TABS = ["allTime", "lastSession", "draft"];
@@ -812,7 +848,13 @@
     cells += '<td class="req-collapse">' + row.k + "</td>";
     cells += '<td class="req-collapse">' + row.d + "</td>";
     cells += '<td class="req-collapse">' + fmt2(row.kd) + "</td>";
-    cells += '<td><span class="rating-cell ' + ratingClass(row) + '">' + fmtRating(row.rating) + "</span></td>";
+    var ratingHtml = '<span class="rating-cell ' + ratingClass(row) + '">' + fmtRating(row.rating) + "</span>";
+    if (state.tab === "allTime" && row.ratingDelta != null) {
+      ratingHtml = '<span class="rating-with-delta">' +
+        '<span class="rating-delta ' + ratingDeltaClass(row.ratingDelta) + '">' + fmtRatingDelta(row.ratingDelta) + "</span>" +
+        ratingHtml + "</span>";
+    }
+    cells += "<td>" + ratingHtml + "</td>";
 
     return '<tr class="' + cls + '" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
   }

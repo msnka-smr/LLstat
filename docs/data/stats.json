@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T16:25:57.310Z",
+  "generatedAt": "2026-09-25T08:03:15.360Z",
   "totalMapsCollected": 32,
   "qualification": {
     "threshold": 13,
@@ -24,7 +24,8 @@
         "d": 516,
         "kd": 1.560077519379845,
         "rating": 608,
-        "isQualified": true
+        "isQualified": true,
+        "ratingDelta": 9
       },
       {
         "steamid64": "76561198039138241",
@@ -40,7 +41,8 @@
         "d": 525,
         "kd": 1.2152380952380952,
         "rating": 543,
-        "isQualified": true
+        "isQualified": true,
+        "ratingDelta": 4
       },
       {
         "steamid64": "76561198017244485",
@@ -56,7 +58,8 @@
         "d": 521,
         "kd": 1.1746641074856046,
         "rating": 519,
-        "isQualified": true
+        "isQualified": true,
+        "ratingDelta": 5
       },
       {
         "steamid64": "76561198064889555",
@@ -72,7 +75,8 @@
         "d": 547,
         "kd": 0.9542961608775137,
         "rating": 512,
-        "isQualified": true
+        "isQualified": true,
+        "ratingDelta": -6
       },
       {
         "steamid64": "76561198303379150",
@@ -88,7 +92,8 @@
         "d": 546,
         "kd": 0.793040293040293,
         "rating": 494,
-        "isQualified": true
+        "isQualified": true,
+        "ratingDelta": 0
       },
       {
         "steamid64": "76561198681103731",
@@ -104,7 +109,8 @@
         "d": 539,
         "kd": 0.7625231910946196,
         "rating": 454,
-        "isQualified": true
+        "isQualified": true,
+        "ratingDelta": -12
       },
       {
         "steamid64": "76561199852434358",
@@ -120,7 +126,8 @@
         "d": 593,
         "kd": 0.6155143338954469,
         "rating": 445,
-        "isQualified": true
+        "isQualified": true,
+        "ratingDelta": -11
       },
       {
         "steamid64": "76561198007494757",
@@ -136,7 +143,8 @@
         "d": 510,
         "kd": 0.3784313725490196,
         "rating": 406,
-        "isQualified": true
+        "isQualified": true,
+        "ratingDelta": -12
       },
       {
         "steamid64": "76561198272167310",
@@ -152,7 +160,8 @@
         "d": 162,
         "kd": 1.7222222222222223,
         "rating": 536,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 0
       },
       {
         "steamid64": "76561198070734509",
@@ -168,7 +177,8 @@
         "d": 98,
         "kd": 1.6122448979591837,
         "rating": 532,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 32
       },
       {
         "steamid64": "76561198137980826",
@@ -184,7 +194,8 @@
         "d": 111,
         "kd": 1.5135135135135136,
         "rating": 528,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 28
       },
       {
         "steamid64": "76561198042805941",
@@ -200,7 +211,8 @@
         "d": 58,
         "kd": 1.4310344827586208,
         "rating": 511,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 0
       },
       {
         "steamid64": "76561198048534904",
@@ -216,7 +228,8 @@
         "d": 185,
         "kd": 1.3243243243243243,
         "rating": 510,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 0
       },
       {
         "steamid64": "76561198054359751",
@@ -232,7 +245,8 @@
         "d": 90,
         "kd": 1.4,
         "rating": 509,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 0
       },
       {
         "steamid64": "76561198728309900",
@@ -248,7 +262,8 @@
         "d": 100,
         "kd": 1.21,
         "rating": 507,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 0
       },
       {
         "steamid64": "76561199686171590",
@@ -264,7 +279,8 @@
         "d": 94,
         "kd": 0.723404255319149,
         "rating": 505,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 0
       },
       {
         "steamid64": "76561198357423221",
@@ -280,7 +296,8 @@
         "d": 168,
         "kd": 0.6130952380952381,
         "rating": 493,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 0
       },
       {
         "steamid64": "76561198696282357",
@@ -296,7 +313,8 @@
         "d": 71,
         "kd": 0.43661971830985913,
         "rating": 485,
-        "isQualified": false
+        "isQualified": false,
+        "ratingDelta": 0
       }
     ]
   },
