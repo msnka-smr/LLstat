@@ -176,7 +176,6 @@
 
   tbody tr.player-row { cursor: pointer; }
   tbody tr.player-row:hover { background: var(--bg-row-hover); }
-  tbody tr.map-row:hover { background: var(--bg-row-hover); }
 
   .map-chips {
     display: flex;
@@ -903,12 +902,8 @@
           '">менее ' + Math.round(state.data.qualification.qualifyShare * 100) +
           '% карт лидера (' + state.data.qualification.threshold + ')</td></tr>';
       }
-      if (isMapsTab) {
-        bodyHtml += mapRowHtml(row);
-      } else {
-        bodyHtml += playerRowHtml(row, showQualification);
-        bodyHtml += detailRowHtml(row);
-      }
+      bodyHtml += isMapsTab ? mapRowHtml(row) : playerRowHtml(row, showQualification);
+      bodyHtml += detailRowHtml(row);
     });
 
     document.getElementById("tableWrap").innerHTML =
@@ -976,8 +971,9 @@
     return '<tr class="' + cls + '" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
   }
 
-  // Вкладка "Карты": все метрики уже отдельными сортируемыми колонками, детали
-  // по клику не нужны — строка не кликабельна (нет класса player-row).
+  // Вкладка "Карты": на десктопе все метрики уже отдельными колонками, но на
+  // мобильном часть (К-D, WR) прячется — кликабельна, как остальные вкладки,
+  // чтобы на телефоне эти цифры тоже были доступны через detailRowHtml.
   function mapRowHtml(row) {
     var avatarHtml = row.avatarUrl
       ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
@@ -998,12 +994,12 @@
       cells += '<td class="' + cls + '">' + text + "</td>";
     });
 
-    return '<tr class="map-row" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
+    return '<tr class="player-row" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
   }
 
   function detailRowHtml(row) {
     var expanded = state.expanded === row.steamid64;
-    var colspan = REQUIRED_COLUMNS.length;
+    var colspan = currentColumns().length;
     if (!expanded) {
       return '<tr class="detail-row" hidden><td colspan="' + colspan + '"></td></tr>';
     }
