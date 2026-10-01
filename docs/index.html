@@ -176,6 +176,35 @@
 
   tbody tr.player-row { cursor: pointer; }
   tbody tr.player-row:hover { background: var(--bg-row-hover); }
+  tbody tr.map-row:hover { background: var(--bg-row-hover); }
+
+  .map-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .map-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .map-chip:hover { background: var(--bg-row-hover); color: var(--text); }
+  .map-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0c1420;
+    font-weight: 600;
+  }
+  .map-chip-count { color: var(--text-faint); font-size: 11px; }
+  .map-chip.active .map-chip-count { color: #0c1420; opacity: 0.7; }
   tbody tr.unqualified { color: var(--text-faint); }
   tbody tr.unqualified .player-name { color: var(--text-dim); }
 
@@ -554,11 +583,13 @@
       <div class="tab active" data-tab="allTime">За всё время</div>
       <div class="tab" data-tab="lastSession">Последняя сессия</div>
       <div class="tab" data-tab="draft">Выбор составов</div>
+      <div class="tab" data-tab="maps">Карты</div>
     </div>
     <a class="rating-info-link" href="rating-info.html" target="_blank" rel="noopener">Информация о рейтинге →</a>
   </div>
 
   <div id="sessionHeader"></div>
+  <div id="mapChips"></div>
   <div class="mobile-sort" id="mobileSort"></div>
   <div id="tableWrap"></div>
   <div id="wheelSection"></div>
@@ -581,6 +612,19 @@
   // На телефоне Карт/K/D/K-D-ratio прячутся как отдельные колонки, но не
   // теряются — переезжают строкой под именем игрока (см. .player-meta).
 
+  // Вкладка "Карты": своя статистика на игрока, без рейтинга — зато с
+  // раундами и разницей K-D, которых нет в REQUIRED_COLUMNS.
+  var MAP_COLUMNS = [
+    { id: "name", label: "Игрок" },
+    { id: "mapsPlayed", label: "Карт", collapseMobile: true },
+    { id: "totalRounds", label: "Раунды", fmt: fmtInt, collapseMobile: true },
+    { id: "k", label: "K", collapseMobile: true },
+    { id: "d", label: "D", collapseMobile: true },
+    { id: "kdDiff", label: "K-D", fmt: fmtDiff, collapseMobile: true },
+    { id: "kd", label: "K/D", fmt: fmt2 },
+    { id: "winRate", label: "WR", fmt: fmtWr, collapseMobile: true },
+  ];
+
   function fmt2(v) { return v == null ? "—" : v.toFixed(2); }
   function fmtInt(v) { return v == null ? "—" : String(v); }
   function fmtWr(v) { return v == null ? "—" : Math.round(v * 100) + "%"; }
@@ -590,7 +634,7 @@
   function ratingDeltaClass(v) { return v > 0 ? "rating-delta-up" : v < 0 ? "rating-delta-down" : "rating-delta-flat"; }
 
   var TAB_STORAGE_KEY = "llstat:selectedTab";
-  var VALID_TABS = ["allTime", "lastSession", "draft"];
+  var VALID_TABS = ["allTime", "lastSession", "draft", "maps"];
   function loadSavedTab() {
     try { return localStorage.getItem(TAB_STORAGE_KEY); } catch (err) { return null; }
   }
@@ -603,8 +647,40 @@
     tab: VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
     sortColumn: "rating",
     sortDirection: "desc",
+    mapSortColumn: "kd",
+    mapSortDirection: "desc",
+    selectedMapKey: null,
     expanded: null,
   };
+
+  // "За всё время"/"Последняя сессия" используют одну общую пару
+  // sortColumn/sortDirection (так исторически сложилось — переключение между
+  // ними не сбрасывает сортировку). У "Карты" свой набор колонок (нет
+  // "рейтинга"), поэтому своя пара с собственным дефолтом (K/D).
+  function currentColumns() {
+    return state.tab === "maps" ? MAP_COLUMNS : REQUIRED_COLUMNS;
+  }
+  function getSortColumn() {
+    return state.tab === "maps" ? state.mapSortColumn : state.sortColumn;
+  }
+  function getSortDirection() {
+    return state.tab === "maps" ? state.mapSortDirection : state.sortDirection;
+  }
+  function setSort(column, direction) {
+    if (state.tab === "maps") {
+      state.mapSortColumn = column;
+      state.mapSortDirection = direction;
+    } else {
+      state.sortColumn = column;
+      state.sortDirection = direction;
+    }
+  }
+  function currentMapEntry() {
+    var maps = (state.data && state.data.maps) || [];
+    if (!maps.length) return null;
+    var found = maps.filter(function (m) { return m.mapKey === state.selectedMapKey; })[0];
+    return found || maps[0];
+  }
 
   // GitHub Pages отдаёт data/stats.json с Cache-Control: max-age=600 — без
   // no-store обычный F5 в течение 10 минут после последнего визита получает
@@ -636,6 +712,7 @@
     renderSubtitle();
     renderBanner();
     renderSessionHeader();
+    renderMapChips();
     renderMobileSort();
     renderTable();
     renderFooter();
@@ -643,25 +720,47 @@
     renderDraftSection();
   }
 
+  function renderMapChips() {
+    var el = document.getElementById("mapChips");
+    if (state.tab !== "maps") { el.innerHTML = ""; return; }
+    var maps = (state.data.maps || []);
+    if (!maps.length) { el.innerHTML = '<div class="session-header">Карт пока нет.</div>'; return; }
+    if (!maps.some(function (m) { return m.mapKey === state.selectedMapKey; })) {
+      state.selectedMapKey = maps[0].mapKey;
+    }
+    el.innerHTML = '<div class="map-chips">' + maps.map(function (m) {
+      var active = m.mapKey === state.selectedMapKey ? " active" : "";
+      return '<button type="button" class="map-chip' + active + '" data-map="' + escapeHtml(m.mapKey) + '">' +
+        escapeHtml(m.displayName) + ' <span class="map-chip-count">×' + m.timesPlayed + "</span></button>";
+    }).join("") + "</div>";
+
+    document.querySelectorAll(".map-chip").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.selectedMapKey = btn.dataset.map;
+        render();
+      });
+    });
+  }
+
   function renderMobileSort() {
     var el = document.getElementById("mobileSort");
     if (state.tab === "draft") { el.innerHTML = ""; return; }
-    var options = REQUIRED_COLUMNS.map(function (c) {
-      var selected = state.sortColumn === c.id ? " selected" : "";
+    var sortCol = getSortColumn();
+    var options = currentColumns().map(function (c) {
+      var selected = sortCol === c.id ? " selected" : "";
       return '<option value="' + c.id + '"' + selected + ">" + escapeHtml(c.label) + "</option>";
     }).join("");
-    var dirLabel = state.sortDirection === "desc" ? "↓" : "↑";
+    var dirLabel = getSortDirection() === "desc" ? "↓" : "↑";
     el.innerHTML =
       '<select id="mobileSortSelect" aria-label="Сортировать по">' + options + "</select>" +
       '<button type="button" id="mobileSortDir" aria-label="Сменить направление сортировки">' + dirLabel + "</button>";
 
     document.getElementById("mobileSortSelect").addEventListener("change", function (e) {
-      state.sortColumn = e.target.value;
-      state.sortDirection = "desc";
+      setSort(e.target.value, "desc");
       render();
     });
     document.getElementById("mobileSortDir").addEventListener("click", function () {
-      state.sortDirection = state.sortDirection === "desc" ? "asc" : "desc";
+      setSort(getSortColumn(), getSortDirection() === "desc" ? "asc" : "desc");
       render();
     });
   }
@@ -720,13 +819,17 @@
   function getRows() {
     if (state.tab === "draft") return [];
     if (state.tab === "allTime") return state.data.allTime.players;
+    if (state.tab === "maps") {
+      var m = currentMapEntry();
+      return m ? m.players : [];
+    }
     return state.data.lastSession ? state.data.lastSession.players : [];
   }
 
   function sortedRows() {
     var rows = getRows().slice();
-    var col = state.sortColumn;
-    var dir = state.sortDirection === "asc" ? 1 : -1;
+    var col = getSortColumn();
+    var dir = getSortDirection() === "asc" ? 1 : -1;
     // Порог квалификации считается по всей истории и не имеет смысла для
     // одной сессии из 3-7 карт — там сортируем только по колонке.
     var useQualification = state.tab === "allTime";
@@ -772,9 +875,11 @@
   function renderTable() {
     if (state.tab === "draft") { document.getElementById("tableWrap").innerHTML = ""; return; }
     var rows = sortedRows();
+    var columns = currentColumns();
+    var isMapsTab = state.tab === "maps";
 
     var headHtml = "<tr>";
-    REQUIRED_COLUMNS.forEach(function (c) {
+    columns.forEach(function (c) {
       headHtml += headerCell(c);
     });
     headHtml += "</tr>";
@@ -785,12 +890,16 @@
     rows.forEach(function (row) {
       if (showQualification && !row.isQualified && !thresholdShown) {
         thresholdShown = true;
-        bodyHtml += '<tr class="qual-divider"><td colspan="' + REQUIRED_COLUMNS.length +
+        bodyHtml += '<tr class="qual-divider"><td colspan="' + columns.length +
           '">менее ' + Math.round(state.data.qualification.qualifyShare * 100) +
           '% карт лидера (' + state.data.qualification.threshold + ')</td></tr>';
       }
-      bodyHtml += playerRowHtml(row, showQualification);
-      bodyHtml += detailRowHtml(row);
+      if (isMapsTab) {
+        bodyHtml += mapRowHtml(row);
+      } else {
+        bodyHtml += playerRowHtml(row, showQualification);
+        bodyHtml += detailRowHtml(row);
+      }
     });
 
     document.getElementById("tableWrap").innerHTML =
@@ -799,11 +908,10 @@
     document.querySelectorAll("thead th[data-sort]").forEach(function (th) {
       th.addEventListener("click", function () {
         var col = th.dataset.sort;
-        if (state.sortColumn === col) {
-          state.sortDirection = state.sortDirection === "desc" ? "asc" : "desc";
+        if (getSortColumn() === col) {
+          setSort(col, getSortDirection() === "desc" ? "asc" : "desc");
         } else {
-          state.sortColumn = col;
-          state.sortDirection = "desc";
+          setSort(col, "desc");
         }
         render();
       });
@@ -819,7 +927,7 @@
   }
 
   function headerCell(c) {
-    var sorted = state.sortColumn === c.id ? "sorted" : "";
+    var sorted = getSortColumn() === c.id ? "sorted" : "";
     var cls = (c.collapseMobile ? "req-collapse " : "") + sorted;
     return '<th class="' + cls + '" data-sort="' + c.id + '">' + escapeHtml(c.label) + "</th>";
   }
@@ -857,6 +965,31 @@
     cells += "<td>" + ratingHtml + "</td>";
 
     return '<tr class="' + cls + '" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
+  }
+
+  // Вкладка "Карты": все метрики уже отдельными сортируемыми колонками, детали
+  // по клику не нужны — строка не кликабельна (нет класса player-row).
+  function mapRowHtml(row) {
+    var avatarHtml = row.avatarUrl
+      ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
+      : '<div class="avatar"></div>';
+    var metaText = row.mapsPlayed + " карт · K " + row.k + " - D " + row.d + " · WR " + fmtWr(row.winRate);
+
+    var cells = '<td><div class="player-cell">' +
+      '<a href="' + escapeHtml(row.steamProfileUrl) + '" target="_blank" rel="noopener">' +
+      avatarHtml + '<span class="player-text">' +
+      '<span class="player-name">' + escapeHtml(row.name) + "</span>" +
+      '<span class="player-meta">' + metaText + "</span>" +
+      "</span></a></div></td>";
+
+    MAP_COLUMNS.slice(1).forEach(function (c) {
+      var value = row[c.id];
+      var text = c.fmt ? c.fmt(value) : String(value);
+      var cls = c.collapseMobile ? "req-collapse" : "";
+      cells += '<td class="' + cls + '">' + text + "</td>";
+    });
+
+    return '<tr class="map-row" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
   }
 
   function detailRowHtml(row) {

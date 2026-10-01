@@ -12,6 +12,7 @@ import { computeThreshold } from "./lib/qualify.mjs";
 import { sortRows } from "./lib/sort.mjs";
 import { calcSessionRating } from "./lib/sessionRating.mjs";
 import { computeAllTimeRating, computeRatingDelta } from "./lib/allTimeRating.mjs";
+import { summarizeMapFrequency } from "./lib/mapCatalog.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MATCHES_DIR = path.join(ROOT, "data", "matches");
@@ -103,6 +104,7 @@ function buildRow(steamid64, registry, mapsForPlayer, threshold, rating) {
     k: agg.k,
     d: agg.d,
     kd: agg.kd,
+    kdDiff: agg.k - agg.d,
     rating,
     isQualified: agg.mapsPlayed >= threshold,
   };
@@ -152,6 +154,25 @@ async function main() {
     return row;
   });
   const allTimeRowsSorted = sortRows(allTimeRows, "rating", "desc");
+
+  // Вкладка "Карты": статистика по каждой карте за всю историю, без привязки
+  // к сессиям и без рейтинга — тот же пул карт (sortedMaps), что и "За всё
+  // время", просто сгруппированный по имени карты вместо игрока.
+  const mapsOutput = summarizeMapFrequency(sortedMaps).map(({ mapKey, displayName: mapDisplayName, timesPlayed }) => {
+    const byPlayerOnMap = new Map();
+    for (const map of sortedMaps) {
+      if (map.map !== mapKey) continue;
+      for (const p of map.players) {
+        const list = byPlayerOnMap.get(p.steamid64) ?? [];
+        list.push({ ...p, mapTotalRounds: map.totalRounds });
+        byPlayerOnMap.set(p.steamid64, list);
+      }
+    }
+    const players = [...byPlayerOnMap.entries()].map(([steamid64, mapsForPlayer]) =>
+      buildRow(steamid64, registry, mapsForPlayer, 0, null)
+    );
+    return { mapKey, displayName: mapDisplayName, timesPlayed, players: sortRows(players, "kd", "desc") };
+  });
 
   // Порог плавает и нигде не запоминается (пересчитывается каждый build), но если
   // он вырос настолько, что кто-то выпал из квалификации — молча посереть для
@@ -217,6 +238,7 @@ async function main() {
     },
     allTime: { players: allTimeRowsSorted },
     lastSession: lastSessionOutput,
+    maps: mapsOutput,
   };
 
   await writeJson(OUTPUT_PATH, output);
