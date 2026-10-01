@@ -5,7 +5,7 @@
       "Volbe",
       "PREMIUM | Volbe"
     ],
-    "lastSeenName": "Volbe",
+    "lastSeenName": "PREMIUM | Volbe",
     "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg"
   },
   "76561198014367879": {
@@ -30,7 +30,7 @@
       "moloko",
       "moloko_"
     ],
-    "lastSeenName": "moloko",
+    "lastSeenName": "moloko_",
     "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg"
   },
   "76561198303379150": {
@@ -71,9 +71,10 @@
       "AlexMax",
       "Alex.Max.",
       "PREMIUM | Alex.Max.",
-      "PREMIUM | AlexMax"
+      "PREMIUM | AlexMax",
+      "LITE | AlexMax"
     ],
-    "lastSeenName": "AlexMax",
+    "lastSeenName": "LITE | AlexMax",
     "avatarUrl": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg"
   },
   "76561199686171590": {
@@ -148,5 +149,13 @@
     ],
     "lastSeenName": "LetsStats",
     "avatarUrl": "https://avatars.steamstatic.com/97dc87cbf6f9c7d5513b15c6f2f7d4f56a22dd12_full.jpg"
+  },
+  "76561199144510024": {
+    "displayName": null,
+    "nicknames": [
+      "LITE | 63dealer"
+    ],
+    "lastSeenName": "LITE | 63dealer",
+    "avatarUrl": "https://avatars.steamstatic.com/85be17759cb6469ce6d26b8c549440f8fb44a105_full.jpg"
   }
 }
