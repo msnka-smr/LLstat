@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mapDisplayName, summarizeMapFrequency } from "../scripts/lib/mapCatalog.mjs";
+import { mapDisplayName, summarizeMapFrequency, mapIconUrl } from "../scripts/lib/mapCatalog.mjs";
 
 test("mapDisplayName returns the known competitive name for a recognised map", () => {
   assert.equal(mapDisplayName("de_mirage"), "Mirage");
@@ -44,4 +44,19 @@ test("summarizeMapFrequency ignores maps with no map name", () => {
   const maps = [{ map: "de_mirage" }, { map: null }, {}];
   const result = summarizeMapFrequency(maps);
   assert.deepEqual(result.map((m) => m.mapKey), ["de_mirage"]);
+});
+
+test("mapIconUrl returns the icon URL for a map with a known icon", () => {
+  assert.equal(
+    mapIconUrl("de_mirage"),
+    "https://raw.githubusercontent.com/vgalisson/csgo-map-icons/master/256x256/map_icon_de_mirage.png"
+  );
+});
+
+test("mapIconUrl returns null for a map with no icon in the set", () => {
+  assert.equal(mapIconUrl("de_boulder"), null);
+});
+
+test("mapIconUrl returns null for a missing map name", () => {
+  assert.equal(mapIconUrl(null), null);
 });

@@ -12,7 +12,7 @@ import { computeThreshold } from "./lib/qualify.mjs";
 import { sortRows } from "./lib/sort.mjs";
 import { calcSessionRating } from "./lib/sessionRating.mjs";
 import { computeAllTimeRating, computeRatingDelta } from "./lib/allTimeRating.mjs";
-import { summarizeMapFrequency } from "./lib/mapCatalog.mjs";
+import { summarizeMapFrequency, mapIconUrl } from "./lib/mapCatalog.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MATCHES_DIR = path.join(ROOT, "data", "matches");
@@ -171,7 +171,13 @@ async function main() {
     const players = [...byPlayerOnMap.entries()].map(([steamid64, mapsForPlayer]) =>
       buildRow(steamid64, registry, mapsForPlayer, 0, null)
     );
-    return { mapKey, displayName: mapDisplayName, timesPlayed, players: sortRows(players, "kd", "desc") };
+    return {
+      mapKey,
+      displayName: mapDisplayName,
+      iconUrl: mapIconUrl(mapKey),
+      timesPlayed,
+      players: sortRows(players, "totalRounds", "desc"),
+    };
   });
 
   // Порог плавает и нигде не запоминается (пересчитывается каждый build), но если

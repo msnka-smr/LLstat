@@ -25,6 +25,31 @@ export function mapDisplayName(rawName) {
   return stripped.charAt(0).toUpperCase() + stripped.slice(1);
 }
 
+// Официальные пентагон-значки карт, вытащенные из файлов игры:
+// https://github.com/vgalisson/csgo-map-icons ("I do not have any rights on
+// this pictures" — автор репозитория про источник). Новые карты CS2
+// (de_boulder/de_fachwerk/cs_shelter) туда ещё не попали — для них иконки
+// просто нет, mapIconUrl возвращает null, и фронт рисует чип без картинки.
+const ICON_BASE = "https://raw.githubusercontent.com/vgalisson/csgo-map-icons/master/256x256/map_icon_";
+const ICONS_AVAILABLE = new Set([
+  "de_mirage",
+  "de_dust2",
+  "de_inferno",
+  "de_nuke",
+  "de_cache",
+  "de_ancient",
+  "de_anubis",
+  "de_overpass",
+  "de_train",
+  "de_vertigo",
+  "cs_office",
+]);
+
+export function mapIconUrl(rawName) {
+  if (!rawName || !ICONS_AVAILABLE.has(rawName)) return null;
+  return ICON_BASE + rawName + ".png";
+}
+
 // maps — нормализованные объекты карт (см. normalize.mjs), только поле .map
 // используется. Возвращает уникальные карты с числом игр, самая играемая первой.
 export function summarizeMapFrequency(maps) {

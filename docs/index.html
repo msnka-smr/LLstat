@@ -205,6 +205,12 @@
   }
   .map-chip-count { color: var(--text-faint); font-size: 11px; }
   .map-chip.active .map-chip-count { color: #0c1420; opacity: 0.7; }
+  .map-chip-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
   tbody tr.unqualified { color: var(--text-faint); }
   tbody tr.unqualified .player-name { color: var(--text-dim); }
 
@@ -617,12 +623,12 @@
   var MAP_COLUMNS = [
     { id: "name", label: "Игрок" },
     { id: "mapsPlayed", label: "Карт", collapseMobile: true },
-    { id: "totalRounds", label: "Раунды", fmt: fmtInt, collapseMobile: true },
     { id: "k", label: "K", collapseMobile: true },
     { id: "d", label: "D", collapseMobile: true },
     { id: "kdDiff", label: "K-D", fmt: fmtDiff, collapseMobile: true },
-    { id: "kd", label: "K/D", fmt: fmt2 },
+    { id: "kd", label: "K/D", fmt: fmt2, collapseMobile: true },
     { id: "winRate", label: "WR", fmt: fmtWr, collapseMobile: true },
+    { id: "totalRounds", label: "Раунды", fmt: fmtInt },
   ];
 
   function fmt2(v) { return v == null ? "—" : v.toFixed(2); }
@@ -647,7 +653,7 @@
     tab: VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
     sortColumn: "rating",
     sortDirection: "desc",
-    mapSortColumn: "kd",
+    mapSortColumn: "totalRounds",
     mapSortDirection: "desc",
     selectedMapKey: null,
     expanded: null,
@@ -730,8 +736,11 @@
     }
     el.innerHTML = '<div class="map-chips">' + maps.map(function (m) {
       var active = m.mapKey === state.selectedMapKey ? " active" : "";
+      var iconHtml = m.iconUrl
+        ? '<img class="map-chip-icon" src="' + escapeHtml(m.iconUrl) + '" alt="" loading="lazy">'
+        : "";
       return '<button type="button" class="map-chip' + active + '" data-map="' + escapeHtml(m.mapKey) + '">' +
-        escapeHtml(m.displayName) + ' <span class="map-chip-count">×' + m.timesPlayed + "</span></button>";
+        iconHtml + escapeHtml(m.displayName) + ' <span class="map-chip-count">×' + m.timesPlayed + "</span></button>";
     }).join("") + "</div>";
 
     document.querySelectorAll(".map-chip").forEach(function (btn) {
@@ -973,7 +982,7 @@
     var avatarHtml = row.avatarUrl
       ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
       : '<div class="avatar"></div>';
-    var metaText = row.mapsPlayed + " карт · K " + row.k + " - D " + row.d + " · WR " + fmtWr(row.winRate);
+    var metaText = row.mapsPlayed + " карт · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
 
     var cells = '<td><div class="player-cell">' +
       '<a href="' + escapeHtml(row.steamProfileUrl) + '" target="_blank" rel="noopener">' +
