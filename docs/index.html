@@ -621,13 +621,13 @@
   // раундами и разницей K-D, которых нет в REQUIRED_COLUMNS.
   var MAP_COLUMNS = [
     { id: "name", label: "Игрок" },
-    { id: "mapsPlayed", label: "Карт", collapseMobile: true },
+    { id: "totalRounds", label: "Раунды", fmt: fmtInt, collapseMobile: true },
     { id: "k", label: "K", collapseMobile: true },
     { id: "d", label: "D", collapseMobile: true },
     { id: "kdDiff", label: "K-D", fmt: fmtDiff, collapseMobile: true },
     { id: "kd", label: "K/D", fmt: fmt2, collapseMobile: true },
     { id: "winRate", label: "WR", fmt: fmtWr, collapseMobile: true },
-    { id: "totalRounds", label: "Раунды", fmt: fmtInt },
+    { id: "mapsPlayed", label: "Карт" },
   ];
 
   function fmt2(v) { return v == null ? "—" : v.toFixed(2); }
@@ -652,7 +652,7 @@
     tab: VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
     sortColumn: "rating",
     sortDirection: "desc",
-    mapSortColumn: "totalRounds",
+    mapSortColumn: "mapsPlayed",
     mapSortDirection: "desc",
     selectedMapKey: null,
     expanded: null,
@@ -841,14 +841,22 @@
     // Порог квалификации считается по всей истории и не имеет смысла для
     // одной сессии из 3-7 карт — там сортируем только по колонке.
     var useQualification = state.tab === "allTime";
+    // "Карты", сортировка по числу карт: при равенстве выше тот, у кого
+    // лучше K/D на этой карте, а не произвольный порядок.
+    var tiebreakKd = state.tab === "maps" && col === "mapsPlayed";
     rows.sort(function (a, b) {
       if (useQualification && a.isQualified !== b.isQualified) return a.isQualified ? -1 : 1;
       var av = a[col], bv = b[col];
       if (av == null && bv == null) return 0;
       if (av == null) return 1;
       if (bv == null) return -1;
-      if (av === bv) return 0;
-      return (av < bv ? -1 : 1) * dir;
+      if (av !== bv) return (av < bv ? -1 : 1) * dir;
+      if (tiebreakKd && a.kd !== b.kd) {
+        if (a.kd == null) return 1;
+        if (b.kd == null) return -1;
+        return a.kd < b.kd ? 1 : -1;
+      }
+      return 0;
     });
     return rows;
   }
@@ -978,7 +986,7 @@
     var avatarHtml = row.avatarUrl
       ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
       : '<div class="avatar"></div>';
-    var metaText = row.mapsPlayed + " карт · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
+    var metaText = fmtInt(row.totalRounds) + " раундов · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
 
     var cells = '<td><div class="player-cell">' +
       '<a href="' + escapeHtml(row.steamProfileUrl) + '" target="_blank" rel="noopener">' +

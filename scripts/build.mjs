@@ -171,12 +171,19 @@ async function main() {
     const players = [...byPlayerOnMap.entries()].map(([steamid64, mapsForPlayer]) =>
       buildRow(steamid64, registry, mapsForPlayer, 0, null)
     );
+    // Сортировка по умолчанию — число карт, при равенстве выше тот, у кого
+    // лучше K/D. sortRows сортирует только по одной колонке, поэтому сначала
+    // сортируем по kd (вторичный ключ), а затем стабильно — по mapsPlayed:
+    // Array.prototype.sort в Node гарантированно стабилен (ES2019), так что
+    // порядок внутри "ничьей" по mapsPlayed останется таким, как после
+    // первого прохода.
+    const playersByMapsThenKd = sortRows(sortRows(players, "kd", "desc"), "mapsPlayed", "desc");
     return {
       mapKey,
       displayName: mapDisplayName,
       iconUrl: mapIconUrl(mapKey),
       timesPlayed,
-      players: sortRows(players, "totalRounds", "desc"),
+      players: playersByMapsThenKd,
     };
   });
 
