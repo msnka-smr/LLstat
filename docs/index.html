@@ -944,6 +944,23 @@
     return '<th class="' + cls + '" data-sort="' + c.id + '">' + escapeHtml(c.label) + "</th>";
   }
 
+  // Ссылка на профиль Steam — только на вкладке "За всё время"; на остальных
+  // (сессия, карты) ник просто текст, без гиперссылки.
+  function playerCellHtml(row, metaText, linked) {
+    var avatarHtml = row.avatarUrl
+      ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
+      : '<div class="avatar"></div>';
+    var inner = avatarHtml + '<span class="player-text">' +
+      '<span class="player-name">' + escapeHtml(row.name) + "</span>" +
+      '<span class="player-meta">' + metaText + "</span>" +
+      "</span>";
+    if (linked) {
+      inner = '<a href="' + escapeHtml(row.steamProfileUrl) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' +
+        inner + "</a>";
+    }
+    return '<td><div class="player-cell">' + inner + "</div></td>";
+  }
+
   function playerRowHtml(row, showQualification) {
     var isUnqualified = showQualification && !row.isQualified;
     var cls = "player-row" + (isUnqualified ? " unqualified" : "");
@@ -951,19 +968,10 @@
       ? row.mapsPlayed
       : row.mapsPlayed + ' <small>/ ' + state.data.qualification.threshold + "</small>";
 
-    var avatarHtml = row.avatarUrl
-      ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
-      : '<div class="avatar"></div>';
-
     var metaText = row.mapsPlayed + " карт · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
 
     var cells = "";
-    cells += '<td><div class="player-cell">' +
-      '<a href="' + escapeHtml(row.steamProfileUrl) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' +
-      avatarHtml + '<span class="player-text">' +
-      '<span class="player-name">' + escapeHtml(row.name) + "</span>" +
-      '<span class="player-meta">' + metaText + "</span>" +
-      "</span></a></div></td>";
+    cells += playerCellHtml(row, metaText, state.tab === "allTime");
     cells += '<td class="maps-cell req-collapse">' + mapsCell + "</td>";
     cells += '<td class="req-collapse">' + row.k + "</td>";
     cells += '<td class="req-collapse">' + row.d + "</td>";
@@ -983,17 +991,8 @@
   // мобильном часть (К-D, WR) прячется — кликабельна, как остальные вкладки,
   // чтобы на телефоне эти цифры тоже были доступны через detailRowHtml.
   function mapRowHtml(row) {
-    var avatarHtml = row.avatarUrl
-      ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
-      : '<div class="avatar"></div>';
     var metaText = fmtInt(row.totalRounds) + " раундов · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
-
-    var cells = '<td><div class="player-cell">' +
-      '<a href="' + escapeHtml(row.steamProfileUrl) + '" target="_blank" rel="noopener">' +
-      avatarHtml + '<span class="player-text">' +
-      '<span class="player-name">' + escapeHtml(row.name) + "</span>" +
-      '<span class="player-meta">' + metaText + "</span>" +
-      "</span></a></div></td>";
+    var cells = playerCellHtml(row, metaText, false);
 
     MAP_COLUMNS.slice(1).forEach(function (c) {
       var value = row[c.id];
