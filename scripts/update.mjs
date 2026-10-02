@@ -19,6 +19,9 @@ function runCapture(cmd, args) {
 function main() {
   const args = process.argv.slice(2);
 
+  // матчи могут добавляться и с кнопки в GitHub Actions — без этого
+  // локальный push после такого коммита отклонялся бы как non-fast-forward
+  run("git", ["pull", "--rebase", "--autostash"]);
   run("node", ["scripts/collect.mjs", ...args]);
 
   // build каждый раз пишет новый generatedAt, поэтому без этой проверки

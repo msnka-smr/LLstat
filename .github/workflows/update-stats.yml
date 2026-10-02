@@ -1,0 +1,58 @@
+# Кнопка «вставил ссылки → Run workflow» прямо на GitHub (вкладка Actions).
+# Делает то же, что update-stats.bat: скачивает матчи по ссылкам (без ожидания
+# разбора демки — статистика из лобби), пересобирает stats.json, коммитит и пушит.
+name: Обновить статистику
+
+on:
+  workflow_dispatch:
+    inputs:
+      links:
+        description: "Ссылки на матчи cybershoke через пробел"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+# два запуска подряд не должны пушить одновременно
+concurrency:
+  group: update-stats
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Проверка связи с cybershoke
+        run: |
+          node --input-type=module -e '
+          const res = await fetch("https://cybershoke.net/api/api/v1/custom-matches/lobbys/info", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ id_lobby: 12291946, lobby_password: "", players_waiting_all: false }),
+          });
+          const text = await res.text();
+          try {
+            if (!JSON.parse(text).data) throw new Error("пустой data");
+            console.log("cybershoke отвечает, статус", res.status);
+          } catch {
+            console.log("::error::cybershoke не пускает запросы с серверов GitHub (статус " + res.status + "), скорее всего это Cloudflare. Обновляйте статистику ярлыком на компьютере.");
+            console.log(text.slice(0, 500));
+            process.exit(1);
+          }
+          '
+
+      - name: Скачать матчи, пересобрать, закоммитить
+        env:
+          LINKS: ${{ inputs.links }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          printf '%s\n' "$LINKS" > "$RUNNER_TEMP/links.txt"
+          node scripts/update.mjs --add --basic-if-pending --file "$RUNNER_TEMP/links.txt"
