@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-01T07:38:55.507Z",
+  "generatedAt": "2026-10-02T13:44:54.932Z",
   "totalMapsCollected": 38,
   "qualification": {
     "threshold": 16,
@@ -681,6 +681,7 @@
       "mapKey": "de_dust2",
       "displayName": "Dust II",
       "iconUrl": "https://raw.githubusercontent.com/vgalisson/csgo-map-icons/master/256x256/map_icon_de_dust2.png",
+      "bannerUrl": "img/maps/de_dust2.webp",
       "timesPlayed": 14,
       "players": [
         {
@@ -1012,6 +1013,7 @@
       "mapKey": "de_inferno",
       "displayName": "Inferno",
       "iconUrl": "https://raw.githubusercontent.com/vgalisson/csgo-map-icons/master/256x256/map_icon_de_inferno.png",
+      "bannerUrl": "img/maps/de_inferno.webp",
       "timesPlayed": 8,
       "players": [
         {
@@ -1343,6 +1345,7 @@
       "mapKey": "de_mirage",
       "displayName": "Mirage",
       "iconUrl": "https://raw.githubusercontent.com/vgalisson/csgo-map-icons/master/256x256/map_icon_de_mirage.png",
+      "bannerUrl": "img/maps/de_mirage.webp",
       "timesPlayed": 6,
       "players": [
         {
@@ -1606,6 +1609,7 @@
       "mapKey": "de_nuke",
       "displayName": "Nuke",
       "iconUrl": "https://raw.githubusercontent.com/vgalisson/csgo-map-icons/master/256x256/map_icon_de_nuke.png",
+      "bannerUrl": "img/maps/de_nuke.webp",
       "timesPlayed": 6,
       "players": [
         {
@@ -1903,6 +1907,7 @@
       "mapKey": "de_cache",
       "displayName": "Cache",
       "iconUrl": "https://raw.githubusercontent.com/vgalisson/csgo-map-icons/master/256x256/map_icon_de_cache.png",
+      "bannerUrl": "img/maps/de_cache.webp",
       "timesPlayed": 4,
       "players": [
         {

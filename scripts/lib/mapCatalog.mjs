@@ -50,6 +50,30 @@ export function mapIconUrl(rawName) {
   return ICON_BASE + rawName + ".png";
 }
 
+// Кадры для баннера на вкладке "Карты" — из
+// https://github.com/ghostcap-gaming/cs2-map-images ("map screenshots that you
+// can use for your CS2-related projects"), пережаты в WebP 1280x720 и лежат в
+// docs/img/maps/, чтобы не зависеть от чужого хостинга. Путь относительный —
+// от docs/index.html. Для карт без кадра фронт рисует баннер с градиентом.
+export const BANNERS_AVAILABLE = new Set([
+  "de_mirage",
+  "de_dust2",
+  "de_inferno",
+  "de_nuke",
+  "de_cache",
+  "de_ancient",
+  "de_anubis",
+  "de_overpass",
+  "de_train",
+  "de_vertigo",
+  "cs_office",
+]);
+
+export function mapBannerUrl(rawName) {
+  if (!rawName || !BANNERS_AVAILABLE.has(rawName)) return null;
+  return "img/maps/" + rawName + ".webp";
+}
+
 // maps — нормализованные объекты карт (см. normalize.mjs), только поле .map
 // используется. Возвращает уникальные карты с числом игр, самая играемая первой.
 export function summarizeMapFrequency(maps) {

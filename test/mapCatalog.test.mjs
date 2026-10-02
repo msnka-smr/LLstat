@@ -1,6 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mapDisplayName, summarizeMapFrequency, mapIconUrl } from "../scripts/lib/mapCatalog.mjs";
+import { existsSync } from "node:fs";
+import {
+  mapDisplayName,
+  summarizeMapFrequency,
+  mapIconUrl,
+  mapBannerUrl,
+  BANNERS_AVAILABLE,
+} from "../scripts/lib/mapCatalog.mjs";
 
 test("mapDisplayName returns the known competitive name for a recognised map", () => {
   assert.equal(mapDisplayName("de_mirage"), "Mirage");
@@ -59,4 +66,22 @@ test("mapIconUrl returns null for a map with no icon in the set", () => {
 
 test("mapIconUrl returns null for a missing map name", () => {
   assert.equal(mapIconUrl(null), null);
+});
+
+test("mapBannerUrl returns the local banner path for a map with a banner", () => {
+  assert.equal(mapBannerUrl("de_dust2"), "img/maps/de_dust2.webp");
+});
+
+test("mapBannerUrl returns null for a map with no banner", () => {
+  assert.equal(mapBannerUrl("de_boulder"), null);
+});
+
+test("mapBannerUrl returns null for a missing map name", () => {
+  assert.equal(mapBannerUrl(null), null);
+});
+
+test("every map in the banner set has its image file in docs/img/maps", () => {
+  for (const name of BANNERS_AVAILABLE) {
+    assert.ok(existsSync(new URL(`../docs/img/maps/${name}.webp`, import.meta.url)), name);
+  }
 });

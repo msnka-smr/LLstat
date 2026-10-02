@@ -12,7 +12,7 @@ import { computeThreshold } from "./lib/qualify.mjs";
 import { sortRows } from "./lib/sort.mjs";
 import { calcSessionRating } from "./lib/sessionRating.mjs";
 import { computeAllTimeRating, computeRatingDelta } from "./lib/allTimeRating.mjs";
-import { summarizeMapFrequency, mapIconUrl } from "./lib/mapCatalog.mjs";
+import { summarizeMapFrequency, mapIconUrl, mapBannerUrl } from "./lib/mapCatalog.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MATCHES_DIR = path.join(ROOT, "data", "matches");
@@ -182,6 +182,7 @@ async function main() {
       mapKey,
       displayName: mapDisplayName,
       iconUrl: mapIconUrl(mapKey),
+      bannerUrl: mapBannerUrl(mapKey),
       timesPlayed,
       players: playersByMapsThenKd,
     };

@@ -210,6 +210,76 @@
     object-fit: contain;
     flex-shrink: 0;
   }
+
+  /* Баннер вкладки "Карты": кадр выбранной карты, поверх — название и
+     чипы. Два слоя фона нужны для плавной смены кадра: новый слой
+     проявляется только после того, как картинка догрузилась. */
+  .map-hero {
+    position: relative;
+    min-height: 260px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #252b3b 0%, var(--bg-panel) 60%, var(--bg) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .map-hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 60%;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+  .map-hero-bg.shown { opacity: 1; }
+  .map-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(20, 22, 28, 0.05) 0%, rgba(20, 22, 28, 0.45) 50%, rgba(20, 22, 28, 0.92) 100%),
+      linear-gradient(to right, rgba(20, 22, 28, 0.55) 0%, rgba(20, 22, 28, 0) 60%);
+    pointer-events: none;
+  }
+  .map-hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 16px;
+  }
+  .map-hero-title {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  }
+  .map-hero-sub {
+    margin: 4px 0 12px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  }
+  .map-hero .map-chips { margin-bottom: 0; }
+  .map-hero .map-chip {
+    background: rgba(20, 22, 28, 0.6);
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.85);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .map-hero .map-chip:hover { background: rgba(38, 42, 53, 0.85); color: #fff; }
+  .map-hero .map-chip-count { color: rgba(255, 255, 255, 0.55); }
+  .map-hero .map-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0c1420;
+  }
+  .map-hero .map-chip.active .map-chip-count { color: #0c1420; }
+  @media (prefers-reduced-motion: reduce) {
+    .map-hero-bg { transition: none; }
+  }
   tbody tr.unqualified { color: var(--text-faint); }
   tbody tr.unqualified .player-name { color: var(--text-dim); }
 
@@ -344,6 +414,22 @@
       white-space: nowrap;
     }
     body { padding-left: 8px; padding-right: 8px; }
+
+    /* Баннер на телефоне ниже, а чипы — одной строкой с прокруткой
+       пальцем вбок: в несколько рядов они раздували бы баннер. */
+    .map-hero { min-height: 190px; }
+    .map-hero-content { padding: 12px 0; }
+    .map-hero-title { font-size: 24px; padding: 0 12px; }
+    .map-hero-sub { margin-bottom: 10px; padding: 0 12px; }
+    .map-hero .map-chips {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 0 12px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .map-hero .map-chips::-webkit-scrollbar { display: none; }
+    .map-hero .map-chip { flex-shrink: 0; }
     table { font-size: 13px; }
     thead th, tbody td { padding: 8px 6px; }
 
@@ -733,21 +819,85 @@
     if (!maps.some(function (m) { return m.mapKey === state.selectedMapKey; })) {
       state.selectedMapKey = maps[0].mapKey;
     }
-    el.innerHTML = '<div class="map-chips">' + maps.map(function (m) {
-      var active = m.mapKey === state.selectedMapKey ? " active" : "";
-      var iconHtml = m.iconUrl
-        ? '<img class="map-chip-icon" src="' + escapeHtml(m.iconUrl) + '" alt="" loading="lazy">'
-        : "";
-      return '<button type="button" class="map-chip' + active + '" data-map="' + escapeHtml(m.mapKey) + '">' +
-        iconHtml + escapeHtml(m.displayName) + ' <span class="map-chip-count">×' + m.timesPlayed + "</span></button>";
-    }).join("") + "</div>";
+    var selected = maps.filter(function (m) { return m.mapKey === state.selectedMapKey; })[0];
 
-    document.querySelectorAll(".map-chip").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        state.selectedMapKey = btn.dataset.map;
-        render();
+    // каркас баннера строим один раз — пересоздание сбрасывало бы прокрутку
+    // строки чипов на телефоне и обрывало плавную смену кадра
+    var hero = el.querySelector(".map-hero");
+    if (!hero) {
+      el.innerHTML =
+        '<div class="map-hero">' +
+          '<div class="map-hero-bg"></div><div class="map-hero-bg"></div>' +
+          '<div class="map-hero-content">' +
+            '<div class="map-hero-title"></div>' +
+            '<div class="map-hero-sub"></div>' +
+            '<div class="map-chips"></div>' +
+          "</div>" +
+        "</div>";
+      hero = el.querySelector(".map-hero");
+    }
+
+    hero.querySelector(".map-hero-title").textContent = selected.displayName;
+    hero.querySelector(".map-hero-sub").textContent = "Сыграно карт: " + selected.timesPlayed;
+    setMapHeroImage(hero, selected.bannerUrl);
+
+    var chips = hero.querySelector(".map-chips");
+    var chipsKey = maps.map(function (m) { return m.mapKey + ":" + m.timesPlayed; }).join(",");
+    if (chips.dataset.key !== chipsKey) {
+      chips.dataset.key = chipsKey;
+      chips.innerHTML = maps.map(function (m) {
+        var iconHtml = m.iconUrl
+          ? '<img class="map-chip-icon" src="' + escapeHtml(m.iconUrl) + '" alt="" loading="lazy">'
+          : "";
+        return '<button type="button" class="map-chip" data-map="' + escapeHtml(m.mapKey) + '">' +
+          iconHtml + escapeHtml(m.displayName) + ' <span class="map-chip-count">×' + m.timesPlayed + "</span></button>";
+      }).join("");
+      chips.querySelectorAll(".map-chip").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          state.selectedMapKey = btn.dataset.map;
+          render();
+        });
       });
+    }
+    var activeChip = null;
+    chips.querySelectorAll(".map-chip").forEach(function (btn) {
+      var isActive = btn.dataset.map === state.selectedMapKey;
+      btn.classList.toggle("active", isActive);
+      if (isActive) activeChip = btn;
     });
+
+    // на телефоне строка чипов прокручивается — докручиваем до выбранного,
+    // если он за краем (scrollIntoView дёрнул бы ещё и всю страницу)
+    if (activeChip && chips.scrollWidth > chips.clientWidth) {
+      var left = activeChip.offsetLeft - chips.offsetLeft;
+      var right = left + activeChip.offsetWidth;
+      if (left < chips.scrollLeft || right > chips.scrollLeft + chips.clientWidth) {
+        chips.scrollTo({ left: Math.max(0, left - 12), behavior: "smooth" });
+      }
+    }
+  }
+
+  // Новый кадр кладём в скрытый слой и проявляем только после загрузки,
+  // чтобы при переключении не мигал пустой баннер. Если ответ пришёл уже
+  // после следующего переключения — он устарел, его игнорируем.
+  function setMapHeroImage(hero, url) {
+    if (hero.dataset.bannerUrl === (url || "")) return;
+    hero.dataset.bannerUrl = url || "";
+    var layers = hero.querySelectorAll(".map-hero-bg");
+    var current = hero.querySelector(".map-hero-bg.shown");
+    var next = current === layers[0] ? layers[1] : layers[0];
+    if (!url) {
+      if (current) current.classList.remove("shown");
+      return;
+    }
+    var img = new Image();
+    img.onload = function () {
+      if (hero.dataset.bannerUrl !== url) return;
+      next.style.backgroundImage = 'url("' + url + '")';
+      next.classList.add("shown");
+      if (current) current.classList.remove("shown");
+    };
+    img.src = url;
   }
 
   function renderMobileSort() {
