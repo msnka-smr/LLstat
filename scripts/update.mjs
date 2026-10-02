@@ -20,6 +20,14 @@ function main() {
   const args = process.argv.slice(2);
 
   run("node", ["scripts/collect.mjs", ...args]);
+
+  // build каждый раз пишет новый generatedAt, поэтому без этой проверки
+  // коммит и пуш случались бы даже когда новых матчей нет
+  if (!runCapture("git", ["status", "--porcelain", "--", "data"]).trim()) {
+    console.log("\nНовых матчей нет — статистику не пересобираю, коммитить нечего.");
+    return;
+  }
+
   run("node", ["scripts/build.mjs"]);
 
   const status = runCapture("git", ["status", "--porcelain"]);
