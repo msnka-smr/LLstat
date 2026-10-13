@@ -585,6 +585,56 @@
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
+  .draft-guests { margin-top: 12px; }
+  .draft-guest-add {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .draft-guest-add:hover:not(:disabled) { color: var(--text); border-color: var(--text-dim); }
+  .draft-guest-add:disabled { opacity: 0.5; cursor: not-allowed; }
+  .draft-guest-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .draft-guest-row input[type="text"] { flex: 1; min-width: 160px; }
+  .draft-guest-row input[type="number"] { width: 90px; }
+  .draft-guest-row input {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+  .draft-guest-row input.invalid { border-color: var(--red); }
+  .draft-guest-remove {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+  }
+  .draft-guest-remove:hover { color: var(--text); border-color: var(--text-dim); }
+  .draft-guest-label {
+    flex-basis: 100%;
+    font-size: 11px;
+    color: var(--text-faint);
+  }
+  .draft-guest-tag {
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-left: 6px;
+  }
   .draft-toolbar {
     display: flex;
     align-items: center;
@@ -1302,7 +1352,12 @@
     }, 5000);
   }
 
-  // "Выбор составов": делит ровно 10 отмеченных игроков на два состава 5×5,
+  // Гости (игроки со стороны): минимум DRAFT_MIN_POOL человек из пула, остальные
+  // до десяти — гости с именем и "рейтингом на глаз". У гостей нет K/D и K-D,
+  // поэтому их оцениваем линейной регрессией по рейтингу на всех игроках
+  // "за всё время" (draftEstimator); сами оценённые числа на экран не выводим.
+  //
+  // "Выбор составов": делит ровно 10 человек на два состава 5×5,
   // минимизируя разницу между командами сразу по трём сигналам — рейтингу
   // "за всё время" (вес 0.3), суммарной K-D разнице (вес 0.3) и K/D (вес 0.4),
   // каждый нормирован к своему разбросу среди выбранной десятки (иначе
@@ -1312,10 +1367,57 @@
   // без всякой эвристики, и берём точный оптимум.
   var DRAFT_MAX = 10;
   var DRAFT_GEN_PREFIX = "llstat:draftGen:";
-  var draftState = { selected: new Set(), lastKey: null, lastSplits: null, currentView: 0 };
+  var DRAFT_MIN_POOL = 4;
+  var DRAFT_GUEST_NAME_MAX = 40;
+  var DRAFT_RATING_MIN = 1;
+  var DRAFT_RATING_MAX = 1500;
+  var DRAFT_GUEST_DEFAULT_RATING = 500;
+  var draftState = { selected: new Set(), guests: [], nextGuestId: 1, lastKey: null, lastSplits: null, currentView: 0 };
 
-  function draftKeyFor(ids) {
-    return DRAFT_GEN_PREFIX + ids.slice().sort().join(",");
+  function draftGuestRatingValid(g) {
+    return g.rating !== "" && isFinite(Number(g.rating)) &&
+      Number(g.rating) >= DRAFT_RATING_MIN && Number(g.rating) <= DRAFT_RATING_MAX;
+  }
+
+  function draftGuestWord(n) {
+    var m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return "гость";
+    if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return "гостя";
+    return "гостей";
+  }
+
+  function draftKeyFor(ids, guests) {
+    var guestPart = guests.map(function (g) { return "g:" + g.name + "=" + g.rating; }).sort();
+    return DRAFT_GEN_PREFIX + ids.slice().sort().concat(guestPart).join(",");
+  }
+
+  // y ≈ a + b·x по методу наименьших квадратов; при нулевом разбросе x — среднее y.
+  function linFit(xs, ys) {
+    var n = xs.length;
+    var mx = xs.reduce(function (s, v) { return s + v; }, 0) / n;
+    var my = ys.reduce(function (s, v) { return s + v; }, 0) / n;
+    var sxx = 0, sxy = 0;
+    for (var i = 0; i < n; i++) {
+      sxx += (xs[i] - mx) * (xs[i] - mx);
+      sxy += (xs[i] - mx) * (ys[i] - my);
+    }
+    var b = sxx > 0 ? sxy / sxx : 0;
+    return { a: my - b * mx, b: b };
+  }
+
+  function draftEstimator(allPlayers) {
+    var pool = allPlayers.filter(function (p) {
+      return p.rating != null && p.kd != null && p.k != null && p.d != null;
+    });
+    var ratings = pool.map(function (p) { return p.rating; });
+    var kdFit = linFit(ratings, pool.map(function (p) { return p.kd; }));
+    var diffFit = linFit(ratings, pool.map(function (p) { return p.k - p.d; }));
+    return function (rating) {
+      return {
+        kd: Math.max(0, kdFit.a + kdFit.b * rating),
+        kdDiff: diffFit.a + diffFit.b * rating,
+      };
+    };
   }
   function loadDraftGenCount(key) {
     try { return parseInt(localStorage.getItem(key), 10) || 0; } catch (err) { return 0; }
@@ -1352,9 +1454,14 @@
 
     el.innerHTML =
       '<div class="draft-section">' +
-        '<p class="draft-hint">Выбери ровно 10 игроков — поделим на два состава 5×5 максимально балансово ' +
-        "по рейтингу, K-D и K/D.</p>" +
+        '<p class="draft-hint">Выбери 10 игроков: минимум ' + DRAFT_MIN_POOL + " из нашего списка, остальных добавь " +
+        "гостями с именем и примерным рейтингом. Поделим на два состава 5×5 максимально балансово " +
+        "по рейтингу, K-D и K/D (у гостей K-D и K/D оцениваются по рейтингу).</p>" +
         '<div class="draft-list" id="draftList">' + rowsHtml + "</div>" +
+        '<div class="draft-guests">' +
+          '<button type="button" class="draft-guest-add" id="draftGuestAddBtn">+ Добавить гостя</button>' +
+          '<div id="draftGuestList"></div>' +
+        "</div>" +
         '<div class="draft-toolbar">' +
           '<div class="draft-counter" id="draftCounter">Выбрано: 0 / ' + DRAFT_MAX + "</div>" +
           '<button type="button" class="draft-clear-btn" id="draftClearBtn">Очистить всё</button>' +
@@ -1370,10 +1477,69 @@
       runDraft(false);
     });
     document.getElementById("draftClearBtn").addEventListener("click", clearDraftSelection);
+    document.getElementById("draftGuestAddBtn").addEventListener("click", addDraftGuest);
+    document.getElementById("draftGuestList").addEventListener("input", onDraftGuestInput);
+    document.getElementById("draftGuestList").addEventListener("click", onDraftGuestClick);
+    updateDraftCounter();
+  }
+
+  function addDraftGuest() {
+    var total = draftState.selected.size + draftState.guests.length;
+    if (total >= DRAFT_MAX || draftState.guests.length >= DRAFT_MAX - DRAFT_MIN_POOL) return;
+    draftState.guests.push({ id: draftState.nextGuestId++, name: "", rating: String(DRAFT_GUEST_DEFAULT_RATING) });
+    renderDraftGuests();
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
+    var inputs = document.querySelectorAll("#draftGuestList .draft-guest-name");
+    inputs[inputs.length - 1].focus();
+  }
+
+  function renderDraftGuests() {
+    document.getElementById("draftGuestList").innerHTML = draftState.guests.map(function (g, i) {
+      return '<div class="draft-guest-row" data-gid="' + g.id + '">' +
+        '<input type="text" class="draft-guest-name" maxlength="' + DRAFT_GUEST_NAME_MAX + '"' +
+          ' placeholder="Гость ' + (i + 1) + ': имя / плюс от…" value="' + escapeHtml(g.name) + '">' +
+        '<input type="number" class="draft-guest-rating' + (draftGuestRatingValid(g) ? "" : " invalid") + '"' +
+          ' min="' + DRAFT_RATING_MIN + '" max="' + DRAFT_RATING_MAX + '" step="1" value="' + escapeHtml(g.rating) + '">' +
+        '<button type="button" class="draft-guest-remove" aria-label="Удалить гостя">×</button>' +
+        '<div class="draft-guest-label">Рейтинг на глаз, ' + DRAFT_RATING_MIN + "–" + DRAFT_RATING_MAX +
+          " (" + DRAFT_GUEST_DEFAULT_RATING + " — средний игрок)</div>" +
+      "</div>";
+    }).join("");
+  }
+
+  function findDraftGuest(target) {
+    var row = target.closest(".draft-guest-row");
+    var id = row ? Number(row.dataset.gid) : null;
+    return draftState.guests.find(function (g) { return g.id === id; });
+  }
+
+  function onDraftGuestInput(e) {
+    var g = findDraftGuest(e.target);
+    if (!g) return;
+    if (e.target.classList.contains("draft-guest-name")) {
+      g.name = e.target.value;
+    } else {
+      g.rating = e.target.value;
+      e.target.classList.toggle("invalid", !draftGuestRatingValid(g));
+    }
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
+  }
+
+  function onDraftGuestClick(e) {
+    if (!e.target.classList.contains("draft-guest-remove")) return;
+    var g = findDraftGuest(e.target);
+    draftState.guests = draftState.guests.filter(function (x) { return x !== g; });
+    renderDraftGuests();
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
   }
 
   function clearDraftSelection() {
     draftState.selected.clear();
+    draftState.guests = [];
+    renderDraftGuests();
     document.querySelectorAll('#draftList input[type="checkbox"]').forEach(function (cb) {
       cb.checked = false;
       cb.disabled = false;
@@ -1385,7 +1551,7 @@
   function onDraftCheckboxChange(e) {
     var id = e.target.dataset.steamid;
     if (e.target.checked) {
-      if (draftState.selected.size >= DRAFT_MAX) {
+      if (draftState.selected.size + draftState.guests.length >= DRAFT_MAX) {
         e.target.checked = false;
         return;
       }
@@ -1398,16 +1564,27 @@
   }
 
   function updateDraftCounter() {
-    var n = draftState.selected.size;
+    var pool = draftState.selected.size;
+    var guests = draftState.guests.length;
+    var n = pool + guests;
     var counter = document.getElementById("draftCounter");
-    counter.textContent = "Выбрано: " + n + " / " + DRAFT_MAX;
+    counter.textContent = guests
+      ? "Выбрано: " + pool + " из списка + " + guests + " " + draftGuestWord(guests) + " = " + n + " / " + DRAFT_MAX
+      : "Выбрано: " + n + " / " + DRAFT_MAX;
     counter.classList.toggle("full", n === DRAFT_MAX);
-    document.getElementById("draftFormBtn").disabled = n !== DRAFT_MAX;
+    document.getElementById("draftFormBtn").disabled = !draftReady();
 
     var atMax = n >= DRAFT_MAX;
     document.querySelectorAll('#draftList input[type="checkbox"]').forEach(function (cb) {
       if (!cb.checked) cb.disabled = atMax;
     });
+    document.getElementById("draftGuestAddBtn").disabled = atMax || guests >= DRAFT_MAX - DRAFT_MIN_POOL;
+  }
+
+  function draftReady() {
+    return draftState.selected.size >= DRAFT_MIN_POOL &&
+      draftState.selected.size + draftState.guests.length === DRAFT_MAX &&
+      draftState.guests.every(draftGuestRatingValid);
   }
 
   function draftAvgOf(list, accessor) {
@@ -1455,9 +1632,12 @@
   // в draftState — переключение между ними после этого бесплатное и не тратит
   // лимит генераций, лимит защищает только от появления третьего варианта.
   function runDraft(isAgain) {
-    if (draftState.selected.size !== DRAFT_MAX) return;
+    if (!draftReady()) return;
     var ids = Array.from(draftState.selected);
-    var key = draftKeyFor(ids);
+    var guests = draftState.guests.map(function (g, i) {
+      return { name: g.name.trim() || "Гость " + (i + 1), rating: Number(g.rating) };
+    });
+    var key = draftKeyFor(ids, guests);
     var used = loadDraftGenCount(key);
 
     if (isAgain) {
@@ -1471,6 +1651,14 @@
       var players = ids.map(function (id) {
         return allPlayers.find(function (p) { return p.steamid64 === id; });
       });
+      if (guests.length) {
+        var estimate = draftEstimator(allPlayers);
+        guests.forEach(function (g) {
+          var est = estimate(g.rating);
+          // computeDraftSplits берёт K-D как k - d, так что кладём оценку в k.
+          players.push({ name: g.name, rating: g.rating, kd: est.kd, k: est.kdDiff, d: 0, guest: true });
+        });
+      }
       draftState.lastKey = key;
       draftState.lastSplits = computeDraftSplits(players);
     }
@@ -1488,7 +1676,8 @@
 
     function teamHtml(title, team, avgRating, avgKdDiff, avgKd) {
       var itemsHtml = team.map(function (p) {
-        return "<li><span>" + escapeHtml(p.name) + "</span><span>" + fmtRating(p.rating) + "</span></li>";
+        var tag = p.guest ? '<span class="draft-guest-tag">гость</span>' : "";
+        return "<li><span>" + escapeHtml(p.name) + tag + "</span><span>" + fmtRating(p.rating) + "</span></li>";
       }).join("");
       return '<div class="draft-team"><h4>' + title + "</h4><ul>" + itemsHtml + "</ul>" +
         '<div class="team-stats">Средний рейтинг: ' + Math.round(avgRating) +
@@ -1510,6 +1699,9 @@
       '<div class="draft-summary">Разница в среднем рейтинге — <strong>' + Math.round(split.ratingDiff) +
       "</strong>, в среднем K-D — <strong>" + split.kdDiffDiff.toFixed(1) +
       "</strong>, в среднем K/D — <strong>" + split.kdDiff.toFixed(2) + "</strong>.</div>" +
+      (split.teamA.concat(split.teamB).some(function (p) { return p.guest; })
+        ? '<div class="draft-variant-note">У гостей K-D и K/D оценены по рейтингу, поэтому средние по составам приблизительные.</div>'
+        : "") +
       '<div class="draft-again-wrap">' + switchButtonHtml + "</div>" +
       '<div class="draft-variant-note">Вариант ' + (variantIndex + 1) + " из 2 — больше вариантов для этой десятки не будет.</div>";
 
