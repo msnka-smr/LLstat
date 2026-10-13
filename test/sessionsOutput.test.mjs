@@ -89,3 +89,22 @@ test("a single-player session is handled", () => {
   const out = buildSessionOutput(sessionOf("2026-01-10", [mapOf(1, [strong])]), makeRow);
   assert.equal(out.players.length, 1);
 });
+
+test("session output keeps its time range and the full map entries", () => {
+  const out = buildSessionOutput(
+    { id: "S", firstPlayedAt: 111, lastPlayedAt: 222, maps: [mapOf(7, [strong], { map: "de_nuke", statsTier: "basic" })] },
+    makeRow
+  );
+  assert.equal(out.firstPlayedAt, 111);
+  assert.equal(out.lastPlayedAt, 222);
+  assert.deepEqual(out.maps[0], {
+    mapId: "7-0", lobbyId: 7, map: "de_nuke", statsTier: "basic",
+    teams: [{ score: 13 }, { score: 7 }], url: "https://cybershoke.net/match/7",
+  });
+});
+
+test("the input sessions array is not mutated", () => {
+  const sessions = [sessionOf("A", [mapOf(1, [strong])]), sessionOf("B", [mapOf(2, [strong])])];
+  buildSessionsOutput(sessions, makeRow);
+  assert.deepEqual(sessions.map((s) => s.id), ["A", "B"]);
+});

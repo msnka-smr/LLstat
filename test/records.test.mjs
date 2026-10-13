@@ -292,3 +292,28 @@ test("worst K-D diff only lists negative differences", () => {
   const top = rec(computeRecords(maps, sessionsOf(maps)), "worst-kd-diff").top;
   assert.deepEqual(top.map((e) => e.steamid64), ["B"]);
 });
+
+test("attendance streak hint speaks about sessions, not evenings", () => {
+  assert.equal(rec(computeRecords([], []), "attendance-streak").hint, "сессий подряд");
+});
+
+test("a 0/0 map neither breaks nor extends the K/D streak", () => {
+  const maps = [
+    mapOf({ day: 1, players: [p("A", 12, 8, true)] }),
+    mapOf({ day: 2, players: [p("A", 0, 0, false)] }), // игрок почти не играл — не считаем ни за, ни против
+    mapOf({ day: 3, players: [p("A", 10, 10, true)] }),
+  ];
+  const top = rec(computeRecords(maps, sessionsOf(maps)), "kd-streak").top;
+  assert.deepEqual(top, [{ steamid64: "A", value: 2, from: 1 * DAY, to: 3 * DAY, place: 1 }]);
+});
+
+test("a real K/D below 1.0 still breaks the streak next to a 0/0 map", () => {
+  const maps = [
+    mapOf({ day: 1, players: [p("A", 12, 8, true)] }),
+    mapOf({ day: 2, players: [p("A", 0, 0, false)] }),
+    mapOf({ day: 3, players: [p("A", 5, 10, true)] }),
+    mapOf({ day: 4, players: [p("A", 10, 10, true)] }),
+  ];
+  const top = rec(computeRecords(maps, sessionsOf(maps)), "kd-streak").top;
+  assert.deepEqual(top, []); // 1 + (0/0 не считается) | 5/10 рвёт | 1 — серий длиннее одной нет
+});

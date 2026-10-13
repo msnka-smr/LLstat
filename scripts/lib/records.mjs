@@ -130,8 +130,9 @@ export function computeRecords(allMaps, sessions) {
       byPlayer.set(p.steamid64, list);
     }
   }
-  const runs = (predicate) =>
-    streakTop(new Map([...byPlayer].map(([id, list]) => [id, longestRun(list, predicate)])));
+  // skip — карты, которые серию не продолжают и не прерывают (как будто игрок на них не играл)
+  const runs = (predicate, skip = () => false) =>
+    streakTop(new Map([...byPlayer].map(([id, list]) => [id, longestRun(list.filter((x) => !skip(x)), predicate)])));
 
   // сессии, в которых играл каждый игрок
   const attended = new Map();
@@ -165,8 +166,8 @@ export function computeRecords(allMaps, sessions) {
     record("win-streak", "streaks", "Серия побед подряд", "карт подряд; пропущенные игроком карты серию не рвут",
       runs((x) => x.won === true)),
     record("kd-streak", "streaks", "Серия карт с K/D не ниже 1.0", "карт подряд",
-      runs((x) => kdOf(x) >= 1)),
-    record("attendance-streak", "streaks", "Железная посещаемость", "игровых вечеров подряд",
+      runs((x) => kdOf(x) >= 1, (x) => x.k === 0 && x.d === 0)), // 0/0 — игрок почти не играл, серию не рвёт
+    record("attendance-streak", "streaks", "Железная посещаемость", "сессий подряд",
       streakTop(attendanceRuns)),
 
     record("biggest-win", "matches", "Самый крупный разгром", "наибольшая разница в счёте",

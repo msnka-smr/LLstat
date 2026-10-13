@@ -831,6 +831,8 @@
     font-size: 12px;
     cursor: pointer;
   }
+  .hist-chip { max-width: 100%; }
+  .hist-chip-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .hist-chip:hover { color: var(--text); }
   .hist-chip.on { color: var(--text); }
   .hist-chip-dot {
@@ -861,11 +863,13 @@
     padding: 8px 10px;
     font-size: 12px;
     white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .hist-tip-head { color: var(--text-dim); margin-bottom: 4px; }
   .hist-tip-row { display: flex; align-items: center; gap: 8px; padding: 1px 0; }
   .hist-tip-key { width: 14px; height: 2px; flex-shrink: 0; }
-  .hist-tip-name { color: var(--text-dim); flex: 1; }
+  .hist-tip-name { color: var(--text-dim); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .hist-tip-val { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
   .hist-table-wrap { margin-top: 10px; font-size: 12px; color: var(--text-dim); }
   .hist-table-wrap summary { cursor: pointer; }
@@ -1237,17 +1241,25 @@
       el.innerHTML = state.tab === "lastSession"
         ? '<div class="session-header">Сессий пока нет.</div>'
         : "";
+      el.dataset.key = "";
       return;
     }
+    // Любой render() (сортировка таблицы, раскрытие строки…) вызывает и эту функцию;
+    // если вкладка, сессия и состояние панели не менялись, шапку не пересобираем —
+    // иначе пересоздавалась бы карточка и пропадало сообщение «Скопировано».
+    var key = state.tab + "|" + s.id + "|" + (recapState.open ? 1 : 0) + "|" + (wheelState.spinning ? 1 : 0);
+    if (el.dataset.key === key && el.firstChild) return;
+    el.dataset.key = key;
     var hours = s.lastPlayedAt && s.firstPlayedAt
       ? Math.max(1, Math.round((s.lastPlayedAt - s.firstPlayedAt) / 3600))
       : null;
     var mapsHtml = s.maps.map(function (m) {
-      var score = m.teams && m.teams.length === 2
-        ? m.teams[0].score + ":" + m.teams[1].score
+      // счёт везде записываем "победитель первым" (как на карточке и в рекордах)
+      var score = m.teams && m.teams.length === 2 && m.teams[0].score != null && m.teams[1].score != null
+        ? Math.max(m.teams[0].score, m.teams[1].score) + ":" + Math.min(m.teams[0].score, m.teams[1].score)
         : "";
       var tierNote = m.statsTier === "basic" ? " (basic)" : "";
-      return '<a href="' + m.url + '" target="_blank" rel="noopener">' +
+      return '<a href="' + escapeHtml(m.url) + '" target="_blank" rel="noopener">' +
         escapeHtml(m.map || "?") + " " + score + tierNote + "</a>";
     }).join("");
     var optionsHtml = state.data.sessions.map(function (x) {
@@ -1255,7 +1267,7 @@
         escapeHtml(sessionLabel(x)) + "</option>";
     }).join("");
     el.innerHTML =
-      '<div class="session-picker"><select id="sessionSelect" aria-label="Сессия">' + optionsHtml + "</select>" +
+      '<div class="session-picker"><select id="sessionSelect" aria-label="Сессия"' + (wheelState.spinning ? " disabled" : "") + ">" + optionsHtml + "</select>" +
       (s.recap
         ? '<button type="button" class="recap-btn" id="recapBtn" aria-expanded="' + (recapState.open ? "true" : "false") + '">Итоги вечера</button>'
         : "") +
@@ -1540,7 +1552,8 @@
     var lo = Math.min.apply(null, values.concat([500]));
     var hi = Math.max.apply(null, values.concat([500]));
     var span = Math.max(hi - lo, 50);
-    var step = [10, 25, 50, 100, 200, 250, 500].filter(function (s) { return span / s <= 5; })[0] || 500;
+    // шаг считаем по диапазону вместе с запасом по краям (+16%), иначе делений выходит больше 5
+    var step = [10, 25, 50, 100, 200, 250, 500].filter(function (s) { return span * 1.16 / s <= 5; })[0] || 500;
     return {
       min: Math.max(0, Math.floor((lo - span * 0.08) / step) * step),
       max: Math.ceil((hi + span * 0.08) / step) * step,
@@ -1575,13 +1588,17 @@
         '<div class="hist-section">' +
           '<div class="hist-title">Динамика рейтинга</div>' +
           '<div class="hist-chips" id="histChips"></div>' +
-          '<div class="hist-hint" id="histHint"></div>' +
+          '<div class="hist-hint" id="histHint" aria-live="polite"></div>' +
           '<div class="hist-chart" id="histChart"></div>' +
           '<details class="hist-table-wrap"><summary>Таблица значений</summary>' +
             '<div class="hist-table-scroll" id="histTable"></div></details>' +
         "</div>";
+      // На телефоне resize приходит и при показе/скрытии адресной строки (меняется
+      // только высота) — перерисовываем, только когда изменилась ширина графика.
       window.addEventListener("resize", function () {
-        if (state.tab === "allTime") drawHistChart();
+        var box = document.getElementById("histChart");
+        if (state.tab !== "allTime" || !box || box.clientWidth === histState.drawnWidth) return;
+        drawHistChart();
       });
       histState.ready = true;
     }
@@ -1603,6 +1620,7 @@
       dot.className = "hist-chip-dot";
       if (sel) dot.style.background = sel.color;
       var label = document.createElement("span");
+      label.className = "hist-chip-label";
       label.textContent = p.name;
       btn.appendChild(dot);
       btn.appendChild(label);
@@ -1634,6 +1652,7 @@
   function drawHistChart() {
     var box = document.getElementById("histChart");
     if (!box || state.tab !== "allTime") return;
+    histState.drawnWidth = box.clientWidth;
     var h = state.data.ratingHistory;
     var names = {};
     state.data.allTime.players.forEach(function (p) { names[p.steamid64] = p.name; });
@@ -1662,7 +1681,7 @@
     function yAt(v) { return padT + (ys.max - v) / (ys.max - ys.min) * (height - padT - padB); }
 
     var svg = svgEl("svg", { width: width, height: height, viewBox: "0 0 " + width + " " + height, role: "img", tabindex: "0",
-      "aria-label": "График рейтинга по сессиям" });
+      "aria-label": "График рейтинга по сессиям; стрелки влево и вправо переключают сессии" });
 
     for (var t = ys.min; t <= ys.max; t += ys.step) {
       svg.appendChild(svgEl("line", { x1: padL, x2: width - padR, y1: yAt(t), y2: yAt(t) }, "stroke: var(--border); stroke-width: 1;"));
@@ -1751,7 +1770,7 @@
       tip.style.display = "";
       var left = xAt(i) + 12;
       if (left + tip.offsetWidth > width) left = xAt(i) - 12 - tip.offsetWidth;
-      tip.style.left = Math.max(0, left) + "px";
+      tip.style.left = Math.max(0, Math.min(left, width - tip.offsetWidth)) + "px";
       tip.style.top = padT + "px";
     }
     function hide() {
@@ -1842,7 +1861,7 @@
       case "best-kd": case "worst-kd": return e.value.toFixed(2);
       case "most-deaths": return e.value + " " + pluralRu(e.value, "смерть", "смерти", "смертей");
       case "win-streak": case "kd-streak": case "loss-streak": return mapsCount(e.value);
-      case "attendance-streak": return e.value + " " + pluralRu(e.value, "вечер", "вечера", "вечеров");
+      case "attendance-streak": return e.value + " " + pluralRu(e.value, "сессия", "сессии", "сессий");
       case "biggest-win": case "closest-match": return e.score[0] + ":" + e.score[1];
       case "longest-map": case "shortest-map":
         return e.rounds + " " + pluralRu(e.rounds, "раунд", "раунда", "раундов");
@@ -2050,6 +2069,12 @@
     document.getElementById("wheelSpinBtn").addEventListener("click", spinWheel);
   }
 
+  // Пока крутится колесо, список сессий недоступен (иначе выбор молча откатывался бы).
+  function setSessionSelectLocked(locked) {
+    var sel = document.getElementById("sessionSelect");
+    if (sel) sel.disabled = locked;
+  }
+
   function spinWheel() {
     var session = currentSession();
     if (wheelState.spinning || !session) return;
@@ -2083,6 +2108,7 @@
     wheelState.rotation += extraSpins * 360 + delta;
 
     wheelState.spinning = true;
+    setSessionSelectLocked(true); // менять сессию во время вращения нельзя
     document.getElementById("wheelCategory").textContent = category.text;
     document.getElementById("wheelResult").textContent = "";
     document.getElementById("wheelSpinBtn").disabled = true;
@@ -2091,6 +2117,7 @@
 
     setTimeout(function () {
       wheelState.spinning = false;
+      setSessionSelectLocked(false);
       document.getElementById("wheelSpinBtn").disabled = false;
       document.getElementById("wheelDial").style.background = wheelBackground(winnerIndex);
       document.getElementById("wheelResult").innerHTML =
@@ -2276,7 +2303,11 @@
   var RECAP_W = 1080;
   var RECAP_PAD = 56;
   var RECAP_MAX_MAPS = 8;
-  var RECAP_FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
+  // Шрифт карточки — тот же, что у страницы (берётся с body), запасной — системный.
+  var RECAP_FALLBACK_FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
+  function recapFontFamily() {
+    return getComputedStyle(document.body).fontFamily || RECAP_FALLBACK_FONT;
+  }
   var recapState = { open: false, joke: null };
 
   function randomExcuse(except) {
@@ -2328,6 +2359,9 @@
     return parts.join(" ");
   }
 
+  // На картинке отрицательные числа со знаком "−" (типографский минус), а не дефисом.
+  function recapMinus(str) { return String(str).replace(/^-/, "−"); }
+
   function recapColors() {
     var cs = getComputedStyle(document.documentElement);
     function v(name, fallback) { return cs.getPropertyValue(name).trim() || fallback; }
@@ -2357,9 +2391,10 @@
   // возвращает полную высоту карточки.
   function renderRecapCard(ctx, m, C, draw) {
     var W = RECAP_W, P = RECAP_PAD, inner = W - 2 * P;
+    var family = recapFontFamily();
     var y = P;
     function text(str, x, baseline, size, weight, color, align, maxW) {
-      ctx.font = weight + " " + size + "px " + RECAP_FONT;
+      ctx.font = weight + " " + size + "px " + family;
       ctx.textAlign = align || "left";
       var s = maxW ? fitText(ctx, String(str), maxW) : String(str);
       if (draw) { ctx.fillStyle = color; ctx.fillText(s, x, baseline); }
@@ -2386,7 +2421,7 @@
       panel(P, y, inner, 236);
       text("MVP вечера", P + 36, y + 56, 26, "600", C.accent);
       text(mvp.name, P + 36, y + 128, 64, "700", C.text, "left", inner - 72);
-      var stats = "Рейтинг " + fmtRating(mvp.rating) + " · K/D " + fmt2(mvp.kd) + " · K-D " + fmtDiff(mvp.kdDiff);
+      var stats = "Рейтинг " + fmtRating(mvp.rating) + " · K/D " + fmt2(mvp.kd) + " · K-D " + recapMinus(fmtDiff(mvp.kdDiff));
       if (typeof mvp.wins === "number" && typeof mvp.maps === "number") stats += " · побед " + mvp.wins + " из " + mvp.maps;
       text(stats, P + 36, y + 188, 30, "400", C.dim, "left", inner - 72);
       y += 236 + 32;
@@ -2403,15 +2438,18 @@
     }
 
     var blocks = [];
-    if (m.rise) blocks.push({ label: "Больше всего вырос", name: m.rise.name, value: fmtRatingDelta(m.rise.delta), color: C.green });
-    if (m.drop) blocks.push({ label: "Больше всего просел", name: m.drop.name, value: fmtRatingDelta(m.drop.delta), color: C.red });
+    if (m.rise) blocks.push({ label: "Больше всего вырос", name: m.rise.name, value: recapMinus(fmtRatingDelta(m.rise.delta)), color: C.green });
+    if (m.drop) blocks.push({ label: "Больше всего просел", name: m.drop.name, value: recapMinus(fmtRatingDelta(m.drop.delta)), color: C.red });
     if (blocks.length) {
       var gap = 24, bw = (inner - gap * (blocks.length - 1)) / blocks.length;
       blocks.forEach(function (b, i) {
         var x = P + i * (bw + gap);
         panel(x, y, bw, 140);
         text(b.label, x + 28, y + 44, 24, "600", C.dim, "left", bw - 56);
-        text(b.name, x + 28, y + 104, 38, "700", C.text, "left", bw - 56 - 130);
+        // ширину значения замеряем, чтобы длинное число не налезало на имя
+        ctx.font = "700 44px " + family;
+        var valueW = ctx.measureText(b.value).width;
+        text(b.name, x + 28, y + 104, 38, "700", C.text, "left", Math.max(40, bw - 56 - valueW - 24));
         text(b.value, x + bw - 28, y + 104, 44, "700", b.color, "right");
       });
       y += 140 + 32;

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-13T10:34:58.124Z",
+  "generatedAt": "2026-10-13T11:23:22.499Z",
   "totalMapsCollected": 38,
   "qualification": {
     "threshold": 16,
@@ -3119,7 +3119,7 @@
       "id": "attendance-streak",
       "group": "streaks",
       "title": "Железная посещаемость",
-      "hint": "игровых вечеров подряд",
+      "hint": "сессий подряд",
       "top": [
         {
           "steamid64": "76561198014367879",
