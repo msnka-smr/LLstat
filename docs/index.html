@@ -567,24 +567,39 @@
     font-size: 13px;
     max-width: 100%;
   }
+  /* Облако на сфере: теги позиционируются из JS (см. tickExcuseSphere), сам
+     контейнер — прямоугольник фиксированной высоты, чтобы блок не прыгал. */
   .excuse-cloud {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: baseline;
-    gap: 6px 14px;
+    position: relative;
+    width: 100%;
+    height: 400px;
     margin-bottom: 14px;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
   }
+  .excuse-cloud.dragging { cursor: grabbing; }
   .excuse-tag {
-    color: var(--text-faint);
-    opacity: 0.55;
-    transition: color 0.3s, opacity 0.3s, transform 0.3s;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 14px;
+    color: var(--text-dim);
+    width: max-content;
+    max-width: 150px; /* длинные фразы переносим, иначе на узком экране вылезают за сферу */
+    text-align: center;
+    will-change: transform, opacity;
+    transition: color 0.3s;
   }
   .excuse-tag.on {
     color: var(--green);
-    opacity: 1;
     font-weight: 600;
-    transform: scale(1.08);
+  }
+  @media (max-width: 640px) {
+    .excuse-cloud { height: 330px; }
+    .excuse-tag { font-size: 12px; max-width: 110px; }
   }
   .excuse-result { font-size: 14px; min-height: 20px; }
   .excuse-result strong { color: var(--accent); }
@@ -1405,8 +1420,9 @@
   // Чисто for fun: "Оправдалка" на вкладке "Последняя сессия" — облако мемных
   // отмазок игроков CS2; кнопка по очереди зажигает 3–5 случайных (с ✅, как в
   // меме) и подписывает их выбранным игроком (по умолчанию — худший по рейтингу
-  // сессии, players уже отсортирован по рейтингу). Размер тега зависит только
-  // от его номера, чтобы облако не "прыгало" при перерисовке.
+  // сессии, players уже отсортирован по рейтингу). Облако — 3D-сфера: теги
+  // лежат на сфере (спираль Фибоначчи), сама она медленно вращается и
+  // крутится перетаскиванием; ближние теги крупнее и ярче дальних.
   var EXCUSES = [
     "Не регает", "Первая разминочная", "Тайминг ебучий", "Инпут лаг",
     "Кто добавил невидимую текстуру?", "Вторая разминочная", "Лагает",
@@ -1416,9 +1432,93 @@
     "Тиммейты не кидают смоки", "Сбился прицел", "Скин не тот", "Тильт",
     "Солнце в глаза",
   ];
-  var EXCUSE_SIZES = [13, 15, 17, 20];
   var EXCUSE_STEP_MS = 700;
-  var excuseState = { running: false };
+  var EXCUSE_AUTO_SPEED = 0.006; // рад/кадр (при 60 fps)
+  var EXCUSE_DRAG_SPEED = 0.008; // рад на пиксель перетаскивания
+  var excuseState = { running: false, raf: 0, last: 0, ax: 0.35, ay: 0, vx: 0, vy: 0, dragging: false, base: [] };
+
+  // Равномерно раскладывает n точек по единичной сфере (спираль Фибоначчи).
+  function fibonacciSphere(n) {
+    var golden = Math.PI * (3 - Math.sqrt(5));
+    var pts = [];
+    for (var i = 0; i < n; i++) {
+      var y = 1 - 2 * (i + 0.5) / n;
+      var r = Math.sqrt(1 - y * y);
+      pts.push([Math.cos(i * golden) * r, y, Math.sin(i * golden) * r]);
+    }
+    return pts;
+  }
+
+  function tickExcuseSphere(ts) {
+    var cloud = document.getElementById("excuseCloud");
+    if (!cloud) { excuseState.raf = 0; return; } // блок перестроен/убран — цикл заканчиваем
+    excuseState.raf = requestAnimationFrame(tickExcuseSphere);
+
+    var w = cloud.clientWidth, h = cloud.clientHeight;
+    var dt = Math.min(ts - excuseState.last, 50) / 16.67;
+    excuseState.last = ts;
+    if (!w || !h) return; // вкладка скрыта (display: none)
+
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!excuseState.dragging) {
+      excuseState.ay += ((reduceMotion ? 0 : EXCUSE_AUTO_SPEED) + excuseState.vy) * dt;
+      excuseState.ax += excuseState.vx * dt;
+      var decay = Math.pow(0.95, dt);
+      excuseState.vx *= decay;
+      excuseState.vy *= decay;
+    }
+
+    var radius = Math.min(w * 0.26, h * 0.42);
+    var sinY = Math.sin(excuseState.ay), cosY = Math.cos(excuseState.ay);
+    var sinX = Math.sin(excuseState.ax), cosX = Math.cos(excuseState.ax);
+    var tags = cloud.querySelectorAll(".excuse-tag");
+    for (var i = 0; i < tags.length; i++) {
+      var b = excuseState.base[i];
+      var x1 = b[0] * cosY + b[2] * sinY;
+      var z1 = -b[0] * sinY + b[2] * cosY;
+      var y2 = b[1] * cosX - z1 * sinX;
+      var z2 = b[1] * sinX + z1 * cosX;
+      var depth = (z2 + 1) / 2; // 0 — дальняя точка сферы, 1 — ближняя
+      var lit = tags[i].classList.contains("on");
+      var scale = 0.65 + 0.55 * depth;
+      var opacity = 0.25 + 0.75 * depth;
+      if (lit) { scale = Math.max(scale, 0.9); opacity = Math.max(opacity, 0.95); }
+      tags[i].style.transform = "translate(-50%, -50%) translate(" + (x1 * radius).toFixed(1) + "px, " +
+        (y2 * radius).toFixed(1) + "px) scale(" + scale.toFixed(3) + ")";
+      tags[i].style.opacity = opacity.toFixed(2);
+      tags[i].style.zIndex = Math.round(depth * 100) + (lit ? 200 : 0);
+    }
+  }
+
+  function bindExcuseDrag(cloud) {
+    var lastX = 0, lastY = 0;
+    cloud.addEventListener("pointerdown", function (e) {
+      excuseState.dragging = true;
+      excuseState.vx = 0;
+      excuseState.vy = 0;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      cloud.classList.add("dragging");
+      cloud.setPointerCapture(e.pointerId);
+    });
+    cloud.addEventListener("pointermove", function (e) {
+      if (!excuseState.dragging) return;
+      var dx = (e.clientX - lastX) * EXCUSE_DRAG_SPEED;
+      var dy = (e.clientY - lastY) * EXCUSE_DRAG_SPEED;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      excuseState.ay += dx;
+      excuseState.ax += dy;
+      excuseState.vy = dx; // последняя дельта — инерция после отпускания
+      excuseState.vx = dy;
+    });
+    function stop() {
+      excuseState.dragging = false;
+      cloud.classList.remove("dragging");
+    }
+    cloud.addEventListener("pointerup", stop);
+    cloud.addEventListener("pointercancel", stop);
+  }
 
   function renderExcuseSection() {
     var el = document.getElementById("excuseSection");
@@ -1442,8 +1542,7 @@
         escapeHtml(p.name) + "</option>";
     }).join("");
     var tagsHtml = EXCUSES.map(function (text, i) {
-      return '<span class="excuse-tag" style="font-size: ' + EXCUSE_SIZES[(i * 7) % EXCUSE_SIZES.length] + 'px;">' +
-        escapeHtml(text) + "</span>";
+      return '<span class="excuse-tag">' + escapeHtml(text) + "</span>";
     }).join("");
 
     el.innerHTML =
@@ -1458,7 +1557,15 @@
       "</div>";
 
     excuseState.running = false;
+    excuseState.dragging = false;
+    excuseState.vx = 0;
+    excuseState.vy = 0;
+    excuseState.base = fibonacciSphere(EXCUSES.length);
     document.getElementById("excuseBtn").addEventListener("click", runExcuses);
+    bindExcuseDrag(document.getElementById("excuseCloud"));
+    cancelAnimationFrame(excuseState.raf);
+    excuseState.last = performance.now();
+    excuseState.raf = requestAnimationFrame(tickExcuseSphere);
   }
 
   function runExcuses() {
