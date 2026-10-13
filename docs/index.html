@@ -82,6 +82,7 @@
     padding: 4px;
     border-radius: 8px;
     border: 1px solid var(--border);
+    max-width: 100%;
   }
 
   .tab {
@@ -91,6 +92,12 @@
     color: var(--text-dim);
     font-size: 13px;
     user-select: none;
+    white-space: nowrap;
+  }
+  /* пять вкладок (~430px) не помещаются в один ряд на телефоне — переносим
+     на вторую строку, чтобы все были видны, а страница не ехала вбок */
+  @media (max-width: 520px) {
+    .tabs { flex-wrap: wrap; }
   }
 
   .tab.active {
@@ -841,6 +848,45 @@
     white-space: nowrap;
   }
   .hist-table th:first-child, .hist-table td:first-child { text-align: left; }
+  .records-group { margin-top: 18px; }
+  .records-group h3 { margin: 0 0 10px; font-size: 16px; }
+  .records-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: 12px;
+  }
+  .record-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .record-card h4 { margin: 0 0 2px; font-size: 14px; }
+  .record-hint { margin: 0 0 10px; font-size: 12px; color: var(--text-faint); }
+  .record-empty { margin: 0; font-size: 13px; color: var(--text-faint); }
+  .record-more { margin: 6px 0 0; font-size: 11px; color: var(--text-faint); }
+  .record-row {
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    column-gap: 10px;
+    align-items: center;
+    padding: 6px 0;
+    border-top: 1px solid var(--border);
+  }
+  .record-row:first-of-type { border-top: none; }
+  .record-place { color: var(--accent); font-weight: 600; font-size: 13px; }
+  .records-group-oops .record-place { color: var(--text-faint); }
+  .record-who { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13px; }
+  .record-who .avatar { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
+  .record-who span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .record-value { font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .record-context {
+    grid-column: 2 / 4;
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
+  .record-context a { color: var(--text-dim); }
 </style>
 </head>
 <body>
@@ -858,6 +904,7 @@
       <div class="tab" data-tab="lastSession">Сессии</div>
       <div class="tab" data-tab="maps">Карты</div>
       <div class="tab" data-tab="draft">Выбор составов</div>
+      <div class="tab" data-tab="records">Рекорды</div>
     </div>
     <a class="rating-info-link" href="rating-info.html" target="_blank" rel="noopener">Информация о рейтинге →</a>
   </div>
@@ -867,6 +914,7 @@
   <div class="mobile-sort" id="mobileSort"></div>
   <div id="tableWrap"></div>
   <div id="historySection"></div>
+  <div id="recordsSection"></div>
   <div id="wheelSection"></div>
   <div id="excuseSection"></div>
   <div id="draftSection"></div>
@@ -919,7 +967,7 @@
   function ratingDeltaClass(v) { return v > 0 ? "rating-delta-up" : v < 0 ? "rating-delta-down" : "rating-delta-flat"; }
 
   var TAB_STORAGE_KEY = "llstat:selectedTab";
-  var VALID_TABS = ["allTime", "lastSession", "draft", "maps"];
+  var VALID_TABS = ["allTime", "lastSession", "draft", "maps", "records"];
   function loadSavedTab() {
     try { return localStorage.getItem(TAB_STORAGE_KEY); } catch (err) { return null; }
   }
@@ -1018,6 +1066,7 @@
     renderMobileSort();
     renderTable();
     renderHistorySection();
+    renderRecordsSection();
     renderFooter();
     renderWheelSection();
     renderExcuseSection();
@@ -1115,7 +1164,7 @@
 
   function renderMobileSort() {
     var el = document.getElementById("mobileSort");
-    if (state.tab === "draft") { el.innerHTML = ""; return; }
+    if (noTableTab()) { el.innerHTML = ""; return; }
     var sortCol = getSortColumn();
     var options = currentColumns().map(function (c) {
       var selected = sortCol === c.id ? " selected" : "";
@@ -1195,7 +1244,7 @@
 
   function renderFooter() {
     var el = document.getElementById("footer");
-    if (state.tab === "draft") { el.textContent = ""; return; }
+    if (noTableTab()) { el.textContent = ""; return; }
     el.textContent =
       state.tab === "allTime"
         ? "Порог квалификации: " + mapsCount(state.data.qualification.threshold) + " " +
@@ -1204,8 +1253,11 @@
         : "Карт учтено всего: " + state.data.totalMapsCollected;
   }
 
+  // Вкладки, на которых нет общей таблицы игроков (у них свой блок).
+  function noTableTab() { return state.tab === "draft" || state.tab === "records"; }
+
   function getRows() {
-    if (state.tab === "draft") return [];
+    if (noTableTab()) return [];
     if (state.tab === "allTime") return state.data.allTime.players;
     if (state.tab === "maps") {
       var m = currentMapEntry();
@@ -1270,7 +1322,7 @@
   }
 
   function renderTable() {
-    if (state.tab === "draft") { document.getElementById("tableWrap").innerHTML = ""; return; }
+    if (noTableTab()) { document.getElementById("tableWrap").innerHTML = ""; return; }
     var rows = sortedRows();
     var columns = currentColumns();
     var isMapsTab = state.tab === "maps";
@@ -1716,6 +1768,157 @@
     host.appendChild(table);
   }
 
+
+  // Вкладка "Рекорды": карточки по четырём группам, у каждого рекорда топ-3
+  // (данные считает scripts/lib/records.mjs). Всё из данных — через textContent.
+  var RECORD_GROUPS = [
+    { id: "personal", title: "Личные рекорды" },
+    { id: "streaks", title: "Серии" },
+    { id: "matches", title: "Матчи" },
+    { id: "oops", title: "Бывает с каждым" },
+  ];
+
+  function formatDay(sec) {
+    if (sec == null) return "—";
+    return new Date(sec * 1000).toLocaleDateString("ru-RU", { timeZone: "Europe/Samara" });
+  }
+  function recordMapName(mapKey) {
+    var m = ((state.data && state.data.maps) || []).filter(function (x) { return x.mapKey === mapKey; })[0];
+    return m ? m.displayName : (mapKey || "—");
+  }
+  function recordValueText(rec, e) {
+    switch (rec.id) {
+      case "most-kills": return e.value + " " + pluralRu(e.value, "убийство", "убийства", "убийств");
+      case "best-kd-diff": case "carry-in-loss": case "worst-kd-diff": return fmtDiff(e.value);
+      case "best-kd": case "worst-kd": return e.value.toFixed(2);
+      case "most-deaths": return e.value + " " + pluralRu(e.value, "смерть", "смерти", "смертей");
+      case "win-streak": case "kd-streak": case "loss-streak": return mapsCount(e.value);
+      case "attendance-streak": return e.value + " " + pluralRu(e.value, "вечер", "вечера", "вечеров");
+      case "biggest-win": case "closest-match": return e.score[0] + ":" + e.score[1];
+      case "longest-map": case "shortest-map":
+        return e.rounds + " " + pluralRu(e.rounds, "раунд", "раунда", "раундов");
+      default: // рекорд, которого страница ещё не знает: показываем, что есть в записи
+        if (e.value != null) return String(e.value);
+        if (e.score) return e.score[0] + ":" + e.score[1];
+        return "—";
+    }
+  }
+  // Подпись под строкой: серия — период, личный рекорд — карта · дата · K/D, матч — дата и раунды/счёт.
+  function recordContextText(rec, e) {
+    if (e.from !== undefined) {
+      var a = formatDay(e.from), b = formatDay(e.to);
+      return a === b ? a : a + " – " + b;
+    }
+    var bits = [recordMapName(e.map), formatDay(e.playedAt)];
+    if (e.k !== undefined) bits.push("K " + e.k + " / D " + e.d);
+    else if (rec.id === "longest-map" || rec.id === "shortest-map") bits.push("счёт " + e.score[0] + ":" + e.score[1]);
+    else bits.push(e.rounds + " " + pluralRu(e.rounds, "раунд", "раунда", "раундов"));
+    return bits.join(" · ");
+  }
+
+  function buildRecordRow(rec, e, place, playersById) {
+    var row = document.createElement("div");
+    row.className = "record-row";
+    var placeEl = document.createElement("span");
+    placeEl.className = "record-place";
+    placeEl.textContent = String(place);
+    var who = document.createElement("div");
+    who.className = "record-who";
+    var player = e.steamid64 ? playersById[e.steamid64] : null;
+    if (e.steamid64) {
+      if (player && player.avatarUrl) {
+        var img = document.createElement("img");
+        img.className = "avatar";
+        img.alt = "";
+        img.loading = "lazy";
+        img.src = player.avatarUrl;
+        who.appendChild(img);
+      }
+      var nameEl = document.createElement("span");
+      nameEl.textContent = player ? player.name : e.steamid64;
+      who.appendChild(nameEl);
+    } else {
+      var mapEl = document.createElement("span");
+      mapEl.textContent = recordMapName(e.map);
+      who.appendChild(mapEl);
+    }
+    var value = document.createElement("span");
+    value.className = "record-value";
+    value.textContent = recordValueText(rec, e);
+    var ctx = document.createElement("div");
+    ctx.className = "record-context";
+    ctx.appendChild(document.createTextNode(recordContextText(rec, e)));
+    if (e.url && /^https:\/\//.test(e.url)) {
+      ctx.appendChild(document.createTextNode(" · "));
+      var link = document.createElement("a");
+      link.href = e.url;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "матч";
+      ctx.appendChild(link);
+    }
+    row.appendChild(placeEl);
+    row.appendChild(who);
+    row.appendChild(value);
+    row.appendChild(ctx);
+    return row;
+  }
+
+  function renderRecordsSection() {
+    var el = document.getElementById("recordsSection");
+    if (state.tab !== "records") { el.style.display = "none"; return; }
+    el.style.display = "";
+    el.textContent = "";
+    var recs = state.data.records;
+    if (!recs || !recs.length) {
+      var none = document.createElement("div");
+      none.className = "session-header";
+      none.textContent = "Рекордов пока нет.";
+      el.appendChild(none);
+      return;
+    }
+    var playersById = {};
+    state.data.allTime.players.forEach(function (p) { playersById[p.steamid64] = p; });
+    RECORD_GROUPS.forEach(function (g) {
+      var items = recs.filter(function (r) { return r.group === g.id; });
+      if (!items.length) return;
+      var section = document.createElement("div");
+      section.className = "records-group records-group-" + g.id;
+      var h3 = document.createElement("h3");
+      h3.textContent = g.title;
+      var grid = document.createElement("div");
+      grid.className = "records-grid";
+      items.forEach(function (rec) {
+        var card = document.createElement("div");
+        card.className = "record-card";
+        var h4 = document.createElement("h4");
+        h4.textContent = rec.title;
+        var hint = document.createElement("p");
+        hint.className = "record-hint";
+        hint.textContent = rec.hint;
+        card.appendChild(h4);
+        card.appendChild(hint);
+        if (!rec.top.length) {
+          var empty = document.createElement("p");
+          empty.className = "record-empty";
+          empty.textContent = "Пока нет";
+          card.appendChild(empty);
+        }
+        // place — из данных: равные результаты делят место (1, 1, 1 / 1, 2, 2)
+        rec.top.forEach(function (e, i) { card.appendChild(buildRecordRow(rec, e, e.place || i + 1, playersById)); });
+        if (rec.more > 0) {
+          var more = document.createElement("p");
+          more.className = "record-more";
+          more.textContent = "и ещё " + rec.more + " с таким же результатом";
+          card.appendChild(more);
+        }
+        grid.appendChild(card);
+      });
+      section.appendChild(h3);
+      section.appendChild(grid);
+      el.appendChild(section);
+    });
+  }
 
   // Чисто for fun: колесо фортуны на вкладке "Сессии" (для выбранной сессии). Категории
   // "random" разыгрываются честным случайным выбором среди участников сессии

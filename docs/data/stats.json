@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-13T08:42:11.154Z",
+  "generatedAt": "2026-10-13T10:16:04.012Z",
   "totalMapsCollected": 38,
   "qualification": {
     "threshold": 16,
@@ -2439,6 +2439,774 @@
           "isQualified": false
         }
       ]
+    }
+  ],
+  "ratingHistory": {
+    "sessions": [
+      {
+        "id": "2026-06-09",
+        "firstPlayedAt": 1781026148
+      },
+      {
+        "id": "2026-07-21",
+        "firstPlayedAt": 1784658564
+      },
+      {
+        "id": "2026-08-05",
+        "firstPlayedAt": 1785950906
+      },
+      {
+        "id": "2026-08-19",
+        "firstPlayedAt": 1787155757
+      },
+      {
+        "id": "2026-09-02",
+        "firstPlayedAt": 1788365954
+      },
+      {
+        "id": "2026-09-16",
+        "firstPlayedAt": 1789574282
+      },
+      {
+        "id": "2026-09-30",
+        "firstPlayedAt": 1790787546
+      }
+    ],
+    "players": {
+      "76561199852434358": [
+        488,
+        477,
+        476,
+        468,
+        456,
+        445,
+        437
+      ],
+      "76561198681103731": [
+        494,
+        486,
+        470,
+        469,
+        466,
+        454,
+        450
+      ],
+      "76561198014367879": [
+        516,
+        550,
+        574,
+        591,
+        599,
+        608,
+        615
+      ],
+      "76561198357423221": [
+        493,
+        493,
+        493,
+        493,
+        493,
+        493,
+        493
+      ],
+      "76561198017244485": [
+        517,
+        516,
+        512,
+        508,
+        514,
+        519,
+        523
+      ],
+      "76561198303379150": [
+        492,
+        498,
+        502,
+        497,
+        494,
+        494,
+        486
+      ],
+      "76561198064889555": [
+        503,
+        513,
+        518,
+        523,
+        518,
+        512,
+        525
+      ],
+      "76561198728309900": [
+        508,
+        508,
+        508,
+        508,
+        507,
+        507,
+        507
+      ],
+      "76561198696282357": [
+        485,
+        485,
+        485,
+        485,
+        485,
+        485,
+        485
+      ],
+      "76561198039138241": [
+        517,
+        519,
+        533,
+        541,
+        539,
+        543,
+        549
+      ],
+      "76561199686171590": [
+        null,
+        505,
+        505,
+        505,
+        505,
+        505,
+        499
+      ],
+      "76561198007494757": [
+        null,
+        475,
+        449,
+        428,
+        418,
+        406,
+        394
+      ],
+      "76561198048534904": [
+        null,
+        null,
+        498,
+        510,
+        510,
+        510,
+        521
+      ],
+      "76561198272167310": [
+        null,
+        null,
+        512,
+        512,
+        536,
+        536,
+        536
+      ],
+      "76561198054359751": [
+        null,
+        null,
+        null,
+        509,
+        509,
+        509,
+        509
+      ],
+      "76561198042805941": [
+        null,
+        null,
+        null,
+        null,
+        511,
+        511,
+        511
+      ],
+      "76561198070734509": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        532,
+        532
+      ],
+      "76561198137980826": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        528,
+        528
+      ],
+      "76561199144510024": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        527
+      ]
+    }
+  },
+  "records": [
+    {
+      "id": "most-kills",
+      "group": "personal",
+      "title": "Больше всего убийств за карту",
+      "hint": "личный максимум за одну карту",
+      "top": [
+        {
+          "steamid64": "76561198017244485",
+          "value": 60,
+          "k": 60,
+          "d": 33,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 1
+        },
+        {
+          "steamid64": "76561198014367879",
+          "value": 57,
+          "k": 57,
+          "d": 38,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 2
+        },
+        {
+          "steamid64": "76561198039138241",
+          "value": 49,
+          "k": 49,
+          "d": 39,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 3
+        }
+      ],
+      "more": 0
+    },
+    {
+      "id": "best-kd-diff",
+      "group": "personal",
+      "title": "Лучшая разница K-D за карту",
+      "hint": "убийства минус смерти за одну карту",
+      "top": [
+        {
+          "steamid64": "76561198017244485",
+          "value": 27,
+          "k": 60,
+          "d": 33,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 1
+        },
+        {
+          "steamid64": "76561198039138241",
+          "value": 26,
+          "k": 35,
+          "d": 9,
+          "map": "de_inferno",
+          "playedAt": 1781037259,
+          "url": "https://cybershoke.net/match/9122596",
+          "place": 2
+        },
+        {
+          "steamid64": "76561198048534904",
+          "value": 22,
+          "k": 34,
+          "d": 12,
+          "map": "de_dust2",
+          "playedAt": 1787165940,
+          "url": "https://cybershoke.net/match/10956149",
+          "place": 3
+        }
+      ],
+      "more": 0
+    },
+    {
+      "id": "best-kd",
+      "group": "personal",
+      "title": "Лучший K/D за карту",
+      "hint": "минимум 15 убийств на карте",
+      "top": [
+        {
+          "steamid64": "76561198014367879",
+          "value": 5.2,
+          "k": 26,
+          "d": 5,
+          "map": "de_nuke",
+          "playedAt": 1784664435,
+          "url": "https://cybershoke.net/match/10134827",
+          "place": 1
+        },
+        {
+          "steamid64": "76561198039138241",
+          "value": 3.89,
+          "k": 35,
+          "d": 9,
+          "map": "de_inferno",
+          "playedAt": 1781037259,
+          "url": "https://cybershoke.net/match/9122596",
+          "place": 2
+        },
+        {
+          "steamid64": "76561198303379150",
+          "value": 3,
+          "k": 15,
+          "d": 5,
+          "map": "de_cache",
+          "playedAt": 1789583282,
+          "url": "https://cybershoke.net/match/11824873",
+          "place": 3
+        }
+      ],
+      "more": 1
+    },
+    {
+      "id": "carry-in-loss",
+      "group": "personal",
+      "title": "Тащил в проигрыше",
+      "hint": "лучшая разница K-D на проигранной карте",
+      "top": [
+        {
+          "steamid64": "76561198017244485",
+          "value": 27,
+          "k": 60,
+          "d": 33,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 1
+        },
+        {
+          "steamid64": "76561198014367879",
+          "value": 17,
+          "k": 32,
+          "d": 15,
+          "map": "de_dust2",
+          "playedAt": 1781034756,
+          "url": "https://cybershoke.net/match/9119022",
+          "place": 2
+        },
+        {
+          "steamid64": "76561198272167310",
+          "value": 17,
+          "k": 30,
+          "d": 13,
+          "map": "de_inferno",
+          "playedAt": 1785953449,
+          "url": "https://cybershoke.net/match/10552874",
+          "place": 2
+        }
+      ],
+      "more": 0
+    },
+    {
+      "id": "win-streak",
+      "group": "streaks",
+      "title": "Серия побед подряд",
+      "hint": "карт подряд; пропущенные игроком карты серию не рвут",
+      "top": [
+        {
+          "steamid64": "76561198064889555",
+          "value": 10,
+          "from": 1781034756,
+          "to": 1785958403,
+          "place": 1
+        },
+        {
+          "steamid64": "76561198014367879",
+          "value": 8,
+          "from": 1784658564,
+          "to": 1785958403,
+          "place": 2
+        },
+        {
+          "steamid64": "76561198303379150",
+          "value": 8,
+          "from": 1784658564,
+          "to": 1785958403,
+          "place": 2
+        }
+      ],
+      "more": 0
+    },
+    {
+      "id": "kd-streak",
+      "group": "streaks",
+      "title": "Серия карт с K/D не ниже 1.0",
+      "hint": "карт подряд",
+      "top": [
+        {
+          "steamid64": "76561198014367879",
+          "value": 27,
+          "from": 1781026148,
+          "to": 1789576409,
+          "place": 1
+        },
+        {
+          "steamid64": "76561198272167310",
+          "value": 11,
+          "from": 1785950906,
+          "to": 1788379223,
+          "place": 2
+        },
+        {
+          "steamid64": "76561198039138241",
+          "value": 9,
+          "from": 1781037259,
+          "to": 1785958403,
+          "place": 3
+        }
+      ],
+      "more": 0
+    },
+    {
+      "id": "attendance-streak",
+      "group": "streaks",
+      "title": "Железная посещаемость",
+      "hint": "игровых вечеров подряд",
+      "top": [
+        {
+          "steamid64": "76561198014367879",
+          "value": 7,
+          "from": 1781026148,
+          "to": 1790787546,
+          "place": 1
+        },
+        {
+          "steamid64": "76561198017244485",
+          "value": 7,
+          "from": 1781026148,
+          "to": 1790787546,
+          "place": 1
+        },
+        {
+          "steamid64": "76561198039138241",
+          "value": 7,
+          "from": 1781026148,
+          "to": 1790787546,
+          "place": 1
+        }
+      ],
+      "more": 4
+    },
+    {
+      "id": "biggest-win",
+      "group": "matches",
+      "title": "Самый крупный разгром",
+      "hint": "наибольшая разница в счёте",
+      "top": [
+        {
+          "map": "de_nuke",
+          "score": [
+            13,
+            1
+          ],
+          "rounds": 14,
+          "playedAt": 1784664435,
+          "url": "https://cybershoke.net/match/10134827",
+          "place": 1
+        },
+        {
+          "map": "de_dust2",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1785958403,
+          "url": "https://cybershoke.net/match/10556260",
+          "place": 2
+        },
+        {
+          "map": "de_inferno",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1789578381,
+          "url": "https://cybershoke.net/match/11820488",
+          "place": 2
+        }
+      ],
+      "more": 1
+    },
+    {
+      "id": "closest-match",
+      "group": "matches",
+      "title": "Самый упорный матч",
+      "hint": "наименьшая разница в счёте",
+      "top": [
+        {
+          "map": "de_inferno",
+          "score": [
+            19,
+            17
+          ],
+          "rounds": 36,
+          "playedAt": 1788370051,
+          "url": "https://cybershoke.net/match/11394970",
+          "place": 1
+        },
+        {
+          "map": "de_dust2",
+          "score": [
+            16,
+            14
+          ],
+          "rounds": 30,
+          "playedAt": 1781026148,
+          "url": "https://cybershoke.net/match/9115489",
+          "place": 2
+        },
+        {
+          "map": "de_dust2",
+          "score": [
+            13,
+            11
+          ],
+          "rounds": 24,
+          "playedAt": 1781034756,
+          "url": "https://cybershoke.net/match/9119022",
+          "place": 3
+        }
+      ],
+      "more": 3
+    },
+    {
+      "id": "longest-map",
+      "group": "matches",
+      "title": "Самая долгая карта",
+      "hint": "больше всего раундов",
+      "top": [
+        {
+          "map": "de_dust2",
+          "score": [
+            28,
+            25
+          ],
+          "rounds": 53,
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 1
+        },
+        {
+          "map": "de_inferno",
+          "score": [
+            19,
+            17
+          ],
+          "rounds": 36,
+          "playedAt": 1788370051,
+          "url": "https://cybershoke.net/match/11394970",
+          "place": 2
+        },
+        {
+          "map": "de_dust2",
+          "score": [
+            16,
+            14
+          ],
+          "rounds": 30,
+          "playedAt": 1781026148,
+          "url": "https://cybershoke.net/match/9115489",
+          "place": 3
+        }
+      ],
+      "more": 0
+    },
+    {
+      "id": "shortest-map",
+      "group": "matches",
+      "title": "Самая короткая карта",
+      "hint": "меньше всего раундов",
+      "top": [
+        {
+          "map": "de_nuke",
+          "score": [
+            13,
+            1
+          ],
+          "rounds": 14,
+          "playedAt": 1784664435,
+          "url": "https://cybershoke.net/match/10134827",
+          "place": 1
+        },
+        {
+          "map": "de_dust2",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1785958403,
+          "url": "https://cybershoke.net/match/10556260",
+          "place": 2
+        },
+        {
+          "map": "de_inferno",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1789578381,
+          "url": "https://cybershoke.net/match/11820488",
+          "place": 2
+        }
+      ],
+      "more": 1
+    },
+    {
+      "id": "worst-kd-diff",
+      "group": "oops",
+      "title": "Трудная карта",
+      "hint": "убийства минус смерти за одну карту",
+      "top": [
+        {
+          "steamid64": "76561198007494757",
+          "value": -25,
+          "k": 14,
+          "d": 39,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 1
+        },
+        {
+          "steamid64": "76561198303379150",
+          "value": -18,
+          "k": 2,
+          "d": 20,
+          "map": "de_nuke",
+          "playedAt": 1785961383,
+          "url": "https://cybershoke.net/match/10557706",
+          "place": 2
+        },
+        {
+          "steamid64": "76561198357423221",
+          "value": -17,
+          "k": 7,
+          "d": 24,
+          "map": "de_dust2",
+          "playedAt": 1784667298,
+          "url": "https://cybershoke.net/match/10136087",
+          "place": 3
+        }
+      ],
+      "more": 0
+    },
+    {
+      "id": "worst-kd",
+      "group": "oops",
+      "title": "Карта не задалась",
+      "hint": "минимум 10 смертей на карте",
+      "top": [
+        {
+          "steamid64": "76561198007494757",
+          "value": 0.08,
+          "k": 1,
+          "d": 13,
+          "map": "de_dust2",
+          "playedAt": 1785958403,
+          "url": "https://cybershoke.net/match/10556260",
+          "place": 1
+        },
+        {
+          "steamid64": "76561198303379150",
+          "value": 0.1,
+          "k": 2,
+          "d": 20,
+          "map": "de_nuke",
+          "playedAt": 1785961383,
+          "url": "https://cybershoke.net/match/10557706",
+          "place": 2
+        },
+        {
+          "steamid64": "76561198696282357",
+          "value": 0.14,
+          "k": 2,
+          "d": 14,
+          "map": "de_inferno",
+          "playedAt": 1781037259,
+          "url": "https://cybershoke.net/match/9122596",
+          "place": 3
+        }
+      ],
+      "more": 0
+    },
+    {
+      "id": "most-deaths",
+      "group": "oops",
+      "title": "Горячая точка",
+      "hint": "больше всего смертей за одну карту",
+      "top": [
+        {
+          "steamid64": "76561199686171590",
+          "value": 42,
+          "k": 26,
+          "d": 42,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 1
+        },
+        {
+          "steamid64": "76561199852434358",
+          "value": 41,
+          "k": 33,
+          "d": 41,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 2
+        },
+        {
+          "steamid64": "76561198007494757",
+          "value": 39,
+          "k": 14,
+          "d": 39,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 3
+        }
+      ],
+      "more": 2
+    },
+    {
+      "id": "loss-streak",
+      "group": "oops",
+      "title": "Полоса неудач",
+      "hint": "карт подряд",
+      "top": [
+        {
+          "steamid64": "76561198017244485",
+          "value": 10,
+          "from": 1781034756,
+          "to": 1785958403,
+          "place": 1
+        },
+        {
+          "steamid64": "76561198681103731",
+          "value": 10,
+          "from": 1781034756,
+          "to": 1785958403,
+          "place": 1
+        },
+        {
+          "steamid64": "76561198007494757",
+          "value": 8,
+          "from": 1784658564,
+          "to": 1785958403,
+          "place": 3
+        }
+      ],
+      "more": 0
     }
   ],
   "maps": [

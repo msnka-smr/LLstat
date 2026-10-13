@@ -11,6 +11,8 @@ import { aggregatePlayerMaps } from "./lib/aggregate.mjs";
 import { computeThreshold } from "./lib/qualify.mjs";
 import { sortRows } from "./lib/sort.mjs";
 import { buildSessionsOutput } from "./lib/sessionsOutput.mjs";
+import { computeRatingHistory } from "./lib/ratingHistory.mjs";
+import { computeRecords } from "./lib/records.mjs";
 import { computeAllTimeRating, computeRatingDelta } from "./lib/allTimeRating.mjs";
 import { summarizeMapFrequency, mapIconUrl, mapBannerUrl } from "./lib/mapCatalog.mjs";
 
@@ -147,8 +149,11 @@ async function main() {
 
   // byPlayerAllTime уже хронологический: sortedMaps идёт по playedAt, и мы
   // только добавляем в список каждого игрока по ходу этого же перебора.
+  // История для графика "Динамика рейтинга": тот же replay, что и рейтинг выше.
+  const ratingHistoryInput = {};
   const allTimeRows = [...byPlayerAllTime.entries()].map(([steamid64, mapsForPlayer]) => {
     const { rating, history } = computeAllTimeRating(mapsForPlayer);
+    ratingHistoryInput[steamid64] = { matches: mapsForPlayer, history };
     const row = buildRow(steamid64, registry, mapsForPlayer, threshold, Math.round(rating));
     row.ratingDelta = computeRatingDelta(mapsForPlayer, history, lastSession?.id ?? null);
     return row;
@@ -227,6 +232,8 @@ async function main() {
     },
     allTime: { players: allTimeRowsSorted },
     sessions: sessionsOutput,
+    ratingHistory: computeRatingHistory(sessions, ratingHistoryInput),
+    records: computeRecords(sortedMaps, sessions),
     maps: mapsOutput,
   };
 
