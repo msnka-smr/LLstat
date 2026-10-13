@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-13T10:16:04.012Z",
+  "generatedAt": "2026-10-13T10:34:58.124Z",
   "totalMapsCollected": 38,
   "qualification": {
     "threshold": 16,
@@ -675,7 +675,43 @@
           "rating": 317,
           "isQualified": false
         }
-      ]
+      ],
+      "recap": {
+        "top": [
+          {
+            "steamid64": "76561199144510024",
+            "rating": 687,
+            "kd": 1.53,
+            "kdDiff": 43,
+            "wins": 3,
+            "maps": 6
+          },
+          {
+            "steamid64": "76561198048534904",
+            "rating": 649,
+            "kd": 1.39,
+            "kdDiff": 30,
+            "wins": 3,
+            "maps": 5
+          },
+          {
+            "steamid64": "76561198064889555",
+            "rating": 603,
+            "kd": 1.3,
+            "kdDiff": 23,
+            "wins": 3,
+            "maps": 6
+          }
+        ],
+        "rise": {
+          "steamid64": "76561199144510024",
+          "delta": 27
+        },
+        "drop": {
+          "steamid64": "76561198007494757",
+          "delta": -12
+        }
+      }
     },
     {
       "id": "2026-09-16",
@@ -1001,7 +1037,43 @@
           "rating": 314,
           "isQualified": false
         }
-      ]
+      ],
+      "recap": {
+        "top": [
+          {
+            "steamid64": "76561198070734509",
+            "rating": 721,
+            "kd": 1.61,
+            "kdDiff": 60,
+            "wins": 4,
+            "maps": 7
+          },
+          {
+            "steamid64": "76561198137980826",
+            "rating": 696,
+            "kd": 1.51,
+            "kdDiff": 57,
+            "wins": 4,
+            "maps": 7
+          },
+          {
+            "steamid64": "76561198014367879",
+            "rating": 641,
+            "kd": 1.39,
+            "kdDiff": 42,
+            "wins": 3,
+            "maps": 7
+          }
+        ],
+        "rise": {
+          "steamid64": "76561198070734509",
+          "delta": 32
+        },
+        "drop": {
+          "steamid64": "76561198007494757",
+          "delta": -12
+        }
+      }
     },
     {
       "id": "2026-09-02",
@@ -1302,7 +1374,43 @@
           "rating": 274,
           "isQualified": false
         }
-      ]
+      ],
+      "recap": {
+        "top": [
+          {
+            "steamid64": "76561198272167310",
+            "rating": 837,
+            "kd": 1.91,
+            "kdDiff": 68,
+            "wins": 3,
+            "maps": 5
+          },
+          {
+            "steamid64": "76561198042805941",
+            "rating": 684,
+            "kd": 1.43,
+            "kdDiff": 25,
+            "wins": 2,
+            "maps": 3
+          },
+          {
+            "steamid64": "76561198014367879",
+            "rating": 661,
+            "kd": 1.41,
+            "kdDiff": 37,
+            "wins": 2,
+            "maps": 5
+          }
+        ],
+        "rise": {
+          "steamid64": "76561198272167310",
+          "delta": 24
+        },
+        "drop": {
+          "steamid64": "76561199852434358",
+          "delta": -12
+        }
+      }
     },
     {
       "id": "2026-08-19",
@@ -1607,7 +1715,43 @@
           "rating": 208,
           "isQualified": false
         }
-      ]
+      ],
+      "recap": {
+        "top": [
+          {
+            "steamid64": "76561198014367879",
+            "rating": 709,
+            "kd": 1.54,
+            "kdDiff": 51,
+            "wins": 4,
+            "maps": 6
+          },
+          {
+            "steamid64": "76561198048534904",
+            "rating": 672,
+            "kd": 1.48,
+            "kdDiff": 44,
+            "wins": 2,
+            "maps": 6
+          },
+          {
+            "steamid64": "76561198054359751",
+            "rating": 641,
+            "kd": 1.4,
+            "kdDiff": 36,
+            "wins": 2,
+            "maps": 6
+          }
+        ],
+        "rise": {
+          "steamid64": "76561198014367879",
+          "delta": 17
+        },
+        "drop": {
+          "steamid64": "76561198007494757",
+          "delta": -21
+        }
+      }
     },
     {
       "id": "2026-08-05",
@@ -1912,7 +2056,43 @@
           "rating": 210,
           "isQualified": false
         }
-      ]
+      ],
+      "recap": {
+        "top": [
+          {
+            "steamid64": "76561198014367879",
+            "rating": 723,
+            "kd": 1.6,
+            "kdDiff": 49,
+            "wins": 5,
+            "maps": 6
+          },
+          {
+            "steamid64": "76561198272167310",
+            "rating": 692,
+            "kd": 1.56,
+            "kdDiff": 49,
+            "wins": 1,
+            "maps": 6
+          },
+          {
+            "steamid64": "76561198039138241",
+            "rating": 608,
+            "kd": 1.27,
+            "kdDiff": 23,
+            "wins": 5,
+            "maps": 6
+          }
+        ],
+        "rise": {
+          "steamid64": "76561198014367879",
+          "delta": 24
+        },
+        "drop": {
+          "steamid64": "76561198007494757",
+          "delta": -26
+        }
+      }
     },
     {
       "id": "2026-07-21",
@@ -2175,7 +2355,43 @@
           "rating": 200,
           "isQualified": false
         }
-      ]
+      ],
+      "recap": {
+        "top": [
+          {
+            "steamid64": "76561198014367879",
+            "rating": 898,
+            "kd": 1.9,
+            "kdDiff": 73,
+            "wins": 4,
+            "maps": 4
+          },
+          {
+            "steamid64": "76561198039138241",
+            "rating": 676,
+            "kd": 1.43,
+            "kdDiff": 39,
+            "wins": 0,
+            "maps": 4
+          },
+          {
+            "steamid64": "76561198017244485",
+            "rating": 636,
+            "kd": 1.36,
+            "kdDiff": 30,
+            "wins": 0,
+            "maps": 4
+          }
+        ],
+        "rise": {
+          "steamid64": "76561198014367879",
+          "delta": 34
+        },
+        "drop": {
+          "steamid64": "76561198007494757",
+          "delta": -25
+        }
+      }
     },
     {
       "id": "2026-06-09",
@@ -2438,7 +2654,43 @@
           "rating": 277,
           "isQualified": false
         }
-      ]
+      ],
+      "recap": {
+        "top": [
+          {
+            "steamid64": "76561198017244485",
+            "rating": 740,
+            "kd": 1.65,
+            "kdDiff": 40,
+            "wins": 2,
+            "maps": 4
+          },
+          {
+            "steamid64": "76561198014367879",
+            "rating": 727,
+            "kd": 1.62,
+            "kdDiff": 37,
+            "wins": 2,
+            "maps": 4
+          },
+          {
+            "steamid64": "76561198039138241",
+            "rating": 639,
+            "kd": 1.36,
+            "kdDiff": 24,
+            "wins": 2,
+            "maps": 4
+          }
+        ],
+        "rise": {
+          "steamid64": "76561198017244485",
+          "delta": 17
+        },
+        "drop": {
+          "steamid64": "76561198696282357",
+          "delta": -15
+        }
+      }
     }
   ],
   "ratingHistory": {
