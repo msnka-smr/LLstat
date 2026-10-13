@@ -772,6 +772,75 @@
     color: var(--text-faint);
     text-align: center;
   }
+  .hist-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-top: 12px;
+  }
+  .hist-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .hist-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .hist-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .hist-chip:hover { color: var(--text); }
+  .hist-chip.on { color: var(--text); }
+  .hist-chip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-faint);
+    flex-shrink: 0;
+  }
+  .hist-hint { min-height: 16px; margin-bottom: 4px; font-size: 12px; color: var(--text-faint); }
+  .hist-chart { position: relative; width: 100%; }
+  .hist-chart svg { display: block; width: 100%; touch-action: pan-y; }
+  .hist-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: var(--text-faint);
+    font-size: 13px;
+  }
+  .hist-tip {
+    position: absolute;
+    z-index: 5;
+    pointer-events: none;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .hist-tip-head { color: var(--text-dim); margin-bottom: 4px; }
+  .hist-tip-row { display: flex; align-items: center; gap: 8px; padding: 1px 0; }
+  .hist-tip-key { width: 14px; height: 2px; flex-shrink: 0; }
+  .hist-tip-name { color: var(--text-dim); flex: 1; }
+  .hist-tip-val { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .hist-table-wrap { margin-top: 10px; font-size: 12px; color: var(--text-dim); }
+  .hist-table-wrap summary { cursor: pointer; }
+  .hist-table-scroll { overflow-x: auto; margin-top: 8px; }
+  .hist-table { border-collapse: collapse; width: 100%; }
+  .hist-table th, .hist-table td {
+    padding: 4px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .hist-table th:first-child, .hist-table td:first-child { text-align: left; }
 </style>
 </head>
 <body>
@@ -797,6 +866,7 @@
   <div id="mapChips"></div>
   <div class="mobile-sort" id="mobileSort"></div>
   <div id="tableWrap"></div>
+  <div id="historySection"></div>
   <div id="wheelSection"></div>
   <div id="excuseSection"></div>
   <div id="draftSection"></div>
@@ -906,10 +976,12 @@
     return sessions.filter(function (s) { return s.id === state.sessionId; })[0] || sessions[0];
   }
   // id сессии — "ГГГГ-ММ-ДД" или "ГГГГ-ММ-ДД-N" (N-я сессия в тот же день).
+  function sessionDate(id) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?:-(\d+))?$/.exec(id);
+    return m ? m[3] + "." + m[2] + "." + m[1] + (m[4] ? " (№" + m[4] + ")" : "") : id;
+  }
   function sessionLabel(s) {
-    var m = /^(\d{4})-(\d{2})-(\d{2})(?:-(\d+))?$/.exec(s.id);
-    var date = m ? m[3] + "." + m[2] + "." + m[1] + (m[4] ? " (№" + m[4] + ")" : "") : s.id;
-    return date + " · " + mapsCount(s.maps.length);
+    return sessionDate(s.id) + " · " + mapsCount(s.maps.length);
   }
 
   // GitHub Pages отдаёт data/stats.json с Cache-Control: max-age=600 — без
@@ -945,6 +1017,7 @@
     renderMapChips();
     renderMobileSort();
     renderTable();
+    renderHistorySection();
     renderFooter();
     renderWheelSection();
     renderExcuseSection();
@@ -1331,6 +1404,318 @@
     return '<tr class="detail-row"><td colspan="' + colspan + '">' +
       '<div class="detail-grid">' + metricsHtml + "</div></td></tr>";
   }
+
+  // "Динамика рейтинга": линейный график рейтинга "за всё время" по сессиям,
+  // до HIST_MAX игроков для сравнения (вкладка "За всё время", под таблицей).
+  // Цвета — 6 слотов тёмной палитры dataviz, проверенные валидатором против
+  // фона панели (#1b1e26). Цвет принадлежит игроку, пока он выбран.
+  var HIST_COLORS = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300"];
+  var HIST_MAX = 6;
+  var HIST_DEFAULT = 3;
+  var SVG_NS = "http://www.w3.org/2000/svg";
+  var histState = { ready: false, selected: [] }; // selected: [{ id, color }]
+
+  function svgEl(name, attrs, style) {
+    var el = document.createElementNS(SVG_NS, name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    if (style) el.setAttribute("style", style);
+    return el;
+  }
+  // Подписи сессий для оси X и шапки таблицы: "ДД.ММ"; если данные охватывают
+  // несколько лет — у всех добавляется год ("ДД.ММ.ГГ"), чтобы подписи не
+  // двоились; 2-я и следующие сессии одного дня получают суффикс " №N".
+  function histLabels(sessions) {
+    var years = {};
+    sessions.forEach(function (s) { years[s.id.slice(0, 4)] = true; });
+    var multiYear = Object.keys(years).length > 1;
+    return sessions.map(function (s) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})(?:-(\d+))?$/.exec(s.id);
+      if (!m) return s.id;
+      return m[3] + "." + m[2] + (multiYear ? "." + m[1].slice(2) : "") + (m[4] ? " №" + m[4] : "");
+    });
+  }
+  // Ось Y: округлённые границы и шаг, не более ~5 делений.
+  function histYScale(values) {
+    var lo = Math.min.apply(null, values.concat([500]));
+    var hi = Math.max.apply(null, values.concat([500]));
+    var span = Math.max(hi - lo, 50);
+    var step = [10, 25, 50, 100, 200, 250, 500].filter(function (s) { return span / s <= 5; })[0] || 500;
+    return {
+      min: Math.max(0, Math.floor((lo - span * 0.08) / step) * step),
+      max: Math.ceil((hi + span * 0.08) / step) * step,
+      step: step,
+    };
+  }
+  function histPlayers() {
+    var h = state.data.ratingHistory;
+    return state.data.allTime.players.filter(function (p) { return h.players[p.steamid64]; });
+  }
+  // В какие сессии игрок реально играл (по списку игроков каждой сессии).
+  function histPlayedIn() {
+    var played = {};
+    (state.data.sessions || []).forEach(function (s) {
+      played[s.id] = {};
+      s.players.forEach(function (p) { played[s.id][p.steamid64] = true; });
+    });
+    return played;
+  }
+
+  function renderHistorySection() {
+    var el = document.getElementById("historySection");
+    var h = state.data && state.data.ratingHistory;
+    if (state.tab !== "allTime" || !h || !h.sessions.length) { el.style.display = "none"; return; }
+    el.style.display = "";
+    if (!histState.ready) {
+      histState.selected = histPlayers()
+        .filter(function (p) { return p.isQualified; })
+        .slice(0, HIST_DEFAULT)
+        .map(function (p, i) { return { id: p.steamid64, color: HIST_COLORS[i] }; });
+      el.innerHTML =
+        '<div class="hist-section">' +
+          '<div class="hist-title">Динамика рейтинга</div>' +
+          '<div class="hist-chips" id="histChips"></div>' +
+          '<div class="hist-hint" id="histHint"></div>' +
+          '<div class="hist-chart" id="histChart"></div>' +
+          '<details class="hist-table-wrap"><summary>Таблица значений</summary>' +
+            '<div class="hist-table-scroll" id="histTable"></div></details>' +
+        "</div>";
+      window.addEventListener("resize", function () {
+        if (state.tab === "allTime") drawHistChart();
+      });
+      histState.ready = true;
+    }
+    renderHistChips();
+    drawHistChart();
+  }
+
+  function renderHistChips() {
+    var box = document.getElementById("histChips");
+    box.textContent = "";
+    histPlayers().forEach(function (p) {
+      var sel = histState.selected.filter(function (s) { return s.id === p.steamid64; })[0];
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "hist-chip" + (sel ? " on" : "");
+      btn.setAttribute("aria-pressed", sel ? "true" : "false");
+      if (sel) btn.style.borderColor = sel.color;
+      var dot = document.createElement("span");
+      dot.className = "hist-chip-dot";
+      if (sel) dot.style.background = sel.color;
+      var label = document.createElement("span");
+      label.textContent = p.name;
+      btn.appendChild(dot);
+      btn.appendChild(label);
+      btn.addEventListener("click", function () { toggleHistPlayer(p.steamid64); });
+      box.appendChild(btn);
+    });
+  }
+
+  function toggleHistPlayer(id) {
+    var hint = document.getElementById("histHint");
+    var idx = -1;
+    histState.selected.forEach(function (s, i) { if (s.id === id) idx = i; });
+    hint.textContent = "";
+    if (idx !== -1) {
+      histState.selected.splice(idx, 1);
+    } else {
+      if (histState.selected.length >= HIST_MAX) {
+        hint.textContent = "Максимум " + HIST_MAX + " игроков — сначала снимите кого-нибудь.";
+        return;
+      }
+      var used = histState.selected.map(function (s) { return s.color; });
+      var color = HIST_COLORS.filter(function (c) { return used.indexOf(c) === -1; })[0];
+      histState.selected.push({ id: id, color: color });
+    }
+    renderHistChips();
+    drawHistChart();
+  }
+
+  function drawHistChart() {
+    var box = document.getElementById("histChart");
+    if (!box || state.tab !== "allTime") return;
+    var h = state.data.ratingHistory;
+    var names = {};
+    state.data.allTime.players.forEach(function (p) { names[p.steamid64] = p.name; });
+    var sel = histState.selected;
+    box.textContent = "";
+    drawHistTable(sel, names);
+    if (!sel.length) {
+      var empty = document.createElement("div");
+      empty.className = "hist-empty";
+      empty.textContent = "Выберите игроков, чтобы сравнить их рейтинг";
+      box.appendChild(empty);
+      return;
+    }
+
+    var n = h.sessions.length;
+    var width = box.clientWidth || 600;
+    var height = width < 480 ? 240 : 280;
+    var padL = 40, padR = 14, padT = 12, padB = 26, inner = 10;
+    var values = [];
+    sel.forEach(function (s) {
+      h.players[s.id].forEach(function (v) { if (v !== null) values.push(v); });
+    });
+    var ys = histYScale(values);
+    var plotW = width - padL - padR - inner * 2;
+    function xAt(i) { return padL + inner + (n === 1 ? plotW / 2 : i * plotW / (n - 1)); }
+    function yAt(v) { return padT + (ys.max - v) / (ys.max - ys.min) * (height - padT - padB); }
+
+    var svg = svgEl("svg", { width: width, height: height, viewBox: "0 0 " + width + " " + height, role: "img", tabindex: "0",
+      "aria-label": "График рейтинга по сессиям" });
+
+    for (var t = ys.min; t <= ys.max; t += ys.step) {
+      svg.appendChild(svgEl("line", { x1: padL, x2: width - padR, y1: yAt(t), y2: yAt(t) }, "stroke: var(--border); stroke-width: 1;"));
+      var tl = svgEl("text", { x: padL - 6, y: yAt(t) + 4, "text-anchor": "end" }, "fill: var(--text-faint); font-size: 11px;");
+      tl.textContent = String(t);
+      svg.appendChild(tl);
+    }
+    if (500 >= ys.min && 500 <= ys.max) {
+      svg.appendChild(svgEl("line", { x1: padL, x2: width - padR, y1: yAt(500), y2: yAt(500) },
+        "stroke: var(--text-faint); stroke-width: 1; opacity: 0.7;"));
+      var ref = svgEl("text", { x: width - padR, y: yAt(500) - 4, "text-anchor": "end" }, "fill: var(--text-faint); font-size: 11px;");
+      ref.textContent = "500 — средний игрок";
+      svg.appendChild(ref);
+    }
+
+    // подписи оси X: не чаще, чем помещаются, последняя сессия всегда подписана
+    var labels = histLabels(h.sessions);
+    var maxLen = Math.max.apply(null, labels.map(function (l) { return l.length; }));
+    var labelWidth = Math.max(44, maxLen * 6 + 14); // ~6px на символ при 11px шрифте
+    var every = Math.max(1, Math.ceil(n * labelWidth / (width - padL - padR)));
+    h.sessions.forEach(function (s, i) {
+      if ((n - 1 - i) % every !== 0) return;
+      var xl = svgEl("text", { x: xAt(i), y: height - 8, "text-anchor": "middle" }, "fill: var(--text-faint); font-size: 11px;");
+      xl.textContent = labels[i];
+      svg.appendChild(xl);
+    });
+
+    var played = histPlayedIn();
+    sel.forEach(function (s) {
+      var arr = h.players[s.id];
+      var d = "";
+      arr.forEach(function (v, i) {
+        if (v === null) return;
+        d += (d ? " L" : "M") + xAt(i).toFixed(1) + " " + yAt(v).toFixed(1);
+      });
+      if (d.indexOf("L") !== -1) {
+        svg.appendChild(svgEl("path", { d: d }, "fill: none; stroke: " + s.color + "; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"));
+      }
+      arr.forEach(function (v, i) {
+        if (v === null || !(played[h.sessions[i].id] && played[h.sessions[i].id][s.id])) return;
+        svg.appendChild(svgEl("circle", { cx: xAt(i), cy: yAt(v), r: 4 },
+          "fill: " + s.color + "; stroke: var(--bg-panel); stroke-width: 2;"));
+      });
+    });
+
+    var guide = svgEl("line", { x1: 0, x2: 0, y1: padT, y2: height - padB }, "stroke: var(--text-faint); stroke-width: 1; display: none;");
+    svg.appendChild(guide);
+    var hit = svgEl("rect", { x: padL, y: 0, width: width - padL - padR, height: height }, "fill: transparent;");
+    svg.appendChild(hit);
+    box.appendChild(svg);
+
+    var tip = document.createElement("div");
+    tip.className = "hist-tip";
+    tip.style.display = "none";
+    box.appendChild(tip);
+
+    function showAt(i) {
+      var rows = sel.map(function (s) {
+        return { color: s.color, name: names[s.id] || s.id, value: h.players[s.id][i] };
+      }).sort(function (a, b) { return (b.value === null ? -1 : b.value) - (a.value === null ? -1 : a.value); });
+      tip.textContent = "";
+      var head = document.createElement("div");
+      head.className = "hist-tip-head";
+      head.textContent = sessionDate(h.sessions[i].id);
+      tip.appendChild(head);
+      rows.forEach(function (r) {
+        var row = document.createElement("div");
+        row.className = "hist-tip-row";
+        var key = document.createElement("span");
+        key.className = "hist-tip-key";
+        key.style.background = r.color;
+        var nm = document.createElement("span");
+        nm.className = "hist-tip-name";
+        nm.textContent = r.name;
+        var val = document.createElement("span");
+        val.className = "hist-tip-val";
+        val.textContent = r.value === null ? "—" : String(r.value);
+        row.appendChild(key);
+        row.appendChild(nm);
+        row.appendChild(val);
+        tip.appendChild(row);
+      });
+      guide.setAttribute("x1", xAt(i));
+      guide.setAttribute("x2", xAt(i));
+      guide.style.display = "";
+      tip.style.display = "";
+      var left = xAt(i) + 12;
+      if (left + tip.offsetWidth > width) left = xAt(i) - 12 - tip.offsetWidth;
+      tip.style.left = Math.max(0, left) + "px";
+      tip.style.top = padT + "px";
+    }
+    function hide() {
+      guide.style.display = "none";
+      tip.style.display = "none";
+    }
+    function nearest(clientX) {
+      var rect = svg.getBoundingClientRect();
+      var x = (clientX - rect.left) * (width / rect.width);
+      var best = 0;
+      for (var i = 1; i < n; i++) if (Math.abs(xAt(i) - x) < Math.abs(xAt(best) - x)) best = i;
+      return best;
+    }
+    var cursor = n - 1;
+    hit.addEventListener("pointermove", function (e) { cursor = nearest(e.clientX); showAt(cursor); });
+    hit.addEventListener("pointerdown", function (e) { cursor = nearest(e.clientX); showAt(cursor); });
+    // У касания pointerleave приходит сразу после pointerup, поэтому прячем
+    // только при уходе мыши; на телефоне подсказка живёт до blur (тап мимо графика).
+    svg.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") hide(); });
+    svg.addEventListener("focus", function () { showAt(cursor); });
+    svg.addEventListener("blur", hide);
+    svg.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") cursor = Math.max(0, cursor - 1);
+      else if (e.key === "ArrowRight") cursor = Math.min(n - 1, cursor + 1);
+      else return;
+      e.preventDefault();
+      showAt(cursor);
+    });
+  }
+
+  // Таблица значений — тот же набор данных без наведения (доступность).
+  function drawHistTable(sel, names) {
+    var host = document.getElementById("histTable");
+    var h = state.data.ratingHistory;
+    host.textContent = "";
+    if (!sel.length) return;
+    var table = document.createElement("table");
+    table.className = "hist-table";
+    var headRow = document.createElement("tr");
+    var corner = document.createElement("th");
+    corner.textContent = "Игрок";
+    headRow.appendChild(corner);
+    var labels = histLabels(h.sessions);
+    h.sessions.forEach(function (s, i) {
+      var th = document.createElement("th");
+      th.textContent = labels[i];
+      th.title = sessionDate(s.id); // полная дата при наведении
+      headRow.appendChild(th);
+    });
+    table.appendChild(headRow);
+    sel.forEach(function (s) {
+      var tr = document.createElement("tr");
+      var nameCell = document.createElement("td");
+      nameCell.textContent = names[s.id] || s.id;
+      tr.appendChild(nameCell);
+      h.players[s.id].forEach(function (v) {
+        var td = document.createElement("td");
+        td.textContent = v === null ? "—" : String(v);
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+    host.appendChild(table);
+  }
+
 
   // Чисто for fun: колесо фортуны на вкладке "Сессии" (для выбранной сессии). Категории
   // "random" разыгрываются честным случайным выбором среди участников сессии
