@@ -541,6 +541,54 @@
   }
   .wheel-result strong { color: var(--accent); }
 
+  .excuse-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .excuse-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .excuse-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .excuse-controls select {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 13px;
+    max-width: 100%;
+  }
+  .excuse-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 6px 14px;
+    margin-bottom: 14px;
+  }
+  .excuse-tag {
+    color: var(--text-faint);
+    opacity: 0.55;
+    transition: color 0.3s, opacity 0.3s, transform 0.3s;
+  }
+  .excuse-tag.on {
+    color: var(--green);
+    opacity: 1;
+    font-weight: 600;
+    transform: scale(1.08);
+  }
+  .excuse-result { font-size: 14px; min-height: 20px; }
+  .excuse-result strong { color: var(--accent); }
+
   .draft-section {
     background: var(--bg-panel);
     border: 1px solid var(--border);
@@ -734,6 +782,7 @@
   <div class="mobile-sort" id="mobileSort"></div>
   <div id="tableWrap"></div>
   <div id="wheelSection"></div>
+  <div id="excuseSection"></div>
   <div id="draftSection"></div>
 
   <footer id="footer"></footer>
@@ -858,6 +907,7 @@
     renderTable();
     renderFooter();
     renderWheelSection();
+    renderExcuseSection();
     renderDraftSection();
   }
 
@@ -1350,6 +1400,103 @@
       document.getElementById("wheelResult").innerHTML =
         escapeHtml(category.text) + ": <strong>" + escapeHtml(winner.name) + "</strong>";
     }, 5000);
+  }
+
+  // Чисто for fun: "Оправдалка" на вкладке "Последняя сессия" — облако мемных
+  // отмазок игроков CS2; кнопка по очереди зажигает 3–5 случайных (с ✅, как в
+  // меме) и подписывает их выбранным игроком (по умолчанию — худший по рейтингу
+  // сессии, players уже отсортирован по рейтингу). Размер тега зависит только
+  // от его номера, чтобы облако не "прыгало" при перерисовке.
+  var EXCUSES = [
+    "Не регает", "Первая разминочная", "Тайминг ебучий", "Инпут лаг",
+    "Кто добавил невидимую текстуру?", "Вторая разминочная", "Лагает",
+    "Начали за T", "Не повезло", "0 помощи", "-98хп", "Бомбу слили",
+    "Достал нож не в тайминг", "Неудобно сидеть", "На карту отвлекся",
+    "Команда бомжей", "Мышка отвалилась", "Пинг 200", "Фризы",
+    "Тиммейты не кидают смоки", "Сбился прицел", "Скин не тот", "Тильт",
+    "Солнце в глаза",
+  ];
+  var EXCUSE_SIZES = [13, 15, 17, 20];
+  var EXCUSE_STEP_MS = 700;
+  var excuseState = { running: false };
+
+  function renderExcuseSection() {
+    var el = document.getElementById("excuseSection");
+    var session = state.data.lastSession;
+    if (!session || !session.players.length) {
+      el.innerHTML = "";
+      el.dataset.built = "";
+      return;
+    }
+    if (el.dataset.built !== session.id) {
+      buildExcuses(el, session.players);
+      el.dataset.built = session.id;
+    }
+    el.style.display = state.tab === "lastSession" ? "" : "none";
+  }
+
+  function buildExcuses(el, players) {
+    var optionsHtml = players.map(function (p, i) {
+      // по умолчанию выбран последний по рейтингу сессии
+      return '<option value="' + i + '"' + (i === players.length - 1 ? " selected" : "") + ">" +
+        escapeHtml(p.name) + "</option>";
+    }).join("");
+    var tagsHtml = EXCUSES.map(function (text, i) {
+      return '<span class="excuse-tag" style="font-size: ' + EXCUSE_SIZES[(i * 7) % EXCUSE_SIZES.length] + 'px;">' +
+        escapeHtml(text) + "</span>";
+    }).join("");
+
+    el.innerHTML =
+      '<div class="excuse-section">' +
+        '<div class="excuse-title">Оправдалка</div>' +
+        '<div class="excuse-controls">' +
+          '<select id="excusePlayer" aria-label="Кого оправдываем">' + optionsHtml + "</select>" +
+          '<button type="button" class="wheel-spin-btn" id="excuseBtn">Найти оправдание</button>' +
+        "</div>" +
+        '<div class="excuse-cloud" id="excuseCloud">' + tagsHtml + "</div>" +
+        '<div class="excuse-result" id="excuseResult"></div>' +
+      "</div>";
+
+    excuseState.running = false;
+    document.getElementById("excuseBtn").addEventListener("click", runExcuses);
+  }
+
+  function runExcuses() {
+    if (excuseState.running || !state.data.lastSession) return;
+    excuseState.running = true;
+    var btn = document.getElementById("excuseBtn");
+    var playerSelect = document.getElementById("excusePlayer");
+    var resultEl = document.getElementById("excuseResult");
+    var tags = document.querySelectorAll("#excuseCloud .excuse-tag");
+    var player = state.data.lastSession.players[Number(playerSelect.value)];
+
+    btn.disabled = true;
+    playerSelect.disabled = true;
+    tags.forEach(function (t) { t.classList.remove("on"); });
+    resultEl.innerHTML = "";
+
+    var count = 3 + Math.floor(Math.random() * 3); // 3..5
+    var order = EXCUSES.map(function (_, i) { return i; });
+    for (var i = order.length - 1; i > 0; i--) { // Фишер–Йейтс
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+    }
+    var picked = order.slice(0, count);
+    var shown = [];
+
+    var timer = setInterval(function () {
+      var idx = picked[shown.length];
+      tags[idx].classList.add("on");
+      shown.push(EXCUSES[idx]);
+      resultEl.innerHTML = "<strong>" + escapeHtml(player.name) + ":</strong> " +
+        shown.map(function (t) { return escapeHtml(t) + " ✅"; }).join(" ");
+      if (shown.length === count) {
+        clearInterval(timer);
+        excuseState.running = false;
+        btn.disabled = false;
+        playerSelect.disabled = false;
+      }
+    }, EXCUSE_STEP_MS);
   }
 
   // Гости (игроки со стороны): минимум DRAFT_MIN_POOL человек из пула, остальные
