@@ -317,3 +317,9 @@ test("a real K/D below 1.0 still breaks the streak next to a 0/0 map", () => {
   const top = rec(computeRecords(maps, sessionsOf(maps)), "kd-streak").top;
   assert.deepEqual(top, []); // 1 + (0/0 не считается) | 5/10 рвёт | 1 — серий длиннее одной нет
 });
+
+test("the worst K/D record explains what it measures and its threshold", () => {
+  const r = rec(computeRecords([], []), "worst-kd");
+  assert.equal(r.title, "Карта не задалась (наименьший K/D)");
+  assert.equal(r.hint, `считается минимум от ${MIN_DEATHS_FOR_KD} смертей на карте`);
+});

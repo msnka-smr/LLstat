@@ -181,7 +181,7 @@ export function computeRecords(allMaps, sessions) {
 
     record("worst-kd-diff", "oops", "Трудная карта", "убийства минус смерти за одну карту",
       personalTop(maps, { filter: (p) => diffOf(p) < 0, rankOf: diffOf, dir: "asc" })),
-    record("worst-kd", "oops", "Карта не задалась", `минимум ${MIN_DEATHS_FOR_KD} смертей на карте`,
+    record("worst-kd", "oops", "Карта не задалась (наименьший K/D)", `считается минимум от ${MIN_DEATHS_FOR_KD} смертей на карте`,
       personalTop(maps, { filter: (p) => p.d >= MIN_DEATHS_FOR_KD, rankOf: kdOf, dir: "asc", value: kdValue })),
     record("most-deaths", "oops", "Горячая точка", "больше всего смертей за одну карту",
       personalTop(maps, { rankOf: (p) => p.d, dir: "desc" })),
