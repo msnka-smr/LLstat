@@ -558,15 +558,6 @@
     gap: 10px;
     margin-bottom: 14px;
   }
-  .excuse-controls select {
-    background: var(--bg);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 8px 10px;
-    font-size: 13px;
-    max-width: 100%;
-  }
   /* Облако на сфере: теги позиционируются из JS (см. tickExcuseSphere), сам
      контейнер — прямоугольник фиксированной высоты, чтобы блок не прыгал. */
   .excuse-cloud {
@@ -1419,8 +1410,7 @@
 
   // Чисто for fun: "Оправдалка" на вкладке "Последняя сессия" — облако мемных
   // отмазок игроков CS2; кнопка по очереди зажигает 3–5 случайных (с ✅, как в
-  // меме) и подписывает их выбранным игроком (по умолчанию — худший по рейтингу
-  // сессии, players уже отсортирован по рейтингу). Облако — 3D-сфера: теги
+  // меме), без привязки к конкретному игроку. Облако — 3D-сфера: теги
   // лежат на сфере (спираль Фибоначчи), сама она медленно вращается и
   // крутится перетаскиванием; ближние теги крупнее и ярче дальних.
   var EXCUSES = [
@@ -1522,26 +1512,15 @@
 
   function renderExcuseSection() {
     var el = document.getElementById("excuseSection");
-    var session = state.data.lastSession;
-    if (!session || !session.players.length) {
-      el.innerHTML = "";
-      el.dataset.built = "";
-      return;
-    }
-    if (el.dataset.built !== session.id) {
-      buildExcuses(el, session.players);
-      el.dataset.built = session.id;
+    if (el.dataset.built !== "1") {
+      buildExcuses(el);
+      el.dataset.built = "1";
     }
     el.style.display = state.tab === "lastSession" ? "" : "none";
   }
 
-  function buildExcuses(el, players) {
-    var optionsHtml = players.map(function (p, i) {
-      // по умолчанию выбран последний по рейтингу сессии
-      return '<option value="' + i + '"' + (i === players.length - 1 ? " selected" : "") + ">" +
-        escapeHtml(p.name) + "</option>";
-    }).join("");
-    var tagsHtml = EXCUSES.map(function (text, i) {
+  function buildExcuses(el) {
+    var tagsHtml = EXCUSES.map(function (text) {
       return '<span class="excuse-tag">' + escapeHtml(text) + "</span>";
     }).join("");
 
@@ -1549,7 +1528,6 @@
       '<div class="excuse-section">' +
         '<div class="excuse-title">Оправдалка</div>' +
         '<div class="excuse-controls">' +
-          '<select id="excusePlayer" aria-label="Кого оправдываем">' + optionsHtml + "</select>" +
           '<button type="button" class="wheel-spin-btn" id="excuseBtn">Найти оправдание</button>' +
         "</div>" +
         '<div class="excuse-cloud" id="excuseCloud">' + tagsHtml + "</div>" +
@@ -1569,16 +1547,13 @@
   }
 
   function runExcuses() {
-    if (excuseState.running || !state.data.lastSession) return;
+    if (excuseState.running) return;
     excuseState.running = true;
     var btn = document.getElementById("excuseBtn");
-    var playerSelect = document.getElementById("excusePlayer");
     var resultEl = document.getElementById("excuseResult");
     var tags = document.querySelectorAll("#excuseCloud .excuse-tag");
-    var player = state.data.lastSession.players[Number(playerSelect.value)];
 
     btn.disabled = true;
-    playerSelect.disabled = true;
     tags.forEach(function (t) { t.classList.remove("on"); });
     resultEl.innerHTML = "";
 
@@ -1595,13 +1570,11 @@
       var idx = picked[shown.length];
       tags[idx].classList.add("on");
       shown.push(EXCUSES[idx]);
-      resultEl.innerHTML = "<strong>" + escapeHtml(player.name) + ":</strong> " +
-        shown.map(function (t) { return escapeHtml(t) + " ✅"; }).join(" ");
+      resultEl.innerHTML = shown.map(function (t) { return escapeHtml(t) + " ✅"; }).join(" ");
       if (shown.length === count) {
         clearInterval(timer);
         excuseState.running = false;
         btn.disabled = false;
-        playerSelect.disabled = false;
       }
     }, EXCUSE_STEP_MS);
   }
