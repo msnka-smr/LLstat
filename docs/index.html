@@ -94,10 +94,17 @@
     user-select: none;
     white-space: nowrap;
   }
-  /* пять вкладок (~430px) не помещаются в один ряд на телефоне — переносим
-     на вторую строку, чтобы все были видны, а страница не ехала вбок */
+  /* пять вкладок (~430px) не помещаются в один ряд на телефоне — делаем два
+     ряда на всю ширину блока без пустоты справа: в первом три вкладки поровну,
+     во втором две поровну (сетка из 6 колонок: 2+2+2 и 3+3) */
   @media (max-width: 520px) {
-    .tabs { flex-wrap: wrap; }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      flex: 1 1 100%;
+    }
+    .tab { grid-column: span 2; padding: 6px 4px; text-align: center; }
+    .tab:nth-child(n + 4) { grid-column: span 3; }
   }
 
   .tab.active {
