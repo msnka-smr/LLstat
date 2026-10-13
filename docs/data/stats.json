@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T13:44:54.932Z",
+  "generatedAt": "2026-10-13T08:42:11.154Z",
   "totalMapsCollected": 38,
   "qualification": {
     "threshold": 16,
@@ -354,328 +354,2093 @@
       }
     ]
   },
-  "lastSession": {
-    "id": "2026-09-30",
-    "firstPlayedAt": 1790787546,
-    "lastPlayedAt": 1790799191,
-    "maps": [
-      {
-        "mapId": "12282511:1",
-        "lobbyId": 12282511,
-        "map": "de_dust2",
-        "statsTier": "full",
-        "teams": [
-          {
-            "key": "team1",
-            "name": "team Player",
-            "score": 13,
-            "isWinner": true
-          },
-          {
-            "key": "team2",
-            "name": "team LITE | AlexMax",
-            "score": 5,
-            "isWinner": false
-          }
-        ],
-        "url": "https://cybershoke.net/match/12282511"
-      },
-      {
-        "mapId": "12284896:1",
-        "lobbyId": 12284896,
-        "map": "de_mirage",
-        "statsTier": "full",
-        "teams": [
-          {
-            "key": "team1",
-            "name": "team msn",
-            "score": 13,
-            "isWinner": true
-          },
-          {
-            "key": "team2",
-            "name": "team moloko_",
-            "score": 9,
-            "isWinner": false
-          }
-        ],
-        "url": "https://cybershoke.net/match/12284896"
-      },
-      {
-        "mapId": "12286984:1",
-        "lobbyId": 12286984,
-        "map": "de_inferno",
-        "statsTier": "full",
-        "teams": [
-          {
-            "key": "team1",
-            "name": "team LITE | AlexMax",
-            "score": 13,
-            "isWinner": true
-          },
-          {
-            "key": "team2",
-            "name": "team LITE | 63dealer",
-            "score": 6,
-            "isWinner": false
-          }
-        ],
-        "url": "https://cybershoke.net/match/12286984"
-      },
-      {
-        "mapId": "12288624:1",
-        "lobbyId": 12288624,
-        "map": "de_nuke",
-        "statsTier": "full",
-        "teams": [
-          {
-            "key": "team1",
-            "name": "team LITE | 63dealer",
-            "score": 13,
-            "isWinner": true
-          },
-          {
-            "key": "team2",
-            "name": "team LITE | AlexMax",
-            "score": 3,
-            "isWinner": false
-          }
-        ],
-        "url": "https://cybershoke.net/match/12288624"
-      },
-      {
-        "mapId": "12290185:1",
-        "lobbyId": 12290185,
-        "map": "de_dust2",
-        "statsTier": "full",
-        "teams": [
-          {
-            "key": "team1",
-            "name": "team SKU4NO",
-            "score": 13,
-            "isWinner": true
-          },
-          {
-            "key": "team2",
-            "name": "team msn",
-            "score": 7,
-            "isWinner": false
-          }
-        ],
-        "url": "https://cybershoke.net/match/12290185"
-      },
-      {
-        "mapId": "12291946:1",
-        "lobbyId": 12291946,
-        "map": "de_cache",
-        "statsTier": "full",
-        "teams": [
-          {
-            "key": "team1",
-            "name": "team SKU4NO",
-            "score": 13,
-            "isWinner": true
-          },
-          {
-            "key": "team2",
-            "name": "team Player",
-            "score": 7,
-            "isWinner": false
-          }
-        ],
-        "url": "https://cybershoke.net/match/12291946"
-      }
-    ],
-    "players": [
-      {
-        "steamid64": "76561199144510024",
-        "name": "LITE | 63dealer",
-        "avatarUrl": "https://avatars.steamstatic.com/85be17759cb6469ce6d26b8c549440f8fb44a105_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561199144510024",
-        "totalRounds": 115,
-        "mapsPlayed": 6,
-        "wins": 3,
-        "losses": 3,
-        "winRate": 0.5,
-        "k": 124,
-        "d": 81,
-        "kd": 1.5308641975308641,
-        "kdDiff": 43,
-        "rating": 687,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561198048534904",
-        "name": "SKU4NO",
-        "avatarUrl": "https://avatars.steamstatic.com/7b3bf09a1a529b13453f4aa8948230762a046c1c_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198048534904",
-        "totalRounds": 97,
-        "mapsPlayed": 5,
-        "wins": 3,
-        "losses": 2,
-        "winRate": 0.6,
-        "k": 106,
-        "d": 76,
-        "kd": 1.394736842105263,
-        "kdDiff": 30,
-        "rating": 649,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561198064889555",
-        "name": "msn",
-        "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
-        "totalRounds": 115,
-        "mapsPlayed": 6,
-        "wins": 3,
-        "losses": 3,
-        "winRate": 0.5,
-        "k": 100,
-        "d": 77,
-        "kd": 1.2987012987012987,
-        "kdDiff": 23,
-        "rating": 603,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561198014367879",
-        "name": "Player",
-        "avatarUrl": "https://avatars.steamstatic.com/891fadfd3613da77999db6a383c7c86e3be7549a_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198014367879",
-        "totalRounds": 115,
-        "mapsPlayed": 6,
-        "wins": 3,
-        "losses": 3,
-        "winRate": 0.5,
-        "k": 98,
-        "d": 81,
-        "kd": 1.2098765432098766,
-        "kdDiff": 17,
-        "rating": 574,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561198039138241",
-        "name": "LITE | AlexMax",
-        "avatarUrl": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198039138241",
-        "totalRounds": 115,
-        "mapsPlayed": 6,
-        "wins": 3,
-        "losses": 3,
-        "winRate": 0.5,
-        "k": 98,
-        "d": 84,
-        "kd": 1.1666666666666667,
-        "kdDiff": 14,
-        "rating": 560,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561198017244485",
-        "name": "moloko_",
-        "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198017244485",
-        "totalRounds": 115,
-        "mapsPlayed": 6,
-        "wins": 3,
-        "losses": 3,
-        "winRate": 0.5,
-        "k": 90,
-        "d": 81,
-        "kd": 1.1111111111111112,
-        "kdDiff": 9,
-        "rating": 539,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561198681103731",
-        "name": "Анальный бур",
-        "avatarUrl": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198681103731",
-        "totalRounds": 115,
-        "mapsPlayed": 6,
-        "wins": 3,
-        "losses": 3,
-        "winRate": 0.5,
-        "k": 58,
-        "d": 78,
-        "kd": 0.7435897435897436,
-        "kdDiff": -20,
-        "rating": 411,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561198303379150",
-        "name": "MrDrolik",
-        "avatarUrl": "https://avatars.steamstatic.com/dc71b61ac0d792fec95ae5007d0bbc69aaa2b44f_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198303379150",
-        "totalRounds": 115,
-        "mapsPlayed": 6,
-        "wins": 3,
-        "losses": 3,
-        "winRate": 0.5,
-        "k": 53,
-        "d": 85,
-        "kd": 0.6235294117647059,
-        "kdDiff": -32,
-        "rating": 365,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561199852434358",
-        "name": "PREMIUM | Volbe",
-        "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561199852434358",
-        "totalRounds": 115,
-        "mapsPlayed": 6,
-        "wins": 3,
-        "losses": 3,
-        "winRate": 0.5,
-        "k": 51,
-        "d": 88,
-        "kd": 0.5795454545454546,
-        "kdDiff": -37,
-        "rating": 347,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561198007494757",
-        "name": "Ooops",
-        "avatarUrl": "https://avatars.steamstatic.com/b26d79a8a530a0381fa9f36fcb0cad71cf6738ab_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198007494757",
-        "totalRounds": 115,
-        "mapsPlayed": 6,
-        "wins": 3,
-        "losses": 3,
-        "winRate": 0.5,
-        "k": 46,
-        "d": 91,
-        "kd": 0.5054945054945055,
-        "kdDiff": -45,
-        "rating": 317,
-        "isQualified": false
-      },
-      {
-        "steamid64": "76561199686171590",
-        "name": "DisterMick",
-        "avatarUrl": "https://avatars.steamstatic.com/300d5b59345fca5a6508d6242a8d7965387bf5fd_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561199686171590",
-        "totalRounds": 18,
-        "mapsPlayed": 1,
-        "wins": 0,
-        "losses": 1,
-        "winRate": 0,
-        "k": 9,
-        "d": 16,
-        "kd": 0.5625,
-        "kdDiff": -7,
-        "rating": 317,
-        "isQualified": false
-      }
-    ]
-  },
+  "sessions": [
+    {
+      "id": "2026-09-30",
+      "firstPlayedAt": 1790787546,
+      "lastPlayedAt": 1790799191,
+      "maps": [
+        {
+          "mapId": "12282511:1",
+          "lobbyId": 12282511,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team LITE | AlexMax",
+              "score": 5,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/12282511"
+        },
+        {
+          "mapId": "12284896:1",
+          "lobbyId": 12284896,
+          "map": "de_mirage",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team msn",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team moloko_",
+              "score": 9,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/12284896"
+        },
+        {
+          "mapId": "12286984:1",
+          "lobbyId": 12286984,
+          "map": "de_inferno",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team LITE | AlexMax",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team LITE | 63dealer",
+              "score": 6,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/12286984"
+        },
+        {
+          "mapId": "12288624:1",
+          "lobbyId": 12288624,
+          "map": "de_nuke",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team LITE | 63dealer",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team LITE | AlexMax",
+              "score": 3,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/12288624"
+        },
+        {
+          "mapId": "12290185:1",
+          "lobbyId": 12290185,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team SKU4NO",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team msn",
+              "score": 7,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/12290185"
+        },
+        {
+          "mapId": "12291946:1",
+          "lobbyId": 12291946,
+          "map": "de_cache",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team SKU4NO",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Player",
+              "score": 7,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/12291946"
+        }
+      ],
+      "players": [
+        {
+          "steamid64": "76561199144510024",
+          "name": "LITE | 63dealer",
+          "avatarUrl": "https://avatars.steamstatic.com/85be17759cb6469ce6d26b8c549440f8fb44a105_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199144510024",
+          "totalRounds": 115,
+          "mapsPlayed": 6,
+          "wins": 3,
+          "losses": 3,
+          "winRate": 0.5,
+          "k": 124,
+          "d": 81,
+          "kd": 1.5308641975308641,
+          "kdDiff": 43,
+          "rating": 687,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198048534904",
+          "name": "SKU4NO",
+          "avatarUrl": "https://avatars.steamstatic.com/7b3bf09a1a529b13453f4aa8948230762a046c1c_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198048534904",
+          "totalRounds": 97,
+          "mapsPlayed": 5,
+          "wins": 3,
+          "losses": 2,
+          "winRate": 0.6,
+          "k": 106,
+          "d": 76,
+          "kd": 1.394736842105263,
+          "kdDiff": 30,
+          "rating": 649,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198064889555",
+          "name": "msn",
+          "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
+          "totalRounds": 115,
+          "mapsPlayed": 6,
+          "wins": 3,
+          "losses": 3,
+          "winRate": 0.5,
+          "k": 100,
+          "d": 77,
+          "kd": 1.2987012987012987,
+          "kdDiff": 23,
+          "rating": 603,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198014367879",
+          "name": "Player",
+          "avatarUrl": "https://avatars.steamstatic.com/891fadfd3613da77999db6a383c7c86e3be7549a_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198014367879",
+          "totalRounds": 115,
+          "mapsPlayed": 6,
+          "wins": 3,
+          "losses": 3,
+          "winRate": 0.5,
+          "k": 98,
+          "d": 81,
+          "kd": 1.2098765432098766,
+          "kdDiff": 17,
+          "rating": 574,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198039138241",
+          "name": "LITE | AlexMax",
+          "avatarUrl": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198039138241",
+          "totalRounds": 115,
+          "mapsPlayed": 6,
+          "wins": 3,
+          "losses": 3,
+          "winRate": 0.5,
+          "k": 98,
+          "d": 84,
+          "kd": 1.1666666666666667,
+          "kdDiff": 14,
+          "rating": 560,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198017244485",
+          "name": "moloko_",
+          "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198017244485",
+          "totalRounds": 115,
+          "mapsPlayed": 6,
+          "wins": 3,
+          "losses": 3,
+          "winRate": 0.5,
+          "k": 90,
+          "d": 81,
+          "kd": 1.1111111111111112,
+          "kdDiff": 9,
+          "rating": 539,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198681103731",
+          "name": "Анальный бур",
+          "avatarUrl": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198681103731",
+          "totalRounds": 115,
+          "mapsPlayed": 6,
+          "wins": 3,
+          "losses": 3,
+          "winRate": 0.5,
+          "k": 58,
+          "d": 78,
+          "kd": 0.7435897435897436,
+          "kdDiff": -20,
+          "rating": 411,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198303379150",
+          "name": "MrDrolik",
+          "avatarUrl": "https://avatars.steamstatic.com/dc71b61ac0d792fec95ae5007d0bbc69aaa2b44f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198303379150",
+          "totalRounds": 115,
+          "mapsPlayed": 6,
+          "wins": 3,
+          "losses": 3,
+          "winRate": 0.5,
+          "k": 53,
+          "d": 85,
+          "kd": 0.6235294117647059,
+          "kdDiff": -32,
+          "rating": 365,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561199852434358",
+          "name": "PREMIUM | Volbe",
+          "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199852434358",
+          "totalRounds": 115,
+          "mapsPlayed": 6,
+          "wins": 3,
+          "losses": 3,
+          "winRate": 0.5,
+          "k": 51,
+          "d": 88,
+          "kd": 0.5795454545454546,
+          "kdDiff": -37,
+          "rating": 347,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198007494757",
+          "name": "Ooops",
+          "avatarUrl": "https://avatars.steamstatic.com/b26d79a8a530a0381fa9f36fcb0cad71cf6738ab_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198007494757",
+          "totalRounds": 115,
+          "mapsPlayed": 6,
+          "wins": 3,
+          "losses": 3,
+          "winRate": 0.5,
+          "k": 46,
+          "d": 91,
+          "kd": 0.5054945054945055,
+          "kdDiff": -45,
+          "rating": 317,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561199686171590",
+          "name": "DisterMick",
+          "avatarUrl": "https://avatars.steamstatic.com/300d5b59345fca5a6508d6242a8d7965387bf5fd_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199686171590",
+          "totalRounds": 18,
+          "mapsPlayed": 1,
+          "wins": 0,
+          "losses": 1,
+          "winRate": 0,
+          "k": 9,
+          "d": 16,
+          "kd": 0.5625,
+          "kdDiff": -7,
+          "rating": 317,
+          "isQualified": false
+        }
+      ]
+    },
+    {
+      "id": "2026-09-16",
+      "firstPlayedAt": 1789574282,
+      "lastPlayedAt": 1789588989,
+      "maps": [
+        {
+          "mapId": "11817269:1",
+          "lobbyId": 11817269,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team 乃卂尺丨ㄥㄥ卂",
+              "score": 7,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/11817269"
+        },
+        {
+          "mapId": "11818759:1",
+          "lobbyId": 11818759,
+          "map": "de_mirage",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team LetsStats",
+              "score": 7,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/11818759"
+        },
+        {
+          "mapId": "11820488:1",
+          "lobbyId": 11820488,
+          "map": "de_inferno",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team 乃卂尺丨ㄥㄥ卂",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team PREMIUM | Volbe",
+              "score": 3,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/11820488"
+        },
+        {
+          "mapId": "11822304:1",
+          "lobbyId": 11822304,
+          "map": "de_nuke",
+          "statsTier": "basic",
+          "teams": [
+            {
+              "key": "team_3",
+              "name": null,
+              "score": 12,
+              "isWinner": false
+            },
+            {
+              "key": "team_2",
+              "name": null,
+              "score": 16,
+              "isWinner": true
+            }
+          ],
+          "url": "https://cybershoke.net/match/11822304"
+        },
+        {
+          "mapId": "11824873:1",
+          "lobbyId": 11824873,
+          "map": "de_cache",
+          "statsTier": "basic",
+          "teams": [
+            {
+              "key": "team_3",
+              "name": null,
+              "score": 5,
+              "isWinner": false
+            },
+            {
+              "key": "team_2",
+              "name": null,
+              "score": 13,
+              "isWinner": true
+            }
+          ],
+          "url": "https://cybershoke.net/match/11824873"
+        },
+        {
+          "mapId": "11826620:1",
+          "lobbyId": 11826620,
+          "map": "de_dust2",
+          "statsTier": "basic",
+          "teams": [
+            {
+              "key": "team_3",
+              "name": null,
+              "score": 16,
+              "isWinner": true
+            },
+            {
+              "key": "team_2",
+              "name": null,
+              "score": 13,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/11826620"
+        },
+        {
+          "mapId": "11829543:1",
+          "lobbyId": 11829543,
+          "map": "de_mirage",
+          "statsTier": "basic",
+          "teams": [
+            {
+              "key": "team_3",
+              "name": null,
+              "score": 6,
+              "isWinner": false
+            },
+            {
+              "key": "team_2",
+              "name": null,
+              "score": 13,
+              "isWinner": true
+            }
+          ],
+          "url": "https://cybershoke.net/match/11829543"
+        }
+      ],
+      "players": [
+        {
+          "steamid64": "76561198070734509",
+          "name": "乃卂尺丨ㄥㄥ卂",
+          "avatarUrl": "https://avatars.steamstatic.com/9f37aeb8a2786c3c91ece677fad39430d29cc96c_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198070734509",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 4,
+          "losses": 3,
+          "winRate": 0.5714285714285714,
+          "k": 158,
+          "d": 98,
+          "kd": 1.6122448979591837,
+          "kdDiff": 60,
+          "rating": 721,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198137980826",
+          "name": "LetsStats",
+          "avatarUrl": "https://avatars.steamstatic.com/97dc87cbf6f9c7d5513b15c6f2f7d4f56a22dd12_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198137980826",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 4,
+          "losses": 3,
+          "winRate": 0.5714285714285714,
+          "k": 168,
+          "d": 111,
+          "kd": 1.5135135135135136,
+          "kdDiff": 57,
+          "rating": 696,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198014367879",
+          "name": "Player",
+          "avatarUrl": "https://avatars.steamstatic.com/891fadfd3613da77999db6a383c7c86e3be7549a_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198014367879",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 3,
+          "losses": 4,
+          "winRate": 0.42857142857142855,
+          "k": 151,
+          "d": 109,
+          "kd": 1.385321100917431,
+          "kdDiff": 42,
+          "rating": 641,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198039138241",
+          "name": "LITE | AlexMax",
+          "avatarUrl": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198039138241",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 3,
+          "losses": 4,
+          "winRate": 0.42857142857142855,
+          "k": 121,
+          "d": 108,
+          "kd": 1.1203703703703705,
+          "kdDiff": 13,
+          "rating": 542,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198017244485",
+          "name": "moloko_",
+          "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198017244485",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 4,
+          "losses": 3,
+          "winRate": 0.5714285714285714,
+          "k": 110,
+          "d": 104,
+          "kd": 1.0576923076923077,
+          "kdDiff": 6,
+          "rating": 524,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198064889555",
+          "name": "msn",
+          "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 3,
+          "losses": 4,
+          "winRate": 0.42857142857142855,
+          "k": 99,
+          "d": 115,
+          "kd": 0.8608695652173913,
+          "kdDiff": -16,
+          "rating": 444,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198303379150",
+          "name": "MrDrolik",
+          "avatarUrl": "https://avatars.steamstatic.com/dc71b61ac0d792fec95ae5007d0bbc69aaa2b44f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198303379150",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 4,
+          "losses": 3,
+          "winRate": 0.5714285714285714,
+          "k": 71,
+          "d": 105,
+          "kd": 0.6761904761904762,
+          "kdDiff": -34,
+          "rating": 384,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561199852434358",
+          "name": "PREMIUM | Volbe",
+          "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199852434358",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 3,
+          "losses": 4,
+          "winRate": 0.42857142857142855,
+          "k": 81,
+          "d": 122,
+          "kd": 0.6639344262295082,
+          "kdDiff": -41,
+          "rating": 365,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198681103731",
+          "name": "Анальный бур",
+          "avatarUrl": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198681103731",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 3,
+          "losses": 4,
+          "winRate": 0.42857142857142855,
+          "k": 70,
+          "d": 114,
+          "kd": 0.6140350877192983,
+          "kdDiff": -44,
+          "rating": 350,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198007494757",
+          "name": "Ooops",
+          "avatarUrl": "https://avatars.steamstatic.com/b26d79a8a530a0381fa9f36fcb0cad71cf6738ab_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198007494757",
+          "totalRounds": 150,
+          "mapsPlayed": 7,
+          "wins": 4,
+          "losses": 3,
+          "winRate": 0.5714285714285714,
+          "k": 56,
+          "d": 112,
+          "kd": 0.5,
+          "kdDiff": -56,
+          "rating": 314,
+          "isQualified": false
+        }
+      ]
+    },
+    {
+      "id": "2026-09-02",
+      "firstPlayedAt": 1788365954,
+      "lastPlayedAt": 1788379223,
+      "maps": [
+        {
+          "mapId": "11393084:1",
+          "lobbyId": 11393084,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Пикулинни Браветти.",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Player",
+              "score": 7,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/11393084"
+        },
+        {
+          "mapId": "11394970:1",
+          "lobbyId": 11394970,
+          "map": "de_inferno",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team PRADA_CODE",
+              "score": 19,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Player",
+              "score": 17,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/11394970"
+        },
+        {
+          "mapId": "11397654:1",
+          "lobbyId": 11397654,
+          "map": "de_mirage",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Пикулинни Браветти.",
+              "score": 11,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/11397654"
+        },
+        {
+          "mapId": "11399948:1",
+          "lobbyId": 11399948,
+          "map": "de_nuke",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Пикулинни Браветти.",
+              "score": 7,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/11399948"
+        },
+        {
+          "mapId": "11401895:1",
+          "lobbyId": 11401895,
+          "map": "de_cache",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Пикулинни Браветти.",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Player",
+              "score": 7,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/11401895"
+        }
+      ],
+      "players": [
+        {
+          "steamid64": "76561198272167310",
+          "name": "Пикулинни Браветти.",
+          "avatarUrl": "https://avatars.steamstatic.com/2153439125bf63fe9ffb1b07920ddd6d9ded0fc2_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198272167310",
+          "totalRounds": 120,
+          "mapsPlayed": 5,
+          "wins": 3,
+          "losses": 2,
+          "winRate": 0.6,
+          "k": 143,
+          "d": 75,
+          "kd": 1.9066666666666667,
+          "kdDiff": 68,
+          "rating": 837,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198042805941",
+          "name": "PRADA_CODE",
+          "avatarUrl": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198042805941",
+          "totalRounds": 80,
+          "mapsPlayed": 3,
+          "wins": 2,
+          "losses": 1,
+          "winRate": 0.6666666666666666,
+          "k": 83,
+          "d": 58,
+          "kd": 1.4310344827586208,
+          "kdDiff": 25,
+          "rating": 684,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198014367879",
+          "name": "Player",
+          "avatarUrl": "https://avatars.steamstatic.com/891fadfd3613da77999db6a383c7c86e3be7549a_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198014367879",
+          "totalRounds": 120,
+          "mapsPlayed": 5,
+          "wins": 2,
+          "losses": 3,
+          "winRate": 0.4,
+          "k": 127,
+          "d": 90,
+          "kd": 1.4111111111111112,
+          "kdDiff": 37,
+          "rating": 661,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198017244485",
+          "name": "moloko_",
+          "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198017244485",
+          "totalRounds": 120,
+          "mapsPlayed": 5,
+          "wins": 3,
+          "losses": 2,
+          "winRate": 0.6,
+          "k": 95,
+          "d": 81,
+          "kd": 1.1728395061728396,
+          "kdDiff": 14,
+          "rating": 569,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198728309900",
+          "name": "BB-00",
+          "avatarUrl": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198728309900",
+          "totalRounds": 40,
+          "mapsPlayed": 2,
+          "wins": 1,
+          "losses": 1,
+          "winRate": 0.5,
+          "k": 31,
+          "d": 30,
+          "kd": 1.0333333333333334,
+          "kdDiff": 1,
+          "rating": 512,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198039138241",
+          "name": "LITE | AlexMax",
+          "avatarUrl": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198039138241",
+          "totalRounds": 120,
+          "mapsPlayed": 5,
+          "wins": 2,
+          "losses": 3,
+          "winRate": 0.4,
+          "k": 86,
+          "d": 89,
+          "kd": 0.9662921348314607,
+          "kdDiff": -3,
+          "rating": 483,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198681103731",
+          "name": "Анальный бур",
+          "avatarUrl": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198681103731",
+          "totalRounds": 120,
+          "mapsPlayed": 5,
+          "wins": 2,
+          "losses": 3,
+          "winRate": 0.4,
+          "k": 82,
+          "d": 89,
+          "kd": 0.9213483146067416,
+          "kdDiff": -7,
+          "rating": 465,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198064889555",
+          "name": "msn",
+          "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
+          "totalRounds": 120,
+          "mapsPlayed": 5,
+          "wins": 2,
+          "losses": 3,
+          "winRate": 0.4,
+          "k": 82,
+          "d": 101,
+          "kd": 0.8118811881188119,
+          "kdDiff": -19,
+          "rating": 417,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198303379150",
+          "name": "MrDrolik",
+          "avatarUrl": "https://avatars.steamstatic.com/dc71b61ac0d792fec95ae5007d0bbc69aaa2b44f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198303379150",
+          "totalRounds": 120,
+          "mapsPlayed": 5,
+          "wins": 3,
+          "losses": 2,
+          "winRate": 0.6,
+          "k": 69,
+          "d": 92,
+          "kd": 0.75,
+          "kdDiff": -23,
+          "rating": 403,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561199852434358",
+          "name": "PREMIUM | Volbe",
+          "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199852434358",
+          "totalRounds": 120,
+          "mapsPlayed": 5,
+          "wins": 2,
+          "losses": 3,
+          "winRate": 0.4,
+          "k": 49,
+          "d": 96,
+          "kd": 0.5104166666666666,
+          "kdDiff": -47,
+          "rating": 295,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198007494757",
+          "name": "Ooops",
+          "avatarUrl": "https://avatars.steamstatic.com/b26d79a8a530a0381fa9f36fcb0cad71cf6738ab_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198007494757",
+          "totalRounds": 120,
+          "mapsPlayed": 5,
+          "wins": 3,
+          "losses": 2,
+          "winRate": 0.6,
+          "k": 41,
+          "d": 94,
+          "kd": 0.43617021276595747,
+          "kdDiff": -53,
+          "rating": 274,
+          "isQualified": false
+        }
+      ]
+    },
+    {
+      "id": "2026-08-19",
+      "firstPlayedAt": 1787155757,
+      "lastPlayedAt": 1787168819,
+      "maps": [
+        {
+          "mapId": "10949401:1",
+          "lobbyId": 10949401,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Tioma**",
+              "score": 7,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10949401"
+        },
+        {
+          "mapId": "10951164:1",
+          "lobbyId": 10951164,
+          "map": "de_mirage",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Tioma**",
+              "score": 8,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10951164"
+        },
+        {
+          "mapId": "10952783:1",
+          "lobbyId": 10952783,
+          "map": "de_inferno",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team PREMIUM | Alex.Max.",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team SKU4NO",
+              "score": 11,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10952783"
+        },
+        {
+          "mapId": "10954410:1",
+          "lobbyId": 10954410,
+          "map": "de_nuke",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team SKU4NO",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Player",
+              "score": 6,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10954410"
+        },
+        {
+          "mapId": "10956149:1",
+          "lobbyId": 10956149,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team SKU4NO",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Alex.Max.",
+              "score": 10,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10956149"
+        },
+        {
+          "mapId": "10957894:1",
+          "lobbyId": 10957894,
+          "map": "de_cache",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Tioma**",
+              "score": 11,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10957894"
+        }
+      ],
+      "players": [
+        {
+          "steamid64": "76561198014367879",
+          "name": "Player",
+          "avatarUrl": "https://avatars.steamstatic.com/891fadfd3613da77999db6a383c7c86e3be7549a_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198014367879",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 4,
+          "losses": 2,
+          "winRate": 0.6666666666666666,
+          "k": 145,
+          "d": 94,
+          "kd": 1.5425531914893618,
+          "kdDiff": 51,
+          "rating": 709,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198048534904",
+          "name": "SKU4NO",
+          "avatarUrl": "https://avatars.steamstatic.com/7b3bf09a1a529b13453f4aa8948230762a046c1c_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198048534904",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 2,
+          "losses": 4,
+          "winRate": 0.3333333333333333,
+          "k": 136,
+          "d": 92,
+          "kd": 1.4782608695652173,
+          "kdDiff": 44,
+          "rating": 672,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198054359751",
+          "name": "Tioma**",
+          "avatarUrl": "https://avatars.steamstatic.com/8f955f6630d15174548594666e7b1df17d2ff40b_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198054359751",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 2,
+          "losses": 4,
+          "winRate": 0.3333333333333333,
+          "k": 126,
+          "d": 90,
+          "kd": 1.4,
+          "kdDiff": 36,
+          "rating": 641,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198039138241",
+          "name": "LITE | AlexMax",
+          "avatarUrl": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198039138241",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 4,
+          "losses": 2,
+          "winRate": 0.6666666666666666,
+          "k": 103,
+          "d": 86,
+          "kd": 1.197674418604651,
+          "kdDiff": 17,
+          "rating": 577,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198064889555",
+          "name": "msn",
+          "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 4,
+          "losses": 2,
+          "winRate": 0.6666666666666666,
+          "k": 93,
+          "d": 91,
+          "kd": 1.021978021978022,
+          "kdDiff": 2,
+          "rating": 514,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198017244485",
+          "name": "moloko_",
+          "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198017244485",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 2,
+          "losses": 4,
+          "winRate": 0.3333333333333333,
+          "k": 90,
+          "d": 97,
+          "kd": 0.9278350515463918,
+          "kdDiff": -7,
+          "rating": 467,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198303379150",
+          "name": "MrDrolik",
+          "avatarUrl": "https://avatars.steamstatic.com/dc71b61ac0d792fec95ae5007d0bbc69aaa2b44f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198303379150",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 2,
+          "losses": 4,
+          "winRate": 0.3333333333333333,
+          "k": 82,
+          "d": 93,
+          "kd": 0.8817204301075269,
+          "kdDiff": -11,
+          "rating": 450,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198681103731",
+          "name": "Анальный бур",
+          "avatarUrl": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198681103731",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 4,
+          "losses": 2,
+          "winRate": 0.6666666666666666,
+          "k": 71,
+          "d": 92,
+          "kd": 0.7717391304347826,
+          "kdDiff": -21,
+          "rating": 421,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561199852434358",
+          "name": "PREMIUM | Volbe",
+          "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199852434358",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 4,
+          "losses": 2,
+          "winRate": 0.6666666666666666,
+          "k": 57,
+          "d": 109,
+          "kd": 0.5229357798165137,
+          "kdDiff": -52,
+          "rating": 315,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198007494757",
+          "name": "Ooops",
+          "avatarUrl": "https://avatars.steamstatic.com/b26d79a8a530a0381fa9f36fcb0cad71cf6738ab_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198007494757",
+          "totalRounds": 131,
+          "mapsPlayed": 6,
+          "wins": 2,
+          "losses": 4,
+          "winRate": 0.3333333333333333,
+          "k": 28,
+          "d": 104,
+          "kd": 0.2692307692307692,
+          "kdDiff": -76,
+          "rating": 208,
+          "isQualified": false
+        }
+      ]
+    },
+    {
+      "id": "2026-08-05",
+      "firstPlayedAt": 1785950906,
+      "lastPlayedAt": 1785964040,
+      "maps": [
+        {
+          "mapId": "10550233:1",
+          "lobbyId": 10550233,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team SKU4NO",
+              "score": 6,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10550233"
+        },
+        {
+          "mapId": "10552874:1",
+          "lobbyId": 10552874,
+          "map": "de_inferno",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Alex.Max.",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Пикулинни Браветти.",
+              "score": 7,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10552874"
+        },
+        {
+          "mapId": "10554428:1",
+          "lobbyId": 10554428,
+          "map": "de_mirage",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Alex.Max.",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team SKU4NO",
+              "score": 10,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10554428"
+        },
+        {
+          "mapId": "10556260:1",
+          "lobbyId": 10556260,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Пикулинни Браветти.",
+              "score": 3,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10556260"
+        },
+        {
+          "mapId": "10557706:1",
+          "lobbyId": 10557706,
+          "map": "de_nuke",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team SKU4NO",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Player",
+              "score": 8,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10557706"
+        },
+        {
+          "mapId": "10559522:1",
+          "lobbyId": 10559522,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Пикулинни Браветти.",
+              "score": 9,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10559522"
+        }
+      ],
+      "players": [
+        {
+          "steamid64": "76561198014367879",
+          "name": "Player",
+          "avatarUrl": "https://avatars.steamstatic.com/891fadfd3613da77999db6a383c7c86e3be7549a_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198014367879",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 5,
+          "losses": 1,
+          "winRate": 0.8333333333333334,
+          "k": 131,
+          "d": 82,
+          "kd": 1.5975609756097562,
+          "kdDiff": 49,
+          "rating": 723,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198272167310",
+          "name": "Пикулинни Браветти.",
+          "avatarUrl": "https://avatars.steamstatic.com/2153439125bf63fe9ffb1b07920ddd6d9ded0fc2_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198272167310",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 1,
+          "losses": 5,
+          "winRate": 0.16666666666666666,
+          "k": 136,
+          "d": 87,
+          "kd": 1.5632183908045978,
+          "kdDiff": 49,
+          "rating": 692,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198039138241",
+          "name": "LITE | AlexMax",
+          "avatarUrl": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198039138241",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 5,
+          "losses": 1,
+          "winRate": 0.8333333333333334,
+          "k": 109,
+          "d": 86,
+          "kd": 1.2674418604651163,
+          "kdDiff": 23,
+          "rating": 608,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198048534904",
+          "name": "SKU4NO",
+          "avatarUrl": "https://avatars.steamstatic.com/7b3bf09a1a529b13453f4aa8948230762a046c1c_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198048534904",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 1,
+          "losses": 5,
+          "winRate": 0.16666666666666666,
+          "k": 109,
+          "d": 93,
+          "kd": 1.1720430107526882,
+          "kdDiff": 16,
+          "rating": 552,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198017244485",
+          "name": "moloko_",
+          "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198017244485",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 1,
+          "losses": 5,
+          "winRate": 0.16666666666666666,
+          "k": 101,
+          "d": 93,
+          "kd": 1.086021505376344,
+          "kdDiff": 8,
+          "rating": 520,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198064889555",
+          "name": "msn",
+          "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 5,
+          "losses": 1,
+          "winRate": 0.8333333333333334,
+          "k": 79,
+          "d": 84,
+          "kd": 0.9404761904761905,
+          "kdDiff": -5,
+          "rating": 490,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198303379150",
+          "name": "MrDrolik",
+          "avatarUrl": "https://avatars.steamstatic.com/dc71b61ac0d792fec95ae5007d0bbc69aaa2b44f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198303379150",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 5,
+          "losses": 1,
+          "winRate": 0.8333333333333334,
+          "k": 73,
+          "d": 86,
+          "kd": 0.8488372093023255,
+          "kdDiff": -13,
+          "rating": 457,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561199852434358",
+          "name": "PREMIUM | Volbe",
+          "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199852434358",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 5,
+          "losses": 1,
+          "winRate": 0.8333333333333334,
+          "k": 63,
+          "d": 94,
+          "kd": 0.6702127659574468,
+          "kdDiff": -31,
+          "rating": 388,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198681103731",
+          "name": "Анальный бур",
+          "avatarUrl": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198681103731",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 1,
+          "losses": 5,
+          "winRate": 0.16666666666666666,
+          "k": 54,
+          "d": 90,
+          "kd": 0.6,
+          "kdDiff": -36,
+          "rating": 341,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198007494757",
+          "name": "Ooops",
+          "avatarUrl": "https://avatars.steamstatic.com/b26d79a8a530a0381fa9f36fcb0cad71cf6738ab_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198007494757",
+          "totalRounds": 121,
+          "mapsPlayed": 6,
+          "wins": 1,
+          "losses": 5,
+          "winRate": 0.16666666666666666,
+          "k": 27,
+          "d": 99,
+          "kd": 0.2727272727272727,
+          "kdDiff": -72,
+          "rating": 210,
+          "isQualified": false
+        }
+      ]
+    },
+    {
+      "id": "2026-07-21",
+      "firstPlayedAt": 1784658564,
+      "lastPlayedAt": 1784667298,
+      "maps": [
+        {
+          "mapId": "10127963:1",
+          "lobbyId": 10127963,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 28,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team moloko_",
+              "score": 25,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10127963"
+        },
+        {
+          "mapId": "10131986:1",
+          "lobbyId": 10131986,
+          "map": "de_inferno",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 16,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Alex.Max.",
+              "score": 13,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10131986"
+        },
+        {
+          "mapId": "10134827:1",
+          "lobbyId": 10134827,
+          "map": "de_nuke",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Alex.Max.",
+              "score": 1,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10134827"
+        },
+        {
+          "mapId": "10136087:1",
+          "lobbyId": 10136087,
+          "map": "de_dust2",
+          "statsTier": "full",
+          "teams": [
+            {
+              "key": "team1",
+              "name": "team Player",
+              "score": 16,
+              "isWinner": true
+            },
+            {
+              "key": "team2",
+              "name": "team Alex.Max.",
+              "score": 13,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/10136087"
+        }
+      ],
+      "players": [
+        {
+          "steamid64": "76561198014367879",
+          "name": "Player",
+          "avatarUrl": "https://avatars.steamstatic.com/891fadfd3613da77999db6a383c7c86e3be7549a_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198014367879",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 4,
+          "losses": 0,
+          "winRate": 1,
+          "k": 154,
+          "d": 81,
+          "kd": 1.9012345679012346,
+          "kdDiff": 73,
+          "rating": 898,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198039138241",
+          "name": "LITE | AlexMax",
+          "avatarUrl": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198039138241",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 0,
+          "losses": 4,
+          "winRate": 0,
+          "k": 129,
+          "d": 90,
+          "kd": 1.4333333333333333,
+          "kdDiff": 39,
+          "rating": 676,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198017244485",
+          "name": "moloko_",
+          "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198017244485",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 0,
+          "losses": 4,
+          "winRate": 0,
+          "k": 114,
+          "d": 84,
+          "kd": 1.3571428571428572,
+          "kdDiff": 30,
+          "rating": 636,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198064889555",
+          "name": "msn",
+          "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 4,
+          "losses": 0,
+          "winRate": 1,
+          "k": 92,
+          "d": 88,
+          "kd": 1.0454545454545454,
+          "kdDiff": 4,
+          "rating": 538,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198303379150",
+          "name": "MrDrolik",
+          "avatarUrl": "https://avatars.steamstatic.com/dc71b61ac0d792fec95ae5007d0bbc69aaa2b44f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198303379150",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 4,
+          "losses": 0,
+          "winRate": 1,
+          "k": 88,
+          "d": 93,
+          "kd": 0.946236559139785,
+          "kdDiff": -5,
+          "rating": 493,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198681103731",
+          "name": "Анальный бур",
+          "avatarUrl": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198681103731",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 0,
+          "losses": 4,
+          "winRate": 0,
+          "k": 83,
+          "d": 88,
+          "kd": 0.9431818181818182,
+          "kdDiff": -5,
+          "rating": 457,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561199686171590",
+          "name": "DisterMick",
+          "avatarUrl": "https://avatars.steamstatic.com/300d5b59345fca5a6508d6242a8d7965387bf5fd_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199686171590",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 4,
+          "losses": 0,
+          "winRate": 1,
+          "k": 68,
+          "d": 94,
+          "kd": 0.723404255319149,
+          "kdDiff": -26,
+          "rating": 391,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561199852434358",
+          "name": "PREMIUM | Volbe",
+          "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199852434358",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 0,
+          "losses": 4,
+          "winRate": 0,
+          "k": 74,
+          "d": 94,
+          "kd": 0.7872340425531915,
+          "kdDiff": -20,
+          "rating": 385,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198357423221",
+          "name": "Cедой",
+          "avatarUrl": "https://avatars.steamstatic.com/fff2e8ebd151d97f15d1b0fa6926301a5b2f650f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198357423221",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 4,
+          "losses": 0,
+          "winRate": 1,
+          "k": 53,
+          "d": 98,
+          "kd": 0.5408163265306123,
+          "kdDiff": -45,
+          "rating": 303,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198007494757",
+          "name": "Ooops",
+          "avatarUrl": "https://avatars.steamstatic.com/b26d79a8a530a0381fa9f36fcb0cad71cf6738ab_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198007494757",
+          "totalRounds": 125,
+          "mapsPlayed": 4,
+          "wins": 0,
+          "losses": 4,
+          "winRate": 0,
+          "k": 41,
+          "d": 101,
+          "kd": 0.40594059405940597,
+          "kdDiff": -60,
+          "rating": 200,
+          "isQualified": false
+        }
+      ]
+    },
+    {
+      "id": "2026-06-09",
+      "firstPlayedAt": 1781026148,
+      "lastPlayedAt": 1781037259,
+      "maps": [
+        {
+          "mapId": "9115489:1",
+          "lobbyId": 9115489,
+          "map": "de_dust2",
+          "statsTier": "basic",
+          "teams": [
+            {
+              "key": "team_3",
+              "name": null,
+              "score": 14,
+              "isWinner": false
+            },
+            {
+              "key": "team_2",
+              "name": null,
+              "score": 16,
+              "isWinner": true
+            }
+          ],
+          "url": "https://cybershoke.net/match/9115489"
+        },
+        {
+          "mapId": "9117454:1",
+          "lobbyId": 9117454,
+          "map": "de_inferno",
+          "statsTier": "basic",
+          "teams": [
+            {
+              "key": "team_3",
+              "name": null,
+              "score": 6,
+              "isWinner": false
+            },
+            {
+              "key": "team_2",
+              "name": null,
+              "score": 13,
+              "isWinner": true
+            }
+          ],
+          "url": "https://cybershoke.net/match/9117454"
+        },
+        {
+          "mapId": "9119022:1",
+          "lobbyId": 9119022,
+          "map": "de_dust2",
+          "statsTier": "basic",
+          "teams": [
+            {
+              "key": "team_3",
+              "name": null,
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team_2",
+              "name": null,
+              "score": 11,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/9119022"
+        },
+        {
+          "mapId": "9122596:1",
+          "lobbyId": 9122596,
+          "map": "de_inferno",
+          "statsTier": "basic",
+          "teams": [
+            {
+              "key": "team_3",
+              "name": null,
+              "score": 13,
+              "isWinner": true
+            },
+            {
+              "key": "team_2",
+              "name": null,
+              "score": 5,
+              "isWinner": false
+            }
+          ],
+          "url": "https://cybershoke.net/match/9122596"
+        }
+      ],
+      "players": [
+        {
+          "steamid64": "76561198017244485",
+          "name": "moloko_",
+          "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198017244485",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 102,
+          "d": 62,
+          "kd": 1.6451612903225807,
+          "kdDiff": 40,
+          "rating": 740,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198014367879",
+          "name": "Player",
+          "avatarUrl": "https://avatars.steamstatic.com/891fadfd3613da77999db6a383c7c86e3be7549a_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198014367879",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 97,
+          "d": 60,
+          "kd": 1.6166666666666667,
+          "kdDiff": 37,
+          "rating": 727,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198039138241",
+          "name": "LITE | AlexMax",
+          "avatarUrl": "https://avatars.steamstatic.com/100099c2b1e93769d704845e20e7e2f40b8fd108_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198039138241",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 90,
+          "d": 66,
+          "kd": 1.3636363636363635,
+          "kdDiff": 24,
+          "rating": 639,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198728309900",
+          "name": "BB-00",
+          "avatarUrl": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198728309900",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 90,
+          "d": 70,
+          "kd": 1.2857142857142858,
+          "kdDiff": 20,
+          "rating": 613,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198064889555",
+          "name": "msn",
+          "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 77,
+          "d": 68,
+          "kd": 1.1323529411764706,
+          "kdDiff": 9,
+          "rating": 551,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198681103731",
+          "name": "Анальный бур",
+          "avatarUrl": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198681103731",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 51,
+          "d": 66,
+          "kd": 0.7727272727272727,
+          "kdDiff": -15,
+          "rating": 413,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198357423221",
+          "name": "Cедой",
+          "avatarUrl": "https://avatars.steamstatic.com/fff2e8ebd151d97f15d1b0fa6926301a5b2f650f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198357423221",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 50,
+          "d": 70,
+          "kd": 0.7142857142857143,
+          "kdDiff": -20,
+          "rating": 388,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198303379150",
+          "name": "MrDrolik",
+          "avatarUrl": "https://avatars.steamstatic.com/dc71b61ac0d792fec95ae5007d0bbc69aaa2b44f_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198303379150",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 50,
+          "d": 77,
+          "kd": 0.6493506493506493,
+          "kdDiff": -27,
+          "rating": 355,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561199852434358",
+          "name": "PREMIUM | Volbe",
+          "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561199852434358",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 41,
+          "d": 78,
+          "kd": 0.5256410256410257,
+          "kdDiff": -37,
+          "rating": 303,
+          "isQualified": false
+        },
+        {
+          "steamid64": "76561198696282357",
+          "name": "iiad0h0k16",
+          "avatarUrl": "https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg",
+          "steamProfileUrl": "https://steamcommunity.com/profiles/76561198696282357",
+          "totalRounds": 91,
+          "mapsPlayed": 4,
+          "wins": 2,
+          "losses": 2,
+          "winRate": 0.5,
+          "k": 31,
+          "d": 71,
+          "kd": 0.43661971830985913,
+          "kdDiff": -40,
+          "rating": 277,
+          "isQualified": false
+        }
+      ]
+    }
+  ],
   "maps": [
     {
       "mapKey": "de_dust2",

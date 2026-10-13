@@ -120,6 +120,16 @@
     margin-bottom: 12px;
   }
 
+  .session-picker { margin-bottom: 8px; }
+  .session-picker select {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 13px;
+    max-width: 100%;
+  }
   .session-header {
     background: var(--bg-panel);
     border: 1px solid var(--border);
@@ -776,7 +786,7 @@
   <div class="toolbar">
     <div class="tabs">
       <div class="tab active" data-tab="allTime">За всё время</div>
-      <div class="tab" data-tab="lastSession">Последняя сессия</div>
+      <div class="tab" data-tab="lastSession">Сессии</div>
       <div class="tab" data-tab="maps">Карты</div>
       <div class="tab" data-tab="draft">Выбор составов</div>
     </div>
@@ -826,6 +836,15 @@
   function fmtWr(v) { return v == null ? "—" : Math.round(v * 100) + "%"; }
   function fmtRating(v) { return v == null ? "—" : String(Math.round(v)); }
   function fmtDiff(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v; }
+  // Склонение по правилам русского языка: 1 карта, 2–4 карты, 5–20 карт,
+  // 21 карта, 22 карты... (11–14 — всегда "карт").
+  function pluralRu(n, one, few, many) {
+    var m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return one;
+    if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+    return many;
+  }
+  function mapsCount(n) { return n + " " + pluralRu(n, "карта", "карты", "карт"); }
   function fmtRatingDelta(v) { return v > 0 ? "+" + v : v < 0 ? String(v) : "+0"; }
   function ratingDeltaClass(v) { return v > 0 ? "rating-delta-up" : v < 0 ? "rating-delta-down" : "rating-delta-flat"; }
 
@@ -847,9 +866,10 @@
     mapSortDirection: "desc",
     selectedMapKey: null,
     expanded: null,
+    sessionId: null,
   };
 
-  // "За всё время"/"Последняя сессия" используют одну общую пару
+  // "За всё время"/"Сессии" используют одну общую пару
   // sortColumn/sortDirection (так исторически сложилось — переключение между
   // ними не сбрасывает сортировку). У "Карты" свой набор колонок (нет
   // "рейтинга"), поэтому своя пара с собственным дефолтом (K/D).
@@ -876,6 +896,20 @@
     if (!maps.length) return null;
     var found = maps.filter(function (m) { return m.mapKey === state.selectedMapKey; })[0];
     return found || maps[0];
+  }
+
+  // Выбранная на вкладке "Сессии": по умолчанию (и после перезагрузки) —
+  // последняя; если id не нашёлся, тоже последняя.
+  function currentSession() {
+    var sessions = (state.data && state.data.sessions) || [];
+    if (!sessions.length) return null;
+    return sessions.filter(function (s) { return s.id === state.sessionId; })[0] || sessions[0];
+  }
+  // id сессии — "ГГГГ-ММ-ДД" или "ГГГГ-ММ-ДД-N" (N-я сессия в тот же день).
+  function sessionLabel(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?:-(\d+))?$/.exec(s.id);
+    var date = m ? m[3] + "." + m[2] + "." + m[1] + (m[4] ? " (№" + m[4] + ")" : "") : s.id;
+    return date + " · " + mapsCount(s.maps.length);
   }
 
   // GitHub Pages отдаёт data/stats.json с Cache-Control: max-age=600 — без
@@ -1039,19 +1073,19 @@
     var drop = state.data.qualification.qualificationDrop;
     if (!drop) { el.innerHTML = ""; return; }
     el.innerHTML =
-      '<div class="banner">Порог квалификации вырос до ' + drop.threshold + ' карт — вне рейтинга: ' +
+      '<div class="banner">Порог квалификации вырос до ' + drop.threshold + " " + pluralRu(drop.threshold, "карты", "карт", "карт") + ' — вне рейтинга: ' +
       drop.droppedNames.map(escapeHtml).join(", ") + "</div>";
   }
 
   function renderSessionHeader() {
     var el = document.getElementById("sessionHeader");
-    if (state.tab !== "lastSession" || !state.data.lastSession) {
+    var s = currentSession();
+    if (state.tab !== "lastSession" || !s) {
       el.innerHTML = state.tab === "lastSession"
         ? '<div class="session-header">Сессий пока нет.</div>'
         : "";
       return;
     }
-    var s = state.data.lastSession;
     var hours = s.lastPlayedAt && s.firstPlayedAt
       ? Math.max(1, Math.round((s.lastPlayedAt - s.firstPlayedAt) / 3600))
       : null;
@@ -1063,10 +1097,27 @@
       return '<a href="' + m.url + '" target="_blank" rel="noopener">' +
         escapeHtml(m.map || "?") + " " + score + tierNote + "</a>";
     }).join("");
+    var optionsHtml = state.data.sessions.map(function (x) {
+      return '<option value="' + escapeHtml(x.id) + '"' + (x.id === s.id ? " selected" : "") + ">" +
+        escapeHtml(sessionLabel(x)) + "</option>";
+    }).join("");
     el.innerHTML =
+      '<div class="session-picker"><select id="sessionSelect" aria-label="Сессия">' + optionsHtml + "</select></div>" +
       '<div class="session-header"><span class="session-id">Сессия ' + escapeHtml(s.id) + "</span> · " +
-      s.maps.length + " карт" + (hours ? " · ~" + hours + " ч" : "") +
+      mapsCount(s.maps.length) + (hours ? " · ~" + hours + " ч" : "") +
       '<div class="session-maps">' + mapsHtml + "</div></div>";
+
+    document.getElementById("sessionSelect").addEventListener("change", function (e) {
+      // Пока крутится колесо, сессию не меняем: по окончании оно пишет результат
+      // в свой блок, который при смене сессии был бы пересобран.
+      if (wheelState.spinning) { e.target.value = currentSession().id; return; }
+      state.sessionId = e.target.value;
+      state.expanded = null;
+      render();
+      // render() пересоздал <select>; возвращаем фокус, иначе по сессиям нельзя
+      // листать стрелками с клавиатуры.
+      document.getElementById("sessionSelect").focus();
+    });
   }
 
   function renderFooter() {
@@ -1074,7 +1125,7 @@
     if (state.tab === "draft") { el.textContent = ""; return; }
     el.textContent =
       state.tab === "allTime"
-        ? "Порог квалификации: " + state.data.qualification.threshold + " карт " +
+        ? "Порог квалификации: " + mapsCount(state.data.qualification.threshold) + " " +
           "(" + Math.round(state.data.qualification.qualifyShare * 100) + "% от " +
           state.data.qualification.maxMaps + " у лидера)"
         : "Карт учтено всего: " + state.data.totalMapsCollected;
@@ -1087,7 +1138,8 @@
       var m = currentMapEntry();
       return m ? m.players : [];
     }
-    return state.data.lastSession ? state.data.lastSession.players : [];
+    var s = currentSession();
+    return s ? s.players : [];
   }
 
   function sortedRows() {
@@ -1224,7 +1276,7 @@
       ? row.mapsPlayed
       : row.mapsPlayed + ' <small>/ ' + state.data.qualification.threshold + "</small>";
 
-    var metaText = row.mapsPlayed + " карт · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
+    var metaText = mapsCount(row.mapsPlayed) + " · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
 
     var cells = "";
     cells += playerCellHtml(row, metaText, state.tab === "allTime");
@@ -1280,7 +1332,7 @@
       '<div class="detail-grid">' + metricsHtml + "</div></td></tr>";
   }
 
-  // Чисто for fun: колесо фортуны на вкладке "Последняя сессия". Категории
+  // Чисто for fun: колесо фортуны на вкладке "Сессии" (для выбранной сессии). Категории
   // "random" разыгрываются честным случайным выбором среди участников сессии
   // (специально не завязаны на статистику, чтобы никого не обижать), а
   // "best"/"worst" всегда указывают на реального лидера/последнего по
@@ -1303,7 +1355,7 @@
 
   function renderWheelSection() {
     var el = document.getElementById("wheelSection");
-    var session = state.data.lastSession;
+    var session = currentSession();
     var hasSession = session && session.players.length > 0;
     if (!hasSession) {
       el.innerHTML = "";
@@ -1362,8 +1414,9 @@
   }
 
   function spinWheel() {
-    if (wheelState.spinning || !state.data.lastSession) return;
-    var players = state.data.lastSession.players;
+    var session = currentSession();
+    if (wheelState.spinning || !session) return;
+    var players = session.players;
     var n = players.length;
     var seg = 360 / n;
 
@@ -1408,7 +1461,7 @@
     }, 5000);
   }
 
-  // Чисто for fun: "Оправдалка" на вкладке "Последняя сессия" — облако мемных
+  // Чисто for fun: "Оправдалка" на вкладке "Сессии" — облако мемных
   // отмазок игроков CS2; кнопка по очереди зажигает 3–5 случайных (с ✅, как в
   // меме), без привязки к конкретному игроку. Облако — 3D-сфера: теги
   // лежат на сфере (спираль Фибоначчи), сама она медленно вращается и
@@ -1607,10 +1660,7 @@
   }
 
   function draftGuestWord(n) {
-    var m10 = n % 10, m100 = n % 100;
-    if (m10 === 1 && m100 !== 11) return "гость";
-    if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return "гостя";
-    return "гостей";
+    return pluralRu(n, "гость", "гостя", "гостей");
   }
 
   function draftKeyFor(ids, guests) {

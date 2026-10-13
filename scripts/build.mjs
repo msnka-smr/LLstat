@@ -10,7 +10,7 @@ import { assignSessions } from "./lib/session.mjs";
 import { aggregatePlayerMaps } from "./lib/aggregate.mjs";
 import { computeThreshold } from "./lib/qualify.mjs";
 import { sortRows } from "./lib/sort.mjs";
-import { calcSessionRating } from "./lib/sessionRating.mjs";
+import { buildSessionsOutput } from "./lib/sessionsOutput.mjs";
 import { computeAllTimeRating, computeRatingDelta } from "./lib/allTimeRating.mjs";
 import { summarizeMapFrequency, mapIconUrl, mapBannerUrl } from "./lib/mapCatalog.mjs";
 
@@ -209,36 +209,11 @@ async function main() {
   }
   await writeJson(THRESHOLD_STATE_PATH, { threshold, qualifiedSteamIds: qualifiedNowIds });
 
-  let lastSessionOutput = null;
-  if (lastSession) {
-    const byPlayerSession = new Map();
-    for (const map of lastSession.maps) {
-      for (const p of map.players) {
-        const list = byPlayerSession.get(p.steamid64) ?? [];
-        list.push({ ...p, mapTotalRounds: map.totalRounds });
-        byPlayerSession.set(p.steamid64, list);
-      }
-    }
-    const sessionRows = [...byPlayerSession.entries()].map(([steamid64, mapsForPlayer]) => {
-      const rating = calcSessionRating(mapsForPlayer);
-      return buildRow(steamid64, registry, mapsForPlayer, threshold, rating);
-    });
-
-    lastSessionOutput = {
-      id: lastSession.id,
-      firstPlayedAt: lastSession.firstPlayedAt,
-      lastPlayedAt: lastSession.lastPlayedAt,
-      maps: lastSession.maps.map((m) => ({
-        mapId: m.mapId,
-        lobbyId: m.lobbyId,
-        map: m.map,
-        statsTier: m.statsTier,
-        teams: m.teams,
-        url: `https://cybershoke.net/match/${m.lobbyId}`,
-      })),
-      players: sortRows(sessionRows, "rating", "desc"),
-    };
-  }
+  // Все игровые вечера, от новых к старым. Пороги квалификации для строк те же,
+  // что для таблицы "За всё время" (текущие), — как и раньше для последней сессии.
+  const sessionsOutput = buildSessionsOutput(sessions, (steamid64, mapsForPlayer, rating) =>
+    buildRow(steamid64, registry, mapsForPlayer, threshold, rating)
+  );
 
   const output = {
     generatedAt: new Date().toISOString(),
@@ -251,7 +226,7 @@ async function main() {
       qualificationDrop,
     },
     allTime: { players: allTimeRowsSorted },
-    lastSession: lastSessionOutput,
+    sessions: sessionsOutput,
     maps: mapsOutput,
   };
 
