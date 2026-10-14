@@ -24,3 +24,10 @@ test("an empty alias map is a no-op", () => {
   assert.deepEqual(applyAliases(maps, {}), maps);
   assert.deepEqual(applyAliases(maps, undefined), maps);
 });
+
+test("aliased players are flagged so their nick/avatar don't overwrite the main account's registry entry", () => {
+  const maps = [{ mapId: "1:1", players: [{ steamid64: "999", name: "alt" }, { steamid64: "111", name: "main" }] }];
+  const [a, b] = applyAliases(maps, { 999: "111" })[0].players;
+  assert.equal(a.aliased, true);
+  assert.equal(b.aliased, undefined);
+});

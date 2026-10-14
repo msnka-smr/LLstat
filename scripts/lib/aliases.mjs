@@ -7,7 +7,8 @@ export function applyAliases(maps, aliasMap) {
     ...map,
     players: map.players.map((p) => {
       const canonical = aliasMap[p.steamid64];
-      return canonical ? { ...p, steamid64: canonical } : p;
+      // aliased: ник и аватар альт-аккаунта не должны затирать данные основного
+      return canonical ? { ...p, steamid64: canonical, aliased: true } : p;
     }),
   }));
 }

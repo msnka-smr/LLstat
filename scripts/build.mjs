@@ -77,9 +77,11 @@ function updatePlayersRegistry(registry, maps) {
         lastSeenName: null,
         avatarUrl: null,
       };
-      if (!entry.nicknames.includes(p.name)) entry.nicknames.push(p.name);
-      entry.lastSeenName = p.name;
-      if (p.avatar) entry.avatarUrl = p.avatar;
+      if (!p.aliased) {
+        if (!entry.nicknames.includes(p.name)) entry.nicknames.push(p.name);
+        entry.lastSeenName = p.name;
+        if (p.avatar) entry.avatarUrl = p.avatar;
+      }
       registry[p.steamid64] = entry;
     }
   }
