@@ -104,6 +104,18 @@ K_coef = 8 для первых 5 карт игрока, дальше 5
 (`npm run build`), проверить, что порядок игроков в сессиях не переворачивается
 неожиданно, и обновить `docs/rating-info.html` (формулы + тиры + примеры).
 
+## Telegram-бот обновления статистики
+
+`bot/` — Cloudflare Worker. Владелец присылает боту ссылки на лобби, воркер
+(`bot/src/worker.mjs`) проверяет секретный заголовок и Telegram ID и запускает
+`.github/workflows/update-stats.yml` через `workflow_dispatch`; ссылки
+разбирает `bot/src/links.mjs`. Об итоге сообщает последний шаг самого workflow
+(секреты репозитория `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`). Настройка и
+деплой — `bot/README.md`, дизайн — `specs/2026-10-19-telegram-bot-design.md`.
+Секреты воркера живут только в Cloudflare (`wrangler secret put`), в репозиторий
+не попадают. Изменение формата ввода workflow (`inputs.links`) требует правки
+воркера.
+
 ## Устройство `docs/index.html`
 
 Одностраничник на ванильном JS (без React/сборки), пять вкладок («За всё
