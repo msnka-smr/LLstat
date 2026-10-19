@@ -1,0 +1,10 @@
+name = "cs2-stata-bot"
+main = "src/worker.mjs"
+compatibility_date = "2026-10-01"
+
+# Не секреты. Секреты (BOT_TOKEN, WEBHOOK_SECRET, GITHUB_TOKEN_DISPATCH,
+# ALLOWED_CHAT_ID) задаются командой `npx wrangler secret put <ИМЯ>`.
+[vars]
+GITHUB_REPO = "msnka-smr/LLstat"
+WORKFLOW_FILE = "update-stats.yml"
+GITHUB_REF = "master"
