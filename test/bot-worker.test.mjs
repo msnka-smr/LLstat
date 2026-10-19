@@ -20,11 +20,15 @@ function req({ method = "POST", secret = "s3cret", body } = {}) {
   return new Request("https://worker.example/", init);
 }
 
-// Подменный fetch: записывает вызовы и отвечает по очереди из `replies`.
-function fakeFetch(replies = []) {
+// Подменный fetch: записывает вызовы. GET со списком запусков workflow
+// отвечает по `runs`, остальные запросы — по очереди из `replies`.
+function fakeFetch(replies = [], { runs = [], runsStatus = 200 } = {}) {
   const calls = [];
   const fn = async (url, init) => {
     calls.push({ url: String(url), init });
+    if (String(url).includes("/runs?")) {
+      return new Response(JSON.stringify({ workflow_runs: runs }), { status: runsStatus });
+    }
     const next = replies.shift() ?? { status: 200, body: "{}" };
     // статус 204 по спецификации Fetch не может иметь тело
     return new Response(next.status === 204 ? null : (next.body ?? ""), { status: next.status });
@@ -32,6 +36,9 @@ function fakeFetch(replies = []) {
   fn.calls = calls;
   return fn;
 }
+
+const run = (status, ageMs = 1000) => ({ status, created_at: new Date(Date.now() - ageMs).toISOString() });
+const dispatchCall = (f) => f.calls.find((c) => c.url.endsWith("/dispatches"));
 
 const message = (text, chatId = 111) => ({ message: { chat: { id: chatId }, text } });
 const telegramTexts = (f) =>
@@ -107,7 +114,7 @@ test("успех: запрос к GitHub с нужным телом и отве�
   );
   assert.equal(res.status, 200);
 
-  const gh = f.calls[0];
+  const gh = dispatchCall(f);
   assert.equal(
     gh.url,
     "https://api.github.com/repos/msnka-smr/LLstat/actions/workflows/update-stats.yml/dispatches"
@@ -123,8 +130,9 @@ test("успех: запрос к GitHub с нужным телом и отве�
   });
 
   assert.match(telegramTexts(f)[0], /Принял 2 матча/);
-  assert.ok(f.calls[1].url.endsWith("/botbot-token/sendMessage"));
-  assert.equal(JSON.parse(f.calls[1].init.body).chat_id, 111);
+  const tg = f.calls.find((c) => c.url.includes("api.telegram.org"));
+  assert.ok(tg.url.endsWith("/botbot-token/sendMessage"));
+  assert.equal(JSON.parse(tg.init.body).chat_id, 111);
 });
 
 test("ошибка GitHub: пользователь видит код, Telegram получает 200", async () => {
@@ -152,4 +160,35 @@ test("склонение: 1 матч, 2 матча, 5 матчей", async () =>
     await handleRequest(req({ body: message(links.join(" ")) }), ENV, f);
     assert.match(telegramTexts(f)[0], new RegExp(`Принял ${n} ${word},`));
   }
+});
+
+const LINK_MSG = () => req({ body: message("https://cybershoke.net/match/12747159") });
+
+test("идёт один запуск — новый ставится в очередь (потерь нет)", async () => {
+  const f = fakeFetch([{ status: 204 }, { status: 200 }], { runs: [run("in_progress")] });
+  await handleRequest(LINK_MSG(), ENV, f);
+  assert.ok(dispatchCall(f));
+  assert.match(telegramTexts(f)[0], /Принял 1 матч/);
+});
+
+test("уже идёт запуск и ещё один ждёт — не запускаем третий, просим подождать", async () => {
+  const f = fakeFetch([{ status: 200 }], { runs: [run("in_progress"), run("pending")] });
+  const res = await handleRequest(LINK_MSG(), ENV, f);
+  assert.equal(res.status, 200);
+  assert.equal(dispatchCall(f), undefined);
+  assert.match(telegramTexts(f)[0], /Готово/);
+});
+
+test("завершённые и очень старые незавершённые запуски не считаются активными", async () => {
+  const f = fakeFetch([{ status: 204 }, { status: 200 }], {
+    runs: [run("completed"), run("in_progress", 2 * 60 * 60 * 1000), run("pending", 2 * 60 * 60 * 1000)],
+  });
+  await handleRequest(LINK_MSG(), ENV, f);
+  assert.ok(dispatchCall(f));
+});
+
+test("список запусков недоступен — всё равно запускаем", async () => {
+  const f = fakeFetch([{ status: 204 }, { status: 200 }], { runsStatus: 500 });
+  await handleRequest(LINK_MSG(), ENV, f);
+  assert.ok(dispatchCall(f));
 });

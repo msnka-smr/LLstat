@@ -5,6 +5,16 @@ import { extractMatchLinks } from "./links.mjs";
 
 export const MAX_LINKS = 30;
 
+// GitHub держит в очереди concurrency-группы только один ожидающий запуск:
+// новый вытесняет ожидающего, и тот молча отменяется. Поэтому при двух уже
+// активных запусках (идёт один, второй ждёт) третий не запускаем.
+const MAX_ACTIVE_RUNS = 2;
+// Запуски старше этого считаем зависшими и не учитываем.
+const ACTIVE_RUN_MAX_AGE_MS = 30 * 60 * 1000;
+
+const BUSY =
+  "Обновление уже идёт, и в очереди есть ещё одно. Дождись моего сообщения «Готово» и пришли эти ссылки ещё раз — иначе они могут потеряться.";
+
 const HINT =
   "Пришли ссылки на матчи в формате https://cybershoke.net/match/12345678 — можно несколько в одном сообщении.";
 
@@ -28,19 +38,43 @@ async function sendMessage(env, chatId, text, fetchFn) {
   });
 }
 
+function githubHeaders(env) {
+  return {
+    authorization: `Bearer ${env.GITHUB_TOKEN_DISPATCH}`,
+    accept: "application/vnd.github+json",
+    "x-github-api-version": "2022-11-28",
+    // GitHub отклоняет запросы без User-Agent
+    "user-agent": "cs2-stata-bot",
+    "content-type": "application/json",
+  };
+}
+
+// true, если запускать ещё один workflow нельзя. Любая неудача при запросе
+// списка — «можно»: лучше запустить, чем отказать из-за сбоя проверки.
+async function queueIsFull(env, fetchFn) {
+  try {
+    const res = await fetchFn(
+      `https://api.github.com/repos/${env.GITHUB_REPO}/actions/workflows/${env.WORKFLOW_FILE}/runs?per_page=10`,
+      { headers: githubHeaders(env) }
+    );
+    if (!res.ok) return false;
+    const { workflow_runs: runs = [] } = await res.json();
+    const now = Date.now();
+    const active = runs.filter(
+      (r) => r.status !== "completed" && now - Date.parse(r.created_at) < ACTIVE_RUN_MAX_AGE_MS
+    );
+    return active.length >= MAX_ACTIVE_RUNS;
+  } catch {
+    return false;
+  }
+}
+
 async function dispatchWorkflow(env, links, fetchFn) {
   const res = await fetchFn(
     `https://api.github.com/repos/${env.GITHUB_REPO}/actions/workflows/${env.WORKFLOW_FILE}/dispatches`,
     {
       method: "POST",
-      headers: {
-        authorization: `Bearer ${env.GITHUB_TOKEN_DISPATCH}`,
-        accept: "application/vnd.github+json",
-        "x-github-api-version": "2022-11-28",
-        // GitHub отклоняет запросы без User-Agent
-        "user-agent": "cs2-stata-bot",
-        "content-type": "application/json",
-      },
+      headers: githubHeaders(env),
       body: JSON.stringify({ ref: env.GITHUB_REF, inputs: { links: links.join(" ") } }),
     }
   );
@@ -79,6 +113,11 @@ export async function handleRequest(request, env, fetchFn = defaultFetch) {
   }
   if (links.length > MAX_LINKS) {
     await sendMessage(env, chatId, `Слишком много ссылок (${links.length}), максимум ${MAX_LINKS} за раз. Пришли поменьше.`, fetchFn);
+    return new Response("ok");
+  }
+
+  if (await queueIsFull(env, fetchFn)) {
+    await sendMessage(env, chatId, BUSY, fetchFn);
     return new Response("ok");
   }
 

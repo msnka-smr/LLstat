@@ -43,3 +43,10 @@ test("пустой и отсутствующий текст", () => {
   assert.deepEqual(extractMatchLinks(undefined), []);
   assert.deepEqual(extractMatchLinks(null), []);
 });
+
+test("ссылка с языком в пути (/ru/, /de/, /pt-br/) и поддомен m.", () => {
+  assert.deepEqual(extractMatchLinks("https://cybershoke.net/ru/match/11836698"), ["https://cybershoke.net/match/11836698"]);
+  assert.deepEqual(extractMatchLinks("https://cybershoke.net/de/match/11836698"), ["https://cybershoke.net/match/11836698"]);
+  assert.deepEqual(extractMatchLinks("https://cybershoke.net/pt-br/match/11836698"), ["https://cybershoke.net/match/11836698"]);
+  assert.deepEqual(extractMatchLinks("https://m.cybershoke.net/match/11836698"), ["https://cybershoke.net/match/11836698"]);
+});
