@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T20:49:52.834Z",
+  "generatedAt": "2026-10-19T06:42:53.336Z",
   "totalMapsCollected": 45,
   "qualification": {
     "threshold": 18,
@@ -24,9 +24,9 @@
         "d": 703,
         "kd": 1.4480796586059743,
         "kdDiff": 315,
-        "rating": 607,
+        "rating": 606,
         "isQualified": true,
-        "ratingDelta": -8
+        "ratingDelta": -4
       },
       {
         "steamid64": "76561198039138241",
@@ -42,27 +42,9 @@
         "d": 705,
         "kd": 1.1801418439716311,
         "kdDiff": 127,
-        "rating": 560,
+        "rating": 557,
         "isQualified": true,
-        "ratingDelta": 11
-      },
-      {
-        "steamid64": "76561198064889555",
-        "name": "msn",
-        "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
-        "totalRounds": 987,
-        "mapsPlayed": 45,
-        "wins": 30,
-        "losses": 15,
-        "winRate": 0.6666666666666666,
-        "k": 720,
-        "d": 709,
-        "kd": 1.0155148095909732,
-        "kdDiff": 11,
-        "rating": 540,
-        "isQualified": true,
-        "ratingDelta": 15
+        "ratingDelta": 8
       },
       {
         "steamid64": "76561198272167310",
@@ -78,9 +60,27 @@
         "d": 258,
         "kd": 1.503875968992248,
         "kdDiff": 130,
-        "rating": 529,
+        "rating": 535,
         "isQualified": true,
-        "ratingDelta": -7
+        "ratingDelta": -3
+      },
+      {
+        "steamid64": "76561198064889555",
+        "name": "msn",
+        "avatarUrl": "https://avatars.steamstatic.com/f17a59ee1255119a2d956a911537cfb543c40b61_full.jpg",
+        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198064889555",
+        "totalRounds": 987,
+        "mapsPlayed": 45,
+        "wins": 30,
+        "losses": 15,
+        "winRate": 0.6666666666666666,
+        "k": 720,
+        "d": 709,
+        "kd": 1.0155148095909732,
+        "kdDiff": 11,
+        "rating": 532,
+        "isQualified": true,
+        "ratingDelta": 11
       },
       {
         "steamid64": "76561198017244485",
@@ -96,9 +96,9 @@
         "d": 715,
         "kd": 1.0937062937062938,
         "kdDiff": 67,
-        "rating": 504,
+        "rating": 512,
         "isQualified": true,
-        "ratingDelta": -19
+        "ratingDelta": -15
       },
       {
         "steamid64": "76561198303379150",
@@ -114,9 +114,9 @@
         "d": 739,
         "kd": 0.7523680649526387,
         "kdDiff": -183,
-        "rating": 466,
+        "rating": 465,
         "isQualified": true,
-        "ratingDelta": -20
+        "ratingDelta": -16
       },
       {
         "steamid64": "76561198681103731",
@@ -132,9 +132,9 @@
         "d": 697,
         "kd": 0.7776183644189383,
         "kdDiff": -155,
-        "rating": 458,
+        "rating": 459,
         "isQualified": true,
-        "ratingDelta": 8
+        "ratingDelta": 4
       },
       {
         "steamid64": "76561199852434358",
@@ -168,9 +168,9 @@
         "d": 722,
         "kd": 0.3850415512465374,
         "kdDiff": -444,
-        "rating": 365,
+        "rating": 374,
         "isQualified": true,
-        "ratingDelta": -29
+        "ratingDelta": -26
       },
       {
         "steamid64": "76561198835346787",
@@ -186,9 +186,9 @@
         "d": 85,
         "kd": 1.7176470588235293,
         "kdDiff": 61,
-        "rating": 548,
+        "rating": 543,
         "isQualified": false,
-        "ratingDelta": 48
+        "ratingDelta": 43
       },
       {
         "steamid64": "76561198129162397",
@@ -204,9 +204,9 @@
         "d": 77,
         "kd": 1.5714285714285714,
         "kdDiff": 44,
-        "rating": 542,
+        "rating": 537,
         "isQualified": false,
-        "ratingDelta": 42
+        "ratingDelta": 37
       },
       {
         "steamid64": "76561198070734509",
@@ -222,7 +222,7 @@
         "d": 98,
         "kd": 1.6122448979591837,
         "kdDiff": 60,
-        "rating": 532,
+        "rating": 531,
         "isQualified": false,
         "ratingDelta": 0
       },
@@ -276,25 +276,7 @@
         "d": 261,
         "kd": 1.3448275862068966,
         "kdDiff": 90,
-        "rating": 521,
-        "isQualified": false,
-        "ratingDelta": 0
-      },
-      {
-        "steamid64": "76561198042805941",
-        "name": "PRADA_CODE",
-        "avatarUrl": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_full.jpg",
-        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198042805941",
-        "totalRounds": 80,
-        "mapsPlayed": 3,
-        "wins": 2,
-        "losses": 1,
-        "winRate": 0.6666666666666666,
-        "k": 83,
-        "d": 58,
-        "kd": 1.4310344827586208,
-        "kdDiff": 25,
-        "rating": 511,
+        "rating": 524,
         "isQualified": false,
         "ratingDelta": 0
       },
@@ -312,7 +294,25 @@
         "d": 90,
         "kd": 1.4,
         "kdDiff": 36,
-        "rating": 509,
+        "rating": 510,
+        "isQualified": false,
+        "ratingDelta": 0
+      },
+      {
+        "steamid64": "76561198042805941",
+        "name": "PRADA_CODE",
+        "avatarUrl": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_full.jpg",
+        "steamProfileUrl": "https://steamcommunity.com/profiles/76561198042805941",
+        "totalRounds": 80,
+        "mapsPlayed": 3,
+        "wins": 2,
+        "losses": 1,
+        "winRate": 0.6666666666666666,
+        "k": 83,
+        "d": 58,
+        "kd": 1.4310344827586208,
+        "kdDiff": 25,
+        "rating": 510,
         "isQualified": false,
         "ratingDelta": 0
       },
@@ -348,7 +348,7 @@
         "d": 110,
         "kd": 0.7,
         "kdDiff": -33,
-        "rating": 499,
+        "rating": 497,
         "isQualified": false,
         "ratingDelta": 0
       },
@@ -366,7 +366,7 @@
         "d": 168,
         "kd": 0.6130952380952381,
         "kdDiff": -65,
-        "rating": 493,
+        "rating": 491,
         "isQualified": false,
         "ratingDelta": 0
       },
@@ -745,11 +745,11 @@
         ],
         "rise": {
           "steamid64": "76561198835346787",
-          "delta": 48
+          "delta": 43
         },
         "drop": {
           "steamid64": "76561198007494757",
-          "delta": -29
+          "delta": -26
         }
       }
     },
@@ -1107,7 +1107,7 @@
         },
         "drop": {
           "steamid64": "76561198007494757",
-          "delta": -12
+          "delta": -11
         }
       }
     },
@@ -1465,11 +1465,11 @@
         ],
         "rise": {
           "steamid64": "76561198070734509",
-          "delta": 32
+          "delta": 31
         },
         "drop": {
           "steamid64": "76561198007494757",
-          "delta": -12
+          "delta": -13
         }
       }
     },
@@ -1802,11 +1802,11 @@
         ],
         "rise": {
           "steamid64": "76561198272167310",
-          "delta": 24
+          "delta": 23
         },
         "drop": {
-          "steamid64": "76561199852434358",
-          "delta": -12
+          "steamid64": "76561198007494757",
+          "delta": -11
         }
       }
     },
@@ -2147,7 +2147,7 @@
         },
         "drop": {
           "steamid64": "76561198007494757",
-          "delta": -21
+          "delta": -19
         }
       }
     },
@@ -2484,11 +2484,11 @@
         ],
         "rise": {
           "steamid64": "76561198014367879",
-          "delta": 24
+          "delta": 22
         },
         "drop": {
           "steamid64": "76561198007494757",
-          "delta": -26
+          "delta": -24
         }
       }
     },
@@ -2783,11 +2783,11 @@
         ],
         "rise": {
           "steamid64": "76561198014367879",
-          "delta": 34
+          "delta": 31
         },
         "drop": {
           "steamid64": "76561198007494757",
-          "delta": -25
+          "delta": -22
         }
       }
     },
@@ -3129,73 +3129,73 @@
     "players": {
       "76561199852434358": [
         488,
+        479,
         477,
-        476,
-        468,
+        467,
         456,
-        445,
+        446,
         437,
         437
       ],
       "76561198681103731": [
         494,
-        486,
+        488,
+        474,
+        472,
         470,
-        469,
-        466,
-        454,
-        450,
-        458
+        458,
+        455,
+        459
       ],
       "76561198014367879": [
         516,
-        550,
-        574,
-        591,
-        599,
-        608,
-        615,
-        607
+        547,
+        569,
+        586,
+        595,
+        603,
+        610,
+        606
       ],
       "76561198357423221": [
         493,
-        493,
-        493,
-        493,
-        493,
-        493,
-        493,
-        493
+        491,
+        491,
+        491,
+        491,
+        491,
+        491,
+        491
       ],
       "76561198017244485": [
         517,
+        518,
         516,
-        512,
-        508,
         514,
-        519,
+        518,
         523,
-        504
+        527,
+        512
       ],
       "76561198303379150": [
         492,
+        496,
         498,
-        502,
-        497,
         494,
-        494,
-        486,
-        466
+        490,
+        490,
+        481,
+        465
       ],
       "76561198064889555": [
         503,
+        511,
+        514,
+        517,
         513,
-        518,
-        523,
-        518,
-        512,
-        525,
-        540
+        508,
+        521,
+        532
       ],
       "76561198728309900": [
         508,
@@ -3219,73 +3219,73 @@
       ],
       "76561198039138241": [
         517,
-        519,
+        521,
         533,
-        541,
+        540,
         539,
         543,
         549,
-        560
+        557
       ],
       "76561199686171590": [
         null,
-        505,
-        505,
-        505,
-        505,
-        505,
-        499,
-        499
+        501,
+        501,
+        501,
+        501,
+        501,
+        497,
+        497
       ],
       "76561198007494757": [
         null,
-        475,
-        449,
-        428,
-        418,
-        406,
-        394,
-        365
+        478,
+        454,
+        435,
+        424,
+        411,
+        400,
+        374
       ],
       "76561198048534904": [
         null,
         null,
-        498,
-        510,
-        510,
-        510,
-        521,
-        521
+        501,
+        514,
+        514,
+        514,
+        524,
+        524
       ],
       "76561198272167310": [
         null,
         null,
-        512,
-        512,
-        536,
-        536,
-        536,
-        529
+        515,
+        515,
+        538,
+        538,
+        538,
+        535
       ],
       "76561198054359751": [
         null,
         null,
         null,
-        509,
-        509,
-        509,
-        509,
-        509
+        510,
+        510,
+        510,
+        510,
+        510
       ],
       "76561198042805941": [
         null,
         null,
         null,
         null,
-        511,
-        511,
-        511,
-        511
+        510,
+        510,
+        510,
+        510
       ],
       "76561198070734509": [
         null,
@@ -3293,9 +3293,9 @@
         null,
         null,
         null,
-        532,
-        532,
-        532
+        531,
+        531,
+        531
       ],
       "76561198137980826": [
         null,
@@ -3325,7 +3325,7 @@
         null,
         null,
         null,
-        542
+        537
       ],
       "76561198835346787": [
         null,
@@ -3335,7 +3335,7 @@
         null,
         null,
         null,
-        548
+        543
       ]
     }
   },
