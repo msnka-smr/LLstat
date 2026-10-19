@@ -29,6 +29,9 @@ jobs:
         with:
           node-version: 24
 
+      - name: Запомнить число матчей до обновления
+        run: echo "MATCHES_BEFORE=$(ls data/matches | wc -l)" >> "$GITHUB_ENV"
+
       - name: Проверка связи с cybershoke
         run: |
           node --input-type=module -e '
@@ -56,3 +59,28 @@ jobs:
           git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
           printf '%s\n' "$LINKS" > "$RUNNER_TEMP/links.txt"
           node scripts/update.mjs --add --basic-if-pending --file "$RUNNER_TEMP/links.txt"
+
+      - name: Сообщить результат в Telegram
+        if: always()
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+          JOB_STATUS: ${{ job.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$TG_TOKEN" ] || [ -z "$TG_CHAT" ]; then
+            echo "Секреты Telegram не заданы — пропускаю оповещение"
+            exit 0
+          fi
+          AFTER=$(ls data/matches | wc -l)
+          ADDED=$((AFTER - ${MATCHES_BEFORE:-$AFTER}))
+          if [ "$JOB_STATUS" = "success" ]; then
+            if [ "$ADDED" -gt 0 ]; then
+              TEXT="Готово: добавлено матчей: $ADDED. Сайт обновится через минуту-две."
+            else
+              TEXT="Готово, но новых матчей нет (все ссылки уже были учтены)."
+            fi
+          else
+            TEXT="Ошибка обновления статистики. Лог: $RUN_URL"
+          fi
+          curl -sS -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage"             --data-urlencode "chat_id=${TG_CHAT}"             --data-urlencode "text=${TEXT}"             --data-urlencode "disable_web_page_preview=true" || true
