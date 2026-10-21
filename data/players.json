@@ -5,7 +5,7 @@
       "Volbe",
       "PREMIUM | Volbe"
     ],
-    "lastSeenName": "PREMIUM | Volbe",
+    "lastSeenName": "Volbe",
     "avatarUrl": "https://avatars.steamstatic.com/7e815800f879b127ed7e97aa5bdfaf0377f29d33_full.jpg"
   },
   "76561198014367879": {
@@ -30,7 +30,7 @@
       "moloko",
       "moloko_"
     ],
-    "lastSeenName": "moloko_",
+    "lastSeenName": "moloko",
     "avatarUrl": "https://avatars.steamstatic.com/aac4d2ed3d536c8e9f15a23fef2a171ecdf2e254_full.jpg"
   },
   "76561198303379150": {
@@ -174,5 +174,13 @@
     ],
     "lastSeenName": "Take this L",
     "avatarUrl": "https://avatars.steamstatic.com/235e6e10cd66af9a6c42020f8053cf3a32508522_full.jpg"
+  },
+  "76561198197222927": {
+    "displayName": null,
+    "nicknames": [
+      "goodipAN"
+    ],
+    "lastSeenName": "goodipAN",
+    "avatarUrl": "https://avatars.steamstatic.com/daf37b42bc2d77f0e9604a25c2d5a30f0bc31187_full.jpg"
   }
 }
