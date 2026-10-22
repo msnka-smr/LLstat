@@ -323,3 +323,27 @@ test("the worst K/D record explains what it measures and its threshold", () => {
   assert.equal(r.title, "Карта не задалась (наименьший K/D)");
   assert.equal(r.hint, `считается минимум от ${MIN_DEATHS_FOR_KD} смертей на карте`);
 });
+
+// Железная посещаемость показывает ВСЕХ, кто делит первое место (решение 2026-10-22):
+// это те, кто ходит с первой сессии и ни разу не пропустил, «и ещё N» тут только путало бы.
+test("attendance streak shows every leader sharing first place, with nobody left in more", () => {
+  const ids = ["A", "B", "C", "D", "E"];
+  const sessions = sessionsOf(
+    ...[1, 2, 3].map((day) => [mapOf({ day, players: ids.map((id) => p(id, 10, 10, true)) })])
+  );
+  const r = rec(computeRecords(sessions.flatMap((s) => s.maps), sessions), "attendance-streak");
+  assert.equal(r.top.length, 5);
+  assert.deepEqual(r.top.map((e) => e.place), [1, 1, 1, 1, 1]);
+  assert.equal(r.more, 0);
+});
+
+test("attendance streak still fills up to three rows when there are fewer leaders", () => {
+  const sessions = sessionsOf(
+    [mapOf({ day: 1, players: ["A", "B", "C", "D"].map((id) => p(id, 10, 10, true)) })],
+    [mapOf({ day: 2, players: ["A", "B", "C", "D"].map((id) => p(id, 10, 10, true)) })],
+    [mapOf({ day: 3, players: ["A", "B"].map((id) => p(id, 10, 10, true)) })]
+  );
+  const r = rec(computeRecords(sessions.flatMap((s) => s.maps), sessions), "attendance-streak");
+  assert.deepEqual(r.top.map((e) => [e.steamid64, e.value, e.place]), [["A", 3, 1], ["B", 3, 1], ["C", 2, 3]]);
+  assert.equal(r.more, 1, "D has the same 2 as C and does not fit, as in every other record");
+});

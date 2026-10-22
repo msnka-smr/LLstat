@@ -2,7 +2,8 @@
 // Личные рекорды и серии — один игрок на одно место (его лучший результат),
 // матчевые — по картам. Равные значения делят место (1, 1, 1 или 1, 2, 2), а
 // игроки с таким же результатом, не поместившиеся в топ-3, считаются в `more`
-// ("и ещё N с таким же результатом"). Порядок среди равных детерминирован:
+// ("и ещё N с таким же результатом"); исключение — «Железная посещаемость»: там
+// показаны все, кто делит 1-е место. Порядок среди равных детерминирован:
 // раньше достигший — выше, затем по mapId/steamid64.
 //
 // maps и sessions должны идти от старой к новой (так их отдаёт build.mjs):
@@ -25,25 +26,27 @@ function better(a, b, dir) {
 
 // Сортирует, проставляет place (1, 1, 1 / 1, 2, 2 / 1, 2, 4) и режет до TOP_N.
 // more — сколько не поместившихся делят значение с последним показанным.
-function pickTop(candidates, dir) {
+function pickTop(candidates, dir, { allLeaders = false } = {}) {
   const sorted = [...candidates].sort((a, b) => (better(a, b, dir) ? -1 : better(b, a, dir) ? 1 : 0));
   let place = 0;
   sorted.forEach((c, i) => {
     if (i === 0 || c.rank !== sorted[i - 1].rank) place = i + 1;
     c.place = place;
   });
-  const top = sorted.slice(0, TOP_N);
+  // allLeaders: всех, кто делит 1-е место, показываем даже сверх TOP_N
+  const limit = allLeaders ? Math.max(TOP_N, sorted.filter((c) => c.place === 1).length) : TOP_N;
+  const top = sorted.slice(0, limit);
   const lastRank = top.length ? top[top.length - 1].rank : null;
-  const more = sorted.slice(TOP_N).filter((c) => c.rank === lastRank).length;
+  const more = sorted.slice(limit).filter((c) => c.rank === lastRank).length;
   return { top, more };
 }
-function bestPerPlayer(candidates, dir) {
+function bestPerPlayer(candidates, dir, options) {
   const best = new Map();
   for (const c of candidates) {
     const cur = best.get(c.steamid64);
     if (!cur || better(c, cur, dir)) best.set(c.steamid64, c);
   }
-  return pickTop([...best.values()], dir);
+  return pickTop([...best.values()], dir, options);
 }
 
 // Все (карта, игрок) как кандидаты; rank считает вызывающий.
@@ -85,12 +88,12 @@ function longestRun(items, predicate) {
   });
   return best;
 }
-function streakTop(runsByPlayer) {
+function streakTop(runsByPlayer, options) {
   const candidates = [];
   for (const [steamid64, run] of runsByPlayer) {
     if (run) candidates.push({ steamid64, rank: run.len, playedAt: run.to, tie: steamid64, run });
   }
-  const { top, more } = bestPerPlayer(candidates, "desc");
+  const { top, more } = bestPerPlayer(candidates, "desc", options);
   return {
     top: top.map((c) => ({ steamid64: c.steamid64, value: c.run.len, from: c.run.from, to: c.run.to, place: c.place })),
     more,
@@ -168,7 +171,7 @@ export function computeRecords(allMaps, sessions) {
     record("kd-streak", "streaks", "Серия карт с K/D не ниже 1.0", "карт подряд",
       runs((x) => kdOf(x) >= 1, (x) => x.k === 0 && x.d === 0)), // 0/0 — игрок почти не играл, серию не рвёт
     record("attendance-streak", "streaks", "Железная посещаемость", "сессий подряд",
-      streakTop(attendanceRuns)),
+      streakTop(attendanceRuns, { allLeaders: true })), // решение 2026-10-22: показываем всех лидеров, не режем до топ-3
 
     record("biggest-win", "matches", "Самый крупный разгром", "наибольшая разница в счёте",
       matchTop(maps, { rankOf: (x) => x.diff, dir: "desc" })),

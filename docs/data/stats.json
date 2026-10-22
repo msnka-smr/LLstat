@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T06:48:03.724Z",
+  "generatedAt": "2026-10-22T07:11:24.324Z",
   "totalMapsCollected": 52,
   "qualification": {
     "threshold": 21,
@@ -4004,9 +4004,16 @@
           "from": 1781026148,
           "to": 1792599124,
           "place": 1
+        },
+        {
+          "steamid64": "76561198681103731",
+          "value": 9,
+          "from": 1781026148,
+          "to": 1792599124,
+          "place": 1
         }
       ],
-      "more": 1
+      "more": 0
     },
     {
       "id": "biggest-win",
