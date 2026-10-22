@@ -23,6 +23,8 @@ function main() {
   // локальный push после такого коммита отклонялся бы как non-fast-forward
   run("git", ["pull", "--rebase", "--autostash"]);
   run("node", ["scripts/collect.mjs", ...args]);
+  // до проверки изменений в data/: смена аватарки в Steam сама по себе повод пересобрать
+  run("node", ["scripts/refresh-avatars.mjs"]);
 
   // build каждый раз пишет новый generatedAt, поэтому без этой проверки
   // коммит и пуш случались бы даже когда новых матчей нет

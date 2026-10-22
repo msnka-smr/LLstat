@@ -43,6 +43,16 @@ docs/index.html                сама страница (fetch stats.json → �
   раннеров GitHub. Так как коммиты теперь бывают и с GitHub, `update.mjs`
   начинает с `git pull --rebase --autostash`.
 
+**Аватарки**: cybershoke запоминает аватарку игрока один раз и не обновляет
+(у moloko в матчах с июня одна и та же, в Steam уже другая). Поэтому
+`update.mjs` после `collect` запускает `scripts/refresh-avatars.mjs`: он берёт
+`avatarFull` из `steamcommunity.com/profiles/<id>?xml=1` (без ключа API) и пишет
+в `data/players.json` поле `steamAvatarUrl`; `build.mjs` предпочитает его
+`avatarUrl` из матчей. Сбой Steam или закрытый профиль не роняют обновление,
+остаётся прошлое значение. Логика и тесты — `scripts/lib/steamAvatar.mjs`.
+Ручной `npm run build` без новых матчей гасит одноразовое уведомление
+`qualificationDrop` (оно живёт только до следующей сборки).
+
 **Важно про пуш**: песочница агента не может достучаться до `github.com`
 (сетевой блок на уровне провайдера/окружения, не самого агента — подтверждено
 даже с отключённым сэндбоксингом). `api.github.com` и

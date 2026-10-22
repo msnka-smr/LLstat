@@ -99,7 +99,7 @@ function buildRow(steamid64, registry, mapsForPlayer, threshold, rating) {
   return {
     steamid64,
     name: displayName(registry, steamid64),
-    avatarUrl: registry[steamid64]?.avatarUrl ?? null,
+    avatarUrl: registry[steamid64]?.steamAvatarUrl ?? registry[steamid64]?.avatarUrl ?? null,
     steamProfileUrl: `https://steamcommunity.com/profiles/${steamid64}`,
     totalRounds,
     mapsPlayed: agg.mapsPlayed,
