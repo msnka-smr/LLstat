@@ -794,6 +794,14 @@
   }
   .draft-summary strong { color: var(--accent); }
   .draft-again-wrap { text-align: center; margin-top: 14px; }
+  .draft-team li.draft-swap { cursor: pointer; padding: 5px 6px; border-radius: 6px; }
+  .draft-team li.draft-swap:hover { background: var(--bg-panel); }
+  .draft-team li.draft-swap.picked { background: var(--accent); color: #0c1420; }
+  .draft-link-btn { background: none; border: none; padding: 0; color: var(--accent); font: inherit; cursor: pointer; text-decoration: underline; }
+  .draft-pin { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); text-align: center; }
+  .draft-pin h4 { margin: 0 0 10px; font-size: 14px; }
+  .draft-link { margin-left: 8px; color: var(--accent); font-size: 14px; }
+  .draft-cmd { display: block; width: 100%; margin-top: 10px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px; font: 12px/1.4 monospace; }
   .draft-limit-note {
     margin-top: 10px;
     font-size: 12px;
@@ -2447,7 +2455,7 @@
   var DRAFT_RATING_MIN = 1;
   var DRAFT_RATING_MAX = 1500;
   var DRAFT_GUEST_DEFAULT_RATING = 500;
-  var draftState = { selected: new Set(), guests: [], nextGuestId: 1, lastKey: null, lastSplits: null, currentView: 0 };
+  var draftState = { selected: new Set(), guests: [], nextGuestId: 1, lastKey: null, lastSplits: null, currentView: 0, work: null };
 
   function draftGuestRatingValid(g) {
     return g.rating !== "" && isFinite(Number(g.rating)) &&
@@ -2738,18 +2746,95 @@
     showDraftVariant(0);
   }
 
+  // Показ варианта: рабочая копия составов (draftState.work) — её игроков можно
+  // менять местами; исходный вариант остаётся в draftState.lastSplits.
   function showDraftVariant(index) {
     draftState.currentView = index;
-    renderDraftResult(draftState.lastSplits[index], draftState.lastKey, index);
+    var split = draftState.lastSplits[index];
+    draftState.work = { variant: index, teamA: split.teamA.slice(), teamB: split.teamB.slice(), pick: null, dirty: false };
+    renderDraftResult(draftState.lastKey, index);
   }
 
-  function renderDraftResult(split, key, variantIndex) {
-    var resultEl = document.getElementById("draftResult");
+  // Те же показатели, что у split из computeDraftSplits, для произвольных составов.
+  function splitStats(teamA, teamB) {
+    var diff = function (p) { return p.k - p.d; };
+    var avgA = draftAvgOf(teamA, "rating"), avgB = draftAvgOf(teamB, "rating");
+    var kdA = draftAvgOf(teamA, "kd"), kdB = draftAvgOf(teamB, "kd");
+    var diffA = draftAvgOf(teamA, diff), diffB = draftAvgOf(teamB, diff);
+    return {
+      avgA: avgA, avgB: avgB, kdA: kdA, kdB: kdB, diffA: diffA, diffB: diffB,
+      ratingDiff: Math.abs(avgA - avgB), kdDiff: Math.abs(kdA - kdB), kdDiffDiff: Math.abs(diffA - diffB),
+    };
+  }
 
-    function teamHtml(title, team, avgRating, avgKdDiff, avgKd) {
-      var itemsHtml = team.map(function (p) {
+  // Имя для команды боту: запятая, |, = и ~ — служебные символы формата.
+  function sanitizeMemberName(name) {
+    var clean = String(name).replace(/[,|=~]/g, " ").replace(/\s+/g, " ").trim();
+    clean = Array.from(clean).slice(0, DRAFT_GUEST_NAME_MAX).join("").trim();
+    return clean || "Игрок";
+  }
+
+  // Команда для бота: /teams Имя=steamid64, ..., Гость~рейтинг | ... (см. scripts/lib/matchday.mjs).
+  function teamsCommand(teamA, teamB) {
+    function member(p) {
+      return p.guest
+        ? sanitizeMemberName(p.name) + "~" + Math.round(p.rating)
+        : sanitizeMemberName(p.name) + "=" + p.steamid64;
+    }
+    return "/teams " + teamA.map(member).join(", ") + " | " + teamB.map(member).join(", ");
+  }
+
+  var BOT_URL = "https://t.me/cs2_stats_tracking_bot";
+
+  // Копирование в буфер; при отказе браузера показываем текст, чтобы скопировать руками.
+  function copyCommandText(text, msgEl, textareaEl) {
+    function manual() {
+      textareaEl.hidden = false;
+      textareaEl.value = text;
+      textareaEl.focus();
+      textareaEl.select();
+      msgEl.textContent = "Не удалось скопировать автоматически — скопируй текст ниже вручную";
+    }
+    if (!navigator.clipboard || !navigator.clipboard.writeText) { manual(); return; }
+    navigator.clipboard.writeText(text).then(function () {
+      textareaEl.hidden = true;
+      msgEl.textContent = "Скопировано";
+    }, manual);
+  }
+
+  function onDraftPlayerClick(team, index) {
+    var w = draftState.work;
+    if (!w) return;
+    var pick = w.pick;
+    if (!pick) {
+      w.pick = { team: team, index: index };
+    } else if (pick.team === team && pick.index === index) {
+      w.pick = null;
+    } else if (pick.team === team) {
+      w.pick = { team: team, index: index };
+    } else {
+      var a = pick.team === "A" ? pick : { team: team, index: index };
+      var b = pick.team === "A" ? { team: team, index: index } : pick;
+      var tmp = w.teamA[a.index];
+      w.teamA[a.index] = w.teamB[b.index];
+      w.teamB[b.index] = tmp;
+      w.pick = null;
+      w.dirty = true;
+    }
+    renderDraftResult(draftState.lastKey, w.variant);
+  }
+
+  function renderDraftResult(key, variantIndex) {
+    var resultEl = document.getElementById("draftResult");
+    var work = draftState.work;
+    var split = splitStats(work.teamA, work.teamB);
+
+    function teamHtml(title, teamId, team, avgRating, avgKdDiff, avgKd) {
+      var itemsHtml = team.map(function (p, i) {
         var tag = p.guest ? '<span class="draft-guest-tag">гость</span>' : "";
-        return "<li><span>" + escapeHtml(p.name) + tag + "</span><span>" + fmtRating(p.rating) + "</span></li>";
+        var picked = work.pick && work.pick.team === teamId && work.pick.index === i;
+        return '<li class="draft-swap' + (picked ? " picked" : "") + '" data-team="' + teamId + '" data-index="' + i + '">' +
+          "<span>" + escapeHtml(p.name) + tag + "</span><span>" + fmtRating(p.rating) + "</span></li>";
       }).join("");
       return '<div class="draft-team"><h4>' + title + "</h4><ul>" + itemsHtml + "</ul>" +
         '<div class="team-stats">Средний рейтинг: ' + Math.round(avgRating) +
@@ -2765,20 +2850,42 @@
 
     resultEl.innerHTML =
       '<div class="draft-teams">' +
-        teamHtml("Состав A", split.teamA, split.avgA, split.diffA, split.kdA) +
-        teamHtml("Состав B", split.teamB, split.avgB, split.diffB, split.kdB) +
+        teamHtml("Состав A", "A", work.teamA, split.avgA, split.diffA, split.kdA) +
+        teamHtml("Состав B", "B", work.teamB, split.avgB, split.diffB, split.kdB) +
+      "</div>" +
+      '<div class="draft-variant-note">Нажми на игрока, потом на игрока из другой команды — они поменяются местами. ' +
+        "Правки относятся к показанному варианту." +
+        (work.dirty ? ' <button type="button" class="draft-link-btn" id="draftResetBtn">Сбросить правки</button>' : "") +
       "</div>" +
       '<div class="draft-summary">Разница в среднем рейтинге — <strong>' + Math.round(split.ratingDiff) +
       "</strong>, в среднем K-D — <strong>" + split.kdDiffDiff.toFixed(1) +
       "</strong>, в среднем K/D — <strong>" + split.kdDiff.toFixed(2) + "</strong>.</div>" +
-      (split.teamA.concat(split.teamB).some(function (p) { return p.guest; })
+      (work.teamA.concat(work.teamB).some(function (p) { return p.guest; })
         ? '<div class="draft-variant-note">У гостей K-D и K/D оценены по рейтингу, поэтому средние по составам приблизительные.</div>'
         : "") +
       '<div class="draft-again-wrap">' + switchButtonHtml + "</div>" +
-      '<div class="draft-variant-note">Вариант ' + (variantIndex + 1) + " из 2 — больше вариантов для этой десятки не будет.</div>";
+      '<div class="draft-variant-note">Вариант ' + (variantIndex + 1) + " из 2 — больше вариантов для этой десятки не будет.</div>" +
+      '<div class="draft-pin">' +
+        "<h4>Закрепить на MatchDay</h4>" +
+        '<button type="button" class="wheel-spin-btn" id="draftCopyTeamsBtn">Копировать команду для состава</button> ' +
+        '<a class="draft-link" href="' + BOT_URL + '" target="_blank" rel="noopener">Открыть бота</a>' +
+        '<div class="draft-variant-note" id="draftCopyMsg"></div>' +
+        '<textarea class="draft-cmd" id="draftCmdText" readonly hidden rows="4"></textarea>' +
+        '<div class="draft-variant-note">Вставь команду в чат с ботом. Дату сессии можно дописать после /teams: ДД.ММ.ГГГГ.</div>' +
+      "</div>";
 
     document.getElementById("draftSwitchBtn").addEventListener("click", function () {
       runDraft(variantIndex === 0);
+    });
+    resultEl.querySelectorAll("li.draft-swap").forEach(function (li) {
+      li.addEventListener("click", function () {
+        onDraftPlayerClick(li.dataset.team, Number(li.dataset.index));
+      });
+    });
+    var resetBtn = document.getElementById("draftResetBtn");
+    if (resetBtn) resetBtn.addEventListener("click", function () { showDraftVariant(work.variant); });
+    document.getElementById("draftCopyTeamsBtn").addEventListener("click", function () {
+      copyCommandText(teamsCommand(work.teamA, work.teamB), document.getElementById("draftCopyMsg"), document.getElementById("draftCmdText"));
     });
   }
 
