@@ -8,23 +8,23 @@ test("starts new players at 1000", () => {
 });
 
 test("delta = K * (result*0.2 + (kd-1.0)*0.8), fixed reference not a rolling average", () => {
-  // 6-я карта, чтобы K=10 (не в первых пяти): K/D=2.0, победа.
-  const priorMatches = Array(5).fill({ k: 12, d: 10, won: true }); // kd=1.2, K=16 каждая
+  // 6-я карта, чтобы K=12.5 (не в первых пяти): K/D=2.0, победа.
+  const priorMatches = Array(5).fill({ k: 12, d: 10, won: true }); // kd=1.2, K=20 каждая
   const sixthMatch = { k: 20, d: 10, won: true }; // kd=2.0
   const { history } = computeAllTimeRating([...priorMatches, sixthMatch]);
 
-  const expectedDelta = Math.round(10 * (1 * 0.2 + (2.0 - 1.0) * 0.8) * 100) / 100;
-  assert.equal(expectedDelta, 10, "10 * (0.2 + 0.8) = 10");
+  const expectedDelta = Math.round(12.5 * (1 * 0.2 + (2.0 - 1.0) * 0.8) * 100) / 100;
+  assert.equal(expectedDelta, 12.5, "12.5 * (0.2 + 0.8) = 12.5");
   assert.equal(history[5].delta, expectedDelta);
 });
 
-test("first 5 matches use K=16, matches after use K=10", () => {
+test("first 5 matches use K=20, matches after use K=12.5", () => {
   const winStreak = Array(10).fill({ k: 10, d: 10, won: true }); // kd=1.0 == база -> bonus=0
   const { history } = computeAllTimeRating(winStreak);
-  assert.equal(history[0].delta, 16 * 0.2);
-  assert.equal(history[4].delta, 16 * 0.2);
-  assert.equal(history[5].delta, 10 * 0.2);
-  assert.equal(history[9].delta, 10 * 0.2);
+  assert.equal(history[0].delta, 20 * 0.2);
+  assert.equal(history[4].delta, 20 * 0.2);
+  assert.equal(history[5].delta, 12.5 * 0.2);
+  assert.equal(history[9].delta, 12.5 * 0.2);
 });
 
 test("rating never leaves the 0-5000 range", () => {
@@ -71,7 +71,7 @@ test("computeRatingDelta is 0 when the player didn't play the last session", () 
 });
 
 test("computeRatingDelta sums the rounded rating change across the last session's maps", () => {
-  const older = Array(6).fill({ k: 10, d: 10, won: true, sessionId: "2026-01-01" }); // kd=1.0, K=10 после 5-й карты
+  const older = Array(6).fill({ k: 10, d: 10, won: true, sessionId: "2026-01-01" }); // kd=1.0, K=12.5 после 5-й карты
   const lastSession = [
     { k: 20, d: 10, won: true, sessionId: "2026-01-02" }, // kd=2.0
     { k: 20, d: 10, won: true, sessionId: "2026-01-02" },
@@ -86,7 +86,7 @@ test("computeRatingDelta sums the rounded rating change across the last session'
 });
 
 test("computeRatingDelta is 0 when a mixed session nets out to zero", () => {
-  // established (K=10), победа с kd=0.75 даёт delta = 10*(0.2 + (0.75-1)*0.8) = 0 ровно
+  // established (K=12.5), победа с kd=0.75 даёт delta = 12.5*(0.2 + (0.75-1)*0.8) = 0 ровно
   const older = Array(5).fill({ k: 10, d: 10, won: true, sessionId: "2026-01-01" });
   const zeroNetMatch = { k: 6, d: 8, won: true, sessionId: "2026-01-02" };
   const matches = [...older, zeroNetMatch];

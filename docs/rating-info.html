@@ -274,7 +274,7 @@ match_K_D  = K / D этой карты (или K, если D = 0)<br>
 result     = +1 победа, −1 поражение<br>
 bonus      = (match_K_D − 1.0) × 0.8&nbsp;&nbsp;<span class="hl">// относительно фиксированного 1.0, не своего среднего</span><br>
 <br>
-K_coef     = 16 для первых 5 карт игрока, дальше 10<br>
+K_coef     = 20 для первых 5 карт игрока, дальше 12.5<br>
 <span class="hl">delta      = K_coef × (result × 0.2 + bonus)</span><br>
 новый рейтинг = текущий рейтинг + delta&nbsp;&nbsp;<span class="hl">// зажат в границы 0-5000</span>
     </div>
@@ -282,26 +282,26 @@ K_coef     = 16 для первых 5 карт игрока, дальше 10<br>
     <div class="example">
       <div class="label">Пример</div>
       Текущий рейтинг 1040. В этой карте K/D = 2.0, победа.<br>
-      bonus = (2.0 − 1.0) × 0.8 = 0.8 → delta = 10 × (1×0.2 + 0.8) = 10 × 1.0 = 10.0 → новый рейтинг = <strong>1050</strong>
+      bonus = (2.0 − 1.0) × 0.8 = 0.8 → delta = 12.5 × (1×0.2 + 0.8) = 12.5 × 1.0 = 12.5 → новый рейтинг = <strong>1052.5</strong> (на сайте показывается округлённым)
     </div>
 
     <p>Личный K/D весит в дельте заметно больше, чем сам факт победы (0.8 против 0.2) — это осознанно: игрок, который
     стабильно фрагает выше среднего, должен обгонять по рейтингу того, кому просто чаще везёт с составом команды, даже
     если у второго выше винрейт.</p>
 
-    <p class="note">Первые 5 карт нового игрока считаются с повышенным коэффициентом (16 вместо 10) — чтобы рейтинг
+    <p class="note">Первые 5 карт нового игрока считаются с повышенным коэффициентом (20 вместо 12.5) — чтобы рейтинг
     быстрее нашёл его настоящий уровень, а не тащился к нему полсезона.</p>
 
     <h3>Что значит цифра</h3>
     <div class="table-scroll">
     <table>
       <tr><th>Рейтинг</th><th>Оценка</th></tr>
-      <tr><td><span class="tier-pill tier-green">1600+</span></td><td>Топ-игрок</td></tr>
-      <tr><td><span class="tier-pill tier-yellow">1400-1599</span></td><td>Сильный игрок</td></tr>
-      <tr><td><span class="tier-pill tier-orange">1200-1399</span></td><td>Средний+</td></tr>
-      <tr><td><span class="tier-pill tier-neutral">1000-1199</span></td><td>Средний</td></tr>
-      <tr><td><span class="tier-pill tier-accent">800-999</span></td><td>Новичок / растёт</td></tr>
-      <tr><td><span class="tier-pill tier-red">0-799</span></td><td>Нужна практика</td></tr>
+      <tr><td><span class="tier-pill tier-green">2500+</span></td><td>Топ-игрок</td></tr>
+      <tr><td><span class="tier-pill tier-yellow">2000-2499</span></td><td>Сильный игрок</td></tr>
+      <tr><td><span class="tier-pill tier-orange">1500-1999</span></td><td>Средний+</td></tr>
+      <tr><td><span class="tier-pill tier-neutral">1000-1499</span></td><td>Средний</td></tr>
+      <tr><td><span class="tier-pill tier-accent">750-999</span></td><td>Новичок / растёт</td></tr>
+      <tr><td><span class="tier-pill tier-red">0-749</span></td><td>Нужна практика</td></tr>
     </table>
     </div>
 
