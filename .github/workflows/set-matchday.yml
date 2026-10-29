@@ -1,0 +1,116 @@
+# Закрепляет на вкладке MatchDay порядок карт или составы на вечер. Запускается
+# Telegram-ботом (команды /maps и /teams), руками обычно не нужен.
+# Пишет docs/data/matchday.json, коммитит, просит сборку Pages и сообщает в Telegram.
+name: Закрепить MatchDay
+
+on:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: "Что закрепляем: maps или teams"
+        required: true
+        type: string
+      payload:
+        description: "Данные части в JSON (см. scripts/lib/matchday.mjs)"
+        required: true
+        type: string
+      session_date:
+        description: "Дата сессии YYYY-MM-DD (пусто — не менять)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+
+# две команды подряд не должны писать файл одновременно
+concurrency:
+  group: set-matchday
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Подтянуть свежие коммиты
+        run: git pull --ff-only
+
+      - name: Записать matchday.json
+        env:
+          KIND: ${{ inputs.kind }}
+          PAYLOAD: ${{ inputs.payload }}
+          SESSION_DATE: ${{ inputs.session_date }}
+        run: node scripts/set-matchday.mjs
+
+      - name: Закоммитить и отправить
+        env:
+          KIND: ${{ inputs.kind }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/matchday.json
+          if git diff --cached --quiet; then
+            echo "Изменений нет — коммит не нужен"
+            exit 0
+          fi
+          if [ "$KIND" = "maps" ]; then
+            git commit -m "MatchDay: закреплён порядок карт"
+          else
+            git commit -m "MatchDay: закреплены составы"
+          fi
+          git pull --rebase
+          git push
+
+      # Коммит от github-actions[bot] через GITHUB_TOKEN не запускает деплой Pages
+      # сам, поэтому сборку просим явно (как в update-stats.yml).
+      - name: Запустить сборку Pages
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          code=$(curl -sS -o "$RUNNER_TEMP/pages.json" -w '%{http_code}' -X POST             -H "Authorization: Bearer $GH_TOKEN"             -H "Accept: application/vnd.github+json"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/$REPO/pages/builds")
+          echo "Pages builds API: HTTP $code"
+          cat "$RUNNER_TEMP/pages.json"; echo
+          if [ "$code" != "201" ]; then
+            echo "::warning::Не удалось запустить сборку Pages (HTTP $code)"
+            echo "PAGES_FAILED=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: Сообщить результат в Telegram
+        if: always()
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+          JOB_STATUS: ${{ job.status }}
+          KIND: ${{ inputs.kind }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$TG_TOKEN" ] || [ -z "$TG_CHAT" ]; then
+            echo "Секреты Telegram не заданы — пропускаю оповещение"
+            exit 0
+          fi
+          if [ "$JOB_STATUS" = "success" ]; then
+            if [ "$KIND" = "maps" ]; then WHAT="порядок карт закреплён"; else WHAT="составы закреплены"; fi
+            DATE=$(node -e '
+              const d = JSON.parse(require("fs").readFileSync("docs/data/matchday.json", "utf8")).sessionDate;
+              console.log(d ? d.split("-").reverse().join(".") : "");
+            ')
+            if [ -n "$DATE" ]; then
+              TEXT="Готово: $WHAT. Дата сессии: $DATE. Сайт обновится через минуту-две."
+            else
+              TEXT="Готово: $WHAT. Дата сессии не указана. Сайт обновится через минуту-две."
+            fi
+          else
+            TEXT="Не удалось закрепить MatchDay. Лог: $RUN_URL"
+          fi
+          if [ "$JOB_STATUS" = "success" ] && [ "${PAGES_FAILED:-0}" = "1" ]; then
+            TEXT="$TEXT Но сборку сайта запустить не удалось, сайт может не обновиться. Лог: $RUN_URL"
+          fi
+          curl -sS -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage"             --data-urlencode "chat_id=${TG_CHAT}"             --data-urlencode "text=${TEXT}"             --data-urlencode "disable_web_page_preview=true" || true
