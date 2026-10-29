@@ -580,8 +580,58 @@
     padding: 16px;
   }
   .md-title { margin: 0 0 4px; font-size: 18px; }
-  .md-date { margin: 0 0 14px; font-size: 15px; color: var(--accent); text-transform: capitalize; }
+  .md-date { margin: 0 0 14px; font-size: 15px; color: var(--accent); }
+  .md-date::first-letter { text-transform: uppercase; }
   .md-empty { color: var(--text-dim); font-size: 14px; margin: 0; }
+  .md-block { margin-top: 18px; }
+  .md-block h3 { margin: 0 0 10px; font-size: 15px; }
+  .md-saved { margin-top: 6px; color: var(--text-dim); font-size: 12px; }
+  .md-teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 640px) { .md-teams { grid-template-columns: minmax(0, 1fr); } }
+  .md-team {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .md-team h4 { margin: 0 0 8px; font-size: 14px; }
+  .md-team ul { list-style: none; margin: 0; padding: 0; }
+  .md-team li { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 14px; }
+  .md-team li .md-pname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .md-team li .md-prating { color: var(--text-dim); font-variant-numeric: tabular-nums; }
+  .md-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--border); flex: none; }
+  .md-team .md-avg { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 12px; }
+  .md-route { position: relative; margin: 6px 0 0 16px; padding-left: 28px; border-left: 3px dashed var(--border); }
+  .md-step { position: relative; margin: 10px 0; }
+  .md-num {
+    position: absolute;
+    left: -46px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0c1420;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .md-map {
+    position: relative;
+    height: 56px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+  }
+  .md-map img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .md-map::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10, 14, 22, 0.85) 0%, rgba(10, 14, 22, 0.25) 100%); }
+  .md-map-name { position: relative; z-index: 1; font-size: 17px; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); }
 
   .draft-section {
     background: var(--bg-panel);
@@ -2734,10 +2784,55 @@
 
   // "2026-10-31" -> "пятница, 31 октября" (календарная дата без часового пояса).
   function matchdayDateLabel(iso) {
-    var m = /^(d{4})-(d{2})-(d{2})$/.exec(iso || "");
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
     if (!m) return "";
     var d = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
     return d.toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+  }
+
+  // Карточка карты по ключу из пула; ключа нет в stats.json — плашка без картинки.
+  function mapInfoFor(key) {
+    var maps = (state.data && state.data.maps) || [];
+    return maps.filter(function (m) { return m.mapKey === key; })[0] || null;
+  }
+
+  // «Маршрут вечера»: дорожка с кружками шагов и плашкой каждой карты (фон — её картинка).
+  function routeHtml(order) {
+    var steps = order.map(function (key, i) {
+      var info = mapInfoFor(key);
+      var name = info ? info.displayName : key;
+      var img = info && info.bannerUrl ? '<img src="' + escapeHtml(info.bannerUrl) + '" alt="" loading="lazy">' : "";
+      return '<div class="md-step"><div class="md-num">' + (i + 1) + "</div>" +
+        '<div class="md-map">' + img + '<span class="md-map-name">' + escapeHtml(name) + "</span></div></div>";
+    }).join("");
+    return '<div class="md-route">' + steps + "</div>";
+  }
+
+  // Игрок из команды -> то, что показываем. Игрок из списка берётся из stats.json
+  // на момент показа; нет в списке -> «Неизвестный игрок».
+  function resolveMember(m) {
+    if (m.guest !== undefined) {
+      return { name: m.guest, avatarUrl: null, rating: m.rating, guest: true, unknown: false };
+    }
+    var p = ((state.data && state.data.allTime && state.data.allTime.players) || [])
+      .filter(function (x) { return x.steamid64 === m.steamid64; })[0];
+    if (!p) return { name: "Неизвестный игрок", avatarUrl: null, rating: null, guest: false, unknown: true };
+    return { name: p.name, avatarUrl: p.avatarUrl || null, rating: p.rating, guest: false, unknown: false };
+  }
+
+  function teamCardHtml(title, members) {
+    var resolved = members.map(resolveMember);
+    var itemsHtml = resolved.map(function (r) {
+      var avatar = r.avatarUrl
+        ? '<img class="md-avatar" src="' + escapeHtml(r.avatarUrl) + '" alt="" loading="lazy">'
+        : '<div class="md-avatar"></div>';
+      var tag = r.guest ? '<span class="draft-guest-tag">гость</span>' : "";
+      return "<li>" + avatar + '<span class="md-pname">' + escapeHtml(r.name) + "</span>" + tag +
+        '<span class="md-prating">' + fmtRating(r.rating) + "</span></li>";
+    }).join("");
+    var rated = resolved.filter(function (r) { return r.rating != null; });
+    var avg = rated.length ? '<div class="md-avg">Средний рейтинг: ' + Math.round(draftAvgOf(rated, "rating")) + "</div>" : "";
+    return '<div class="md-team"><h4>' + escapeHtml(title) + "</h4><ul>" + itemsHtml + "</ul>" + avg + "</div>";
   }
 
   function renderMatchdaySection() {
@@ -2751,6 +2846,18 @@
         '<h2 class="md-title">MatchDay</h2>' +
         (md && md.sessionDate ? '<div class="md-date">' + escapeHtml(matchdayDateLabel(md.sessionDate)) + "</div>" : "") +
         (empty ? '<p class="md-empty">Вечер пока не запланирован.</p>' : "") +
+        (empty ? "" :
+          '<div class="md-block"><h3>Составы</h3>' +
+            (md.teams
+              ? '<div class="md-teams">' + teamCardHtml("Состав A", md.teams.teamA) + teamCardHtml("Состав B", md.teams.teamB) + "</div>" +
+                '<div class="md-saved">Закреплено ' + escapeHtml(formatDateTime(md.teams.savedAt)) + "</div>"
+              : '<p class="md-empty">Составы пока не определены.</p>') +
+          "</div>" +
+          '<div class="md-block"><h3>Маршрут вечера</h3>' +
+            (md.maps
+              ? routeHtml(md.maps.order) + '<div class="md-saved">Закреплено ' + escapeHtml(formatDateTime(md.maps.savedAt)) + "</div>"
+              : '<p class="md-empty">Порядок карт пока не определён.</p>') +
+          "</div>") +
       "</div>";
   }
 
