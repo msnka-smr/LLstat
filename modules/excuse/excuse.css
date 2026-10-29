@@ -1,0 +1,53 @@
+  .excuse-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .excuse-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .excuse-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  /* Облако на сфере: теги позиционируются из JS (см. tickExcuseSphere), сам
+     контейнер — прямоугольник фиксированной высоты, чтобы блок не прыгал. */
+  .excuse-cloud {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
+  }
+  .excuse-cloud.dragging { cursor: grabbing; }
+  .excuse-tag {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 14px;
+    color: var(--text-dim);
+    width: max-content;
+    max-width: 150px; /* длинные фразы переносим, иначе на узком экране вылезают за сферу */
+    text-align: center;
+    will-change: transform, opacity;
+    transition: color 0.3s;
+  }
+  .excuse-tag.on {
+    color: var(--green);
+    font-weight: 600;
+  }
+  @media (max-width: 640px) {
+    .excuse-cloud { height: 330px; }
+    .excuse-tag { font-size: 12px; max-width: 110px; }
+  }
+  .excuse-result { font-size: 14px; min-height: 20px; }
+  .excuse-result strong { color: var(--accent); }
