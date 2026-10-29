@@ -1,0 +1,69 @@
+  .wheel-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .wheel-category {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    min-height: 20px;
+  }
+  .wheel-stage {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 0 auto 16px;
+  }
+  .wheel-pointer {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    line-height: 1;
+    color: var(--accent);
+    z-index: 2;
+  }
+  .wheel-dial {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: transform 5s cubic-bezier(0.12, 0.65, 0.18, 1), background 0.4s ease;
+  }
+  /* Подпись идёт вдоль своего радиуса (от центра к краю) — pivot прижат к
+     центру колеса (left:50%, transform-origin: 0 50%), а сама подпись
+     центрируется внутри сектора отступом слева и flex-центрированием текста. */
+  .wheel-seg-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 108px;
+    height: 20px;
+    margin-top: -10px;
+    transform-origin: 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 30px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wheel-result {
+    margin-top: 14px;
+    font-size: 14px;
+    min-height: 20px;
+  }
+  .wheel-result strong { color: var(--accent); }

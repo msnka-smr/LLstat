@@ -1,0 +1,2934 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Рейтинг игроков "ЛЛ"</title>
+<link rel="icon" type="image/png" href="favicon.png" />
+<style>
+  :root {
+    --bg: #14161c;
+    --bg-panel: #1b1e26;
+    --bg-row: #1b1e26;
+    --bg-row-alt: #20232c;
+    --bg-row-hover: #262a35;
+    --border: #2c303b;
+    --text: #e6e8ef;
+    --text-dim: #9096a6;
+    --text-faint: #5b6172;
+    --accent: #6ea8ff;
+    --accent-bg: rgba(110, 168, 255, 0.14);
+    --green: #3ecf6e;
+    --green-bg: rgba(62, 207, 110, 0.14);
+    --yellow: #e0c34c;
+    --yellow-bg: rgba(224, 195, 76, 0.12);
+    --orange: #e0923e;
+    --orange-bg: rgba(224, 146, 62, 0.14);
+    --red: #e0625c;
+    --red-bg: rgba(224, 98, 92, 0.14);
+    --maroon: #9b2d30;
+    --maroon-bg: rgba(155, 45, 48, 0.18);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 14px;
+    padding: 16px;
+    padding-bottom: 48px;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 4px;
+  }
+  .title-row img {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+  }
+  h1 {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-panel);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    max-width: 100%;
+  }
+
+  .tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 13px;
+    user-select: none;
+    white-space: nowrap;
+  }
+  /* пять вкладок (~430px) не помещаются в один ряд на телефоне — делаем два
+     ряда на всю ширину блока без пустоты справа: в первом три вкладки поровну,
+     во втором две поровну (сетка из 6 колонок: 2+2+2 и 3+3) */
+  @media (max-width: 520px) {
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      flex: 1 1 100%;
+    }
+    .tab { grid-column: span 2; padding: 6px 4px; text-align: center; }
+    .tab:nth-child(n + 4) { grid-column: span 3; }
+  }
+
+  .tab.active {
+    background: var(--accent);
+    color: #0c1420;
+    font-weight: 600;
+  }
+
+  /* margin-left: auto держит ссылку у правого края тулбара (над колонкой
+     "Рейтинг"), даже когда на узком экране она переносится на свою строку. */
+  .rating-info-link {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--text-dim);
+    align-self: center;
+    white-space: nowrap;
+  }
+  .rating-info-link:hover { color: var(--accent); }
+
+  .banner {
+    background: var(--yellow-bg);
+    border: 1px solid var(--yellow);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .session-picker { margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .recap-btn, .recap-actions button {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .recap-btn:hover, .recap-btn[aria-expanded="true"], .recap-actions button:hover {
+    color: var(--text);
+    border-color: var(--text-dim);
+  }
+  .recap-canvas {
+    display: block;
+    width: 100%;
+    max-width: 540px;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 12px 0 8px;
+  }
+  .recap-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .recap-status { font-size: 12px; color: var(--text-faint); }
+  .session-picker select {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 13px;
+    max-width: 100%;
+  }
+  .session-header {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .session-header .session-id {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .session-maps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-top: 8px;
+  }
+  .session-maps a { color: var(--text-dim); }
+  .session-maps a:hover { color: var(--accent); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-panel);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  thead th {
+    text-align: right;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-faint);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+  thead th:first-child { text-align: left; }
+  thead th.sorted { color: var(--accent); }
+
+  tbody td {
+    padding: 8px 10px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td:first-child { text-align: left; }
+
+  tbody tr.player-row { cursor: pointer; }
+  tbody tr.player-row:hover { background: var(--bg-row-hover); }
+
+  .map-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .map-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .map-chip:hover { background: var(--bg-row-hover); color: var(--text); }
+  .map-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0c1420;
+    font-weight: 600;
+  }
+  .map-chip-count { color: var(--text-faint); font-size: 11px; }
+  .map-chip.active .map-chip-count { color: #0c1420; opacity: 0.7; }
+  .map-chip-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  /* Баннер вкладки "Карты": кадр выбранной карты, поверх — название и
+     чипы. Два слоя фона нужны для плавной смены кадра: новый слой
+     проявляется только после того, как картинка догрузилась. */
+  .map-hero {
+    position: relative;
+    min-height: 260px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #252b3b 0%, var(--bg-panel) 60%, var(--bg) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .map-hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 60%;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+  .map-hero-bg.shown { opacity: 1; }
+  .map-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(20, 22, 28, 0.05) 0%, rgba(20, 22, 28, 0.45) 50%, rgba(20, 22, 28, 0.92) 100%),
+      linear-gradient(to right, rgba(20, 22, 28, 0.55) 0%, rgba(20, 22, 28, 0) 60%);
+    pointer-events: none;
+  }
+  .map-hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 16px;
+  }
+  .map-hero-title {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  }
+  .map-hero-sub {
+    margin: 4px 0 12px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  }
+  .map-hero .map-chips { margin-bottom: 0; }
+  .map-hero .map-chip {
+    background: rgba(20, 22, 28, 0.6);
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.85);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .map-hero .map-chip:hover { background: rgba(38, 42, 53, 0.85); color: #fff; }
+  .map-hero .map-chip-count { color: rgba(255, 255, 255, 0.55); }
+  .map-hero .map-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0c1420;
+  }
+  .map-hero .map-chip.active .map-chip-count { color: #0c1420; }
+  @media (prefers-reduced-motion: reduce) {
+    .map-hero-bg { transition: none; }
+  }
+  tbody tr.unqualified { color: var(--text-faint); }
+  tbody tr.unqualified .player-name { color: var(--text-dim); }
+
+  .player-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+  .player-cell a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: inherit;
+  }
+  .player-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+  .player-cell a:hover .player-name { text-decoration: underline; }
+
+  .rating-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-variant-numeric: tabular-nums;
+  }
+  .tier-green { background: var(--green-bg); color: var(--green); }
+  .tier-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .tier-orange { background: var(--orange-bg); color: var(--orange); }
+  .tier-red { background: var(--maroon-bg); color: var(--maroon); }
+  .tier-neutral { background: var(--accent-bg); color: var(--accent); }
+  .tier-accent { background: var(--red-bg); color: var(--red); }
+  .rating-na { color: var(--text-faint); }
+
+  .rating-with-delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rating-delta {
+    display: inline-flex;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 26px;
+    height: 22px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--bg);
+  }
+  .rating-delta-up {
+    align-items: flex-end;
+    padding-bottom: 1px;
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    background: var(--green);
+  }
+  .rating-delta-down {
+    align-items: flex-start;
+    padding-top: 1px;
+    clip-path: polygon(50% 100%, 100% 0%, 0% 0%);
+    background: var(--red);
+  }
+  .rating-delta-flat {
+    align-items: center;
+    border-radius: 4px;
+    background: var(--accent);
+  }
+
+  .maps-cell small { color: var(--text-faint); font-weight: 400; }
+
+  .qual-divider td {
+    padding: 4px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: 11px;
+    background: var(--bg);
+  }
+
+  tr.detail-row td {
+    background: var(--bg);
+    padding: 12px 16px 18px;
+    cursor: default;
+  }
+  tr.detail-row[hidden] { display: none; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px 18px;
+  }
+  .detail-metric .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    letter-spacing: 0.03em;
+  }
+  .detail-metric .value {
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  footer {
+    margin-top: 16px;
+    color: var(--text-faint);
+    font-size: 12px;
+  }
+
+  /* На телефоне таблица сворачивается до Игрок (+ строка с Карт/K-D/K-D под
+     именем) / Рейтинг — сами колонки Карт/K/D/K-D прячутся, но их значения
+     не пропадают, а переезжают во вторую строку под именем игрока. */
+  .player-meta { display: none; }
+  .mobile-sort { display: none; }
+  @media (max-width: 640px) {
+    .req-collapse { display: none; }
+    .player-meta {
+      display: block;
+      font-size: 11px;
+      color: var(--text-faint);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    body { padding-left: 8px; padding-right: 8px; }
+
+    /* Баннер на телефоне ниже, а чипы — одной строкой с прокруткой
+       пальцем вбок: в несколько рядов они раздували бы баннер. */
+    .map-hero { min-height: 190px; }
+    .map-hero-content { padding: 12px 0; }
+    .map-hero-title { font-size: 24px; padding: 0 12px; }
+    .map-hero-sub { margin-bottom: 10px; padding: 0 12px; }
+    .map-hero .map-chips {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 0 12px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .map-hero .map-chips::-webkit-scrollbar { display: none; }
+    .map-hero .map-chip { flex-shrink: 0; }
+    table { font-size: 13px; }
+    thead th, tbody td { padding: 8px 6px; }
+
+    /* На телефоне заголовки Карт/K/D/K-D скрыты вместе с колонками (см. выше),
+       а вместе с ними пропадает и клик для сортировки по ним — этот блок
+       отдаёт то же самое через выпадающий список + кнопку направления. */
+    .mobile-sort {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .mobile-sort select {
+      flex: 1;
+      background: var(--bg-panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 13px;
+    }
+    .mobile-sort button {
+      background: var(--bg-panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  }
+
+  .wheel-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .wheel-category {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    min-height: 20px;
+  }
+  .wheel-stage {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 0 auto 16px;
+  }
+  .wheel-pointer {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    line-height: 1;
+    color: var(--accent);
+    z-index: 2;
+  }
+  .wheel-dial {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: transform 5s cubic-bezier(0.12, 0.65, 0.18, 1), background 0.4s ease;
+  }
+  /* Подпись идёт вдоль своего радиуса (от центра к краю) — pivot прижат к
+     центру колеса (left:50%, transform-origin: 0 50%), а сама подпись
+     центрируется внутри сектора отступом слева и flex-центрированием текста. */
+  .wheel-seg-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 108px;
+    height: 20px;
+    margin-top: -10px;
+    transform-origin: 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 30px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wheel-spin-btn {
+    background: var(--accent);
+    color: #0c1420;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .wheel-spin-btn:disabled { opacity: 0.5; cursor: default; }
+  .wheel-result {
+    margin-top: 14px;
+    font-size: 14px;
+    min-height: 20px;
+  }
+  .wheel-result strong { color: var(--accent); }
+
+  .excuse-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .excuse-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .excuse-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  /* Облако на сфере: теги позиционируются из JS (см. tickExcuseSphere), сам
+     контейнер — прямоугольник фиксированной высоты, чтобы блок не прыгал. */
+  .excuse-cloud {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
+  }
+  .excuse-cloud.dragging { cursor: grabbing; }
+  .excuse-tag {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 14px;
+    color: var(--text-dim);
+    width: max-content;
+    max-width: 150px; /* длинные фразы переносим, иначе на узком экране вылезают за сферу */
+    text-align: center;
+    will-change: transform, opacity;
+    transition: color 0.3s;
+  }
+  .excuse-tag.on {
+    color: var(--green);
+    font-weight: 600;
+  }
+  @media (max-width: 640px) {
+    .excuse-cloud { height: 330px; }
+    .excuse-tag { font-size: 12px; max-width: 110px; }
+  }
+  .excuse-result { font-size: 14px; min-height: 20px; }
+  .excuse-result strong { color: var(--accent); }
+
+  .draft-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .draft-hint {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin: 0 0 12px;
+  }
+  .draft-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 420px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px;
+  }
+  .draft-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .draft-row:hover { background: var(--bg-row-hover); }
+  .draft-row input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+  }
+  .draft-row .draft-name { flex: 1; font-size: 13px; }
+  .draft-row .draft-meta {
+    font-size: 12px;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .draft-guests { margin-top: 12px; }
+  .draft-guest-add {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .draft-guest-add:hover:not(:disabled) { color: var(--text); border-color: var(--text-dim); }
+  .draft-guest-add:disabled { opacity: 0.5; cursor: not-allowed; }
+  .draft-guest-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .draft-guest-row input[type="text"] { flex: 1; min-width: 160px; }
+  .draft-guest-row input[type="number"] { width: 90px; }
+  .draft-guest-row input {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+  .draft-guest-row input.invalid { border-color: var(--red); }
+  .draft-guest-remove {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+  }
+  .draft-guest-remove:hover { color: var(--text); border-color: var(--text-dim); }
+  .draft-guest-label {
+    flex-basis: 100%;
+    font-size: 11px;
+    color: var(--text-faint);
+  }
+  .draft-guest-tag {
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-left: 6px;
+  }
+  .draft-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .draft-counter {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .draft-counter.full { color: var(--green); font-weight: 600; }
+  .draft-clear-btn {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .draft-clear-btn:hover { color: var(--text); border-color: var(--text-dim); }
+  .draft-variant-note {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: center;
+  }
+  .draft-teams {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+    text-align: left;
+  }
+  @media (max-width: 640px) {
+    .draft-teams { grid-template-columns: 1fr; }
+  }
+  .draft-team {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .draft-team h4 { margin: 0 0 8px; font-size: 14px; }
+  .draft-team ul { list-style: none; margin: 0 0 10px; padding: 0; font-size: 13px; }
+  .draft-team li {
+    padding: 3px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .draft-team .team-stats {
+    font-size: 12px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+  .draft-summary {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+  .draft-summary strong { color: var(--accent); }
+  .draft-again-wrap { text-align: center; margin-top: 14px; }
+  .draft-limit-note {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: center;
+  }
+  .hist-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-top: 12px;
+  }
+  .hist-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .hist-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .hist-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .hist-chip { max-width: 100%; }
+  .hist-chip-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hist-chip:hover { color: var(--text); }
+  .hist-chip.on { color: var(--text); }
+  .hist-chip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-faint);
+    flex-shrink: 0;
+  }
+  .hist-hint { min-height: 16px; margin-bottom: 4px; font-size: 12px; color: var(--text-faint); }
+  .hist-chart { position: relative; width: 100%; }
+  .hist-chart svg { display: block; width: 100%; touch-action: pan-y; }
+  .hist-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: var(--text-faint);
+    font-size: 13px;
+  }
+  .hist-tip {
+    position: absolute;
+    z-index: 5;
+    pointer-events: none;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .hist-tip-head { color: var(--text-dim); margin-bottom: 4px; }
+  .hist-tip-row { display: flex; align-items: center; gap: 8px; padding: 1px 0; }
+  .hist-tip-key { width: 14px; height: 2px; flex-shrink: 0; }
+  .hist-tip-name { color: var(--text-dim); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .hist-tip-val { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .hist-table-wrap { margin-top: 10px; font-size: 12px; color: var(--text-dim); }
+  .hist-table-wrap summary { cursor: pointer; }
+  .hist-table-scroll { overflow-x: auto; margin-top: 8px; }
+  .hist-table { border-collapse: collapse; width: 100%; }
+  .hist-table th, .hist-table td {
+    padding: 4px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .hist-table th:first-child, .hist-table td:first-child { text-align: left; }
+  .records-group { margin-top: 18px; }
+  .records-group h3 { margin: 0 0 10px; font-size: 16px; }
+  .records-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: 12px;
+  }
+  .record-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .record-card h4 { margin: 0 0 2px; font-size: 14px; }
+  .record-hint { margin: 0 0 10px; font-size: 12px; color: var(--text-faint); }
+  .record-empty { margin: 0; font-size: 13px; color: var(--text-faint); }
+  .record-more { margin: 6px 0 0; font-size: 11px; color: var(--text-faint); }
+  .record-row {
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    column-gap: 10px;
+    align-items: center;
+    padding: 6px 0;
+    border-top: 1px solid var(--border);
+  }
+  .record-row:first-of-type { border-top: none; }
+  .record-place { color: var(--accent); font-weight: 600; font-size: 13px; }
+  .records-group-oops .record-place { color: var(--text-faint); }
+  .record-who { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13px; }
+  .record-who .avatar { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
+  .record-who span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .record-value { font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .record-context {
+    grid-column: 2 / 4;
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
+  .record-context a { color: var(--text-dim); }
+</style>
+</head>
+<body>
+  <div class="title-row">
+    <img src="favicon.png" alt="" />
+    <h1>Рейтинг игроков "ЛЛ"</h1>
+  </div>
+  <div class="subtitle" id="subtitle">Загрузка…</div>
+
+  <div id="qualBanner"></div>
+
+  <div class="toolbar">
+    <div class="tabs">
+      <div class="tab active" data-tab="allTime">За всё время</div>
+      <div class="tab" data-tab="lastSession">Сессии</div>
+      <div class="tab" data-tab="maps">Карты</div>
+      <div class="tab" data-tab="draft">Выбор составов</div>
+      <div class="tab" data-tab="records">Рекорды</div>
+    </div>
+    <a class="rating-info-link" href="rating-info.html" target="_blank" rel="noopener">Информация о рейтинге →</a>
+  </div>
+
+  <div id="sessionHeader"></div>
+  <div id="mapChips"></div>
+  <div class="mobile-sort" id="mobileSort"></div>
+  <div id="tableWrap"></div>
+  <div id="historySection"></div>
+  <div id="recordsSection"></div>
+  <div id="wheelSection"></div>
+  <div id="excuseSection"></div>
+  <div id="draftSection"></div>
+
+  <footer id="footer"></footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var REQUIRED_COLUMNS = [
+    { id: "name", label: "Игрок" },
+    { id: "mapsPlayed", label: "Карт", collapseMobile: true },
+    { id: "k", label: "K", collapseMobile: true },
+    { id: "d", label: "D", collapseMobile: true },
+    { id: "kd", label: "K/D", fmt: fmt2, collapseMobile: true },
+    { id: "rating", label: "Рейтинг", fmt: fmtRating },
+  ];
+  // На телефоне Карт/K/D/K-D-ratio прячутся как отдельные колонки, но не
+  // теряются — переезжают строкой под именем игрока (см. .player-meta).
+
+  // Вкладка "Карты": своя статистика на игрока, без рейтинга — зато с
+  // раундами и разницей K-D, которых нет в REQUIRED_COLUMNS.
+  var MAP_COLUMNS = [
+    { id: "name", label: "Игрок" },
+    { id: "totalRounds", label: "Раунды", fmt: fmtInt, collapseMobile: true },
+    { id: "k", label: "K", collapseMobile: true },
+    { id: "d", label: "D", collapseMobile: true },
+    { id: "kdDiff", label: "K-D", fmt: fmtDiff, collapseMobile: true },
+    { id: "kd", label: "K/D", fmt: fmt2, collapseMobile: true },
+    { id: "winRate", label: "WR", fmt: fmtWr, collapseMobile: true },
+    { id: "mapsPlayed", label: "Карт" },
+  ];
+
+  function fmt2(v) { return v == null ? "—" : v.toFixed(2); }
+  function fmtInt(v) { return v == null ? "—" : String(v); }
+  function fmtWr(v) { return v == null ? "—" : Math.round(v * 100) + "%"; }
+  function fmtRating(v) { return v == null ? "—" : String(Math.round(v)); }
+  function fmtDiff(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v; }
+  // Склонение по правилам русского языка: 1 карта, 2–4 карты, 5–20 карт,
+  // 21 карта, 22 карты... (11–14 — всегда "карт").
+  function pluralRu(n, one, few, many) {
+    var m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return one;
+    if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+    return many;
+  }
+  function mapsCount(n) { return n + " " + pluralRu(n, "карта", "карты", "карт"); }
+  function fmtRatingDelta(v) { return v > 0 ? "+" + v : v < 0 ? String(v) : "+0"; }
+  function ratingDeltaClass(v) { return v > 0 ? "rating-delta-up" : v < 0 ? "rating-delta-down" : "rating-delta-flat"; }
+
+  var TAB_STORAGE_KEY = "llstat:selectedTab";
+  var VALID_TABS = ["allTime", "lastSession", "draft", "maps", "records"];
+  function loadSavedTab() {
+    try { return localStorage.getItem(TAB_STORAGE_KEY); } catch (err) { return null; }
+  }
+  function saveTab(tab) {
+    try { localStorage.setItem(TAB_STORAGE_KEY, tab); } catch (err) {}
+  }
+
+  var state = {
+    data: null,
+    tab: VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
+    sortColumn: "rating",
+    sortDirection: "desc",
+    mapSortColumn: "mapsPlayed",
+    mapSortDirection: "desc",
+    selectedMapKey: null,
+    expanded: null,
+    sessionId: null,
+  };
+
+  // "За всё время"/"Сессии" используют одну общую пару
+  // sortColumn/sortDirection (так исторически сложилось — переключение между
+  // ними не сбрасывает сортировку). У "Карты" свой набор колонок (нет
+  // "рейтинга"), поэтому своя пара с собственным дефолтом (K/D).
+  function currentColumns() {
+    return state.tab === "maps" ? MAP_COLUMNS : REQUIRED_COLUMNS;
+  }
+  function getSortColumn() {
+    return state.tab === "maps" ? state.mapSortColumn : state.sortColumn;
+  }
+  function getSortDirection() {
+    return state.tab === "maps" ? state.mapSortDirection : state.sortDirection;
+  }
+  function setSort(column, direction) {
+    if (state.tab === "maps") {
+      state.mapSortColumn = column;
+      state.mapSortDirection = direction;
+    } else {
+      state.sortColumn = column;
+      state.sortDirection = direction;
+    }
+  }
+  function currentMapEntry() {
+    var maps = (state.data && state.data.maps) || [];
+    if (!maps.length) return null;
+    var found = maps.filter(function (m) { return m.mapKey === state.selectedMapKey; })[0];
+    return found || maps[0];
+  }
+
+  // Выбранная на вкладке "Сессии": по умолчанию (и после перезагрузки) —
+  // последняя; если id не нашёлся, тоже последняя.
+  function currentSession() {
+    var sessions = (state.data && state.data.sessions) || [];
+    if (!sessions.length) return null;
+    return sessions.filter(function (s) { return s.id === state.sessionId; })[0] || sessions[0];
+  }
+  // id сессии — "ГГГГ-ММ-ДД" или "ГГГГ-ММ-ДД-N" (N-я сессия в тот же день).
+  function sessionDate(id) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?:-(\d+))?$/.exec(id);
+    return m ? m[3] + "." + m[2] + "." + m[1] + (m[4] ? " (№" + m[4] + ")" : "") : id;
+  }
+  function sessionLabel(s) {
+    return sessionDate(s.id) + " · " + mapsCount(s.maps.length);
+  }
+
+  // GitHub Pages отдаёт data/stats.json с Cache-Control: max-age=600 — без
+  // no-store обычный F5 в течение 10 минут после последнего визита получает
+  // старую версию из кэша браузера, даже если на сервере уже новые цифры.
+  fetch("data/stats.json", { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      state.data = data;
+      render();
+    })
+    .catch(function (err) {
+      document.getElementById("subtitle").textContent = "Не удалось загрузить data/stats.json: " + err.message;
+    });
+
+  var tabEls = document.querySelectorAll(".tab");
+  tabEls.forEach(function (tab) {
+    tab.classList.toggle("active", tab.dataset.tab === state.tab);
+    tab.addEventListener("click", function () {
+      state.tab = tab.dataset.tab;
+      state.expanded = null;
+      saveTab(state.tab);
+      tabEls.forEach(function (t) { t.classList.toggle("active", t === tab); });
+      render();
+    });
+  });
+
+  function render() {
+    if (!state.data) return;
+    renderSubtitle();
+    renderBanner();
+    renderSessionHeader();
+    renderMapChips();
+    renderMobileSort();
+    renderTable();
+    renderHistorySection();
+    renderRecordsSection();
+    renderFooter();
+    renderWheelSection();
+    renderExcuseSection();
+    renderDraftSection();
+  }
+
+  function renderMapChips() {
+    var el = document.getElementById("mapChips");
+    if (state.tab !== "maps") { el.innerHTML = ""; return; }
+    var maps = (state.data.maps || []);
+    if (!maps.length) { el.innerHTML = '<div class="session-header">Карт пока нет.</div>'; return; }
+    if (!maps.some(function (m) { return m.mapKey === state.selectedMapKey; })) {
+      state.selectedMapKey = maps[0].mapKey;
+    }
+    var selected = maps.filter(function (m) { return m.mapKey === state.selectedMapKey; })[0];
+
+    // каркас баннера строим один раз — пересоздание сбрасывало бы прокрутку
+    // строки чипов на телефоне и обрывало плавную смену кадра
+    var hero = el.querySelector(".map-hero");
+    if (!hero) {
+      el.innerHTML =
+        '<div class="map-hero">' +
+          '<div class="map-hero-bg"></div><div class="map-hero-bg"></div>' +
+          '<div class="map-hero-content">' +
+            '<div class="map-hero-title"></div>' +
+            '<div class="map-hero-sub"></div>' +
+            '<div class="map-chips"></div>' +
+          "</div>" +
+        "</div>";
+      hero = el.querySelector(".map-hero");
+    }
+
+    hero.querySelector(".map-hero-title").textContent = selected.displayName;
+    hero.querySelector(".map-hero-sub").textContent = "Сыграно карт: " + selected.timesPlayed;
+    setMapHeroImage(hero, selected.bannerUrl);
+
+    var chips = hero.querySelector(".map-chips");
+    var chipsKey = maps.map(function (m) { return m.mapKey + ":" + m.timesPlayed; }).join(",");
+    if (chips.dataset.key !== chipsKey) {
+      chips.dataset.key = chipsKey;
+      chips.innerHTML = maps.map(function (m) {
+        var iconHtml = m.iconUrl
+          ? '<img class="map-chip-icon" src="' + escapeHtml(m.iconUrl) + '" alt="" loading="lazy">'
+          : "";
+        return '<button type="button" class="map-chip" data-map="' + escapeHtml(m.mapKey) + '">' +
+          iconHtml + escapeHtml(m.displayName) + ' <span class="map-chip-count">×' + m.timesPlayed + "</span></button>";
+      }).join("");
+      chips.querySelectorAll(".map-chip").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          state.selectedMapKey = btn.dataset.map;
+          render();
+        });
+      });
+    }
+    var activeChip = null;
+    chips.querySelectorAll(".map-chip").forEach(function (btn) {
+      var isActive = btn.dataset.map === state.selectedMapKey;
+      btn.classList.toggle("active", isActive);
+      if (isActive) activeChip = btn;
+    });
+
+    // на телефоне строка чипов прокручивается — докручиваем до выбранного,
+    // если он за краем (scrollIntoView дёрнул бы ещё и всю страницу)
+    if (activeChip && chips.scrollWidth > chips.clientWidth) {
+      var left = activeChip.offsetLeft - chips.offsetLeft;
+      var right = left + activeChip.offsetWidth;
+      if (left < chips.scrollLeft || right > chips.scrollLeft + chips.clientWidth) {
+        chips.scrollTo({ left: Math.max(0, left - 12), behavior: "smooth" });
+      }
+    }
+  }
+
+  // Новый кадр кладём в скрытый слой и проявляем только после загрузки,
+  // чтобы при переключении не мигал пустой баннер. Если ответ пришёл уже
+  // после следующего переключения — он устарел, его игнорируем.
+  function setMapHeroImage(hero, url) {
+    if (hero.dataset.bannerUrl === (url || "")) return;
+    hero.dataset.bannerUrl = url || "";
+    var layers = hero.querySelectorAll(".map-hero-bg");
+    var current = hero.querySelector(".map-hero-bg.shown");
+    var next = current === layers[0] ? layers[1] : layers[0];
+    if (!url) {
+      if (current) current.classList.remove("shown");
+      return;
+    }
+    var img = new Image();
+    img.onload = function () {
+      if (hero.dataset.bannerUrl !== url) return;
+      next.style.backgroundImage = 'url("' + url + '")';
+      next.classList.add("shown");
+      if (current) current.classList.remove("shown");
+    };
+    img.src = url;
+  }
+
+  function renderMobileSort() {
+    var el = document.getElementById("mobileSort");
+    if (noTableTab()) { el.innerHTML = ""; return; }
+    var sortCol = getSortColumn();
+    var options = currentColumns().map(function (c) {
+      var selected = sortCol === c.id ? " selected" : "";
+      return '<option value="' + c.id + '"' + selected + ">" + escapeHtml(c.label) + "</option>";
+    }).join("");
+    var dirLabel = getSortDirection() === "desc" ? "↓" : "↑";
+    el.innerHTML =
+      '<select id="mobileSortSelect" aria-label="Сортировать по">' + options + "</select>" +
+      '<button type="button" id="mobileSortDir" aria-label="Сменить направление сортировки">' + dirLabel + "</button>";
+
+    document.getElementById("mobileSortSelect").addEventListener("change", function (e) {
+      setSort(e.target.value, "desc");
+      render();
+    });
+    document.getElementById("mobileSortDir").addEventListener("click", function () {
+      setSort(getSortColumn(), getSortDirection() === "desc" ? "asc" : "desc");
+      render();
+    });
+  }
+
+  function renderSubtitle() {
+    document.getElementById("subtitle").textContent =
+      "Карт учтено: " + state.data.totalMapsCollected + " · обновлено " + formatDateTime(state.data.generatedAt);
+  }
+
+  function renderBanner() {
+    var el = document.getElementById("qualBanner");
+    var drop = state.data.qualification.qualificationDrop;
+    if (!drop) { el.innerHTML = ""; return; }
+    el.innerHTML =
+      '<div class="banner">Порог квалификации вырос до ' + drop.threshold + " " + pluralRu(drop.threshold, "карты", "карт", "карт") + ' — вне рейтинга: ' +
+      drop.droppedNames.map(escapeHtml).join(", ") + "</div>";
+  }
+
+  function renderSessionHeader() {
+    var el = document.getElementById("sessionHeader");
+    var s = currentSession();
+    if (state.tab !== "lastSession" || !s) {
+      el.innerHTML = state.tab === "lastSession"
+        ? '<div class="session-header">Сессий пока нет.</div>'
+        : "";
+      el.dataset.key = "";
+      return;
+    }
+    // Любой render() (сортировка таблицы, раскрытие строки…) вызывает и эту функцию;
+    // если вкладка, сессия и состояние панели не менялись, шапку не пересобираем —
+    // иначе пересоздавалась бы карточка и пропадало сообщение «Скопировано».
+    var key = state.tab + "|" + s.id + "|" + (recapState.open ? 1 : 0) + "|" + (wheelState.spinning ? 1 : 0);
+    if (el.dataset.key === key && el.firstChild) return;
+    el.dataset.key = key;
+    var hours = s.lastPlayedAt && s.firstPlayedAt
+      ? Math.max(1, Math.round((s.lastPlayedAt - s.firstPlayedAt) / 3600))
+      : null;
+    var mapsHtml = s.maps.map(function (m) {
+      // счёт везде записываем "победитель первым" (как на карточке и в рекордах)
+      var score = m.teams && m.teams.length === 2 && m.teams[0].score != null && m.teams[1].score != null
+        ? Math.max(m.teams[0].score, m.teams[1].score) + ":" + Math.min(m.teams[0].score, m.teams[1].score)
+        : "";
+      var tierNote = m.statsTier === "basic" ? " (basic)" : "";
+      return '<a href="' + escapeHtml(m.url) + '" target="_blank" rel="noopener">' +
+        escapeHtml(m.map || "?") + " " + score + tierNote + "</a>";
+    }).join("");
+    var optionsHtml = state.data.sessions.map(function (x) {
+      return '<option value="' + escapeHtml(x.id) + '"' + (x.id === s.id ? " selected" : "") + ">" +
+        escapeHtml(sessionLabel(x)) + "</option>";
+    }).join("");
+    el.innerHTML =
+      '<div class="session-picker"><select id="sessionSelect" aria-label="Сессия"' + (wheelState.spinning ? " disabled" : "") + ">" + optionsHtml + "</select>" +
+      (s.recap
+        ? '<button type="button" class="recap-btn" id="recapBtn" aria-expanded="' + (recapState.open ? "true" : "false") + '">Итоги вечера</button>'
+        : "") +
+      "</div>" +
+      '<div class="session-header"><span class="session-id">Сессия ' + escapeHtml(s.id) + "</span> · " +
+      mapsCount(s.maps.length) + (hours ? " · ~" + hours + " ч" : "") +
+      '<div class="session-maps">' + mapsHtml + "</div></div>" +
+      '<div id="recapPanel"></div>';
+
+    document.getElementById("sessionSelect").addEventListener("change", function (e) {
+      // Пока крутится колесо, сессию не меняем: по окончании оно пишет результат
+      // в свой блок, который при смене сессии был бы пересобран.
+      if (wheelState.spinning) { e.target.value = currentSession().id; return; }
+      state.sessionId = e.target.value;
+      state.expanded = null;
+      render();
+      // render() пересоздал <select>; возвращаем фокус, иначе по сессиям нельзя
+      // листать стрелками с клавиатуры.
+      document.getElementById("sessionSelect").focus();
+    });
+
+    var recapBtn = document.getElementById("recapBtn");
+    if (recapBtn) {
+      recapBtn.addEventListener("click", function () {
+        recapState.open = !recapState.open;
+        if (recapState.open) recapState.joke = randomExcuse();
+        renderSessionHeader();
+        // renderSessionHeader пересоздал кнопку; возвращаем фокус, иначе с
+        // клавиатуры нельзя закрыть панель тем же нажатием
+        document.getElementById("recapBtn").focus();
+      });
+    }
+    renderRecapPanel(s);
+  }
+
+  function renderFooter() {
+    var el = document.getElementById("footer");
+    if (noTableTab()) { el.textContent = ""; return; }
+    el.textContent =
+      state.tab === "allTime"
+        ? "Порог квалификации: " + mapsCount(state.data.qualification.threshold) + " " +
+          "(" + Math.round(state.data.qualification.qualifyShare * 100) + "% от " +
+          state.data.qualification.maxMaps + " у лидера)"
+        : "Карт учтено всего: " + state.data.totalMapsCollected;
+  }
+
+  // Вкладки, на которых нет общей таблицы игроков (у них свой блок).
+  function noTableTab() { return state.tab === "draft" || state.tab === "records"; }
+
+  function getRows() {
+    if (noTableTab()) return [];
+    if (state.tab === "allTime") return state.data.allTime.players;
+    if (state.tab === "maps") {
+      var m = currentMapEntry();
+      return m ? m.players : [];
+    }
+    var s = currentSession();
+    return s ? s.players : [];
+  }
+
+  function sortedRows() {
+    var rows = getRows().slice();
+    var col = getSortColumn();
+    var dir = getSortDirection() === "asc" ? 1 : -1;
+    // Порог квалификации считается по всей истории и не имеет смысла для
+    // одной сессии из 3-7 карт — там сортируем только по колонке.
+    var useQualification = state.tab === "allTime";
+    // "Карты", сортировка по числу карт: при равенстве выше тот, у кого
+    // лучше K/D на этой карте, а не произвольный порядок.
+    var tiebreakKd = state.tab === "maps" && col === "mapsPlayed";
+    rows.sort(function (a, b) {
+      if (useQualification && a.isQualified !== b.isQualified) return a.isQualified ? -1 : 1;
+      var av = a[col], bv = b[col];
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      if (av !== bv) return (av < bv ? -1 : 1) * dir;
+      if (tiebreakKd && a.kd !== b.kd) {
+        if (a.kd == null) return 1;
+        if (b.kd == null) return -1;
+        return a.kd < b.kd ? 1 : -1;
+      }
+      return 0;
+    });
+    return rows;
+  }
+
+  // Абсолютные пороги (см. "Информация о рейтинге") — разные для двух вкладок,
+  // потому что у них разные шкалы: сессия почти никогда не доходит до 800+,
+  // "за всё время" считается вокруг базы 500.
+  var SESSION_TIERS = [
+    { min: 800, cls: "tier-green" },
+    { min: 600, cls: "tier-yellow" },
+    { min: 400, cls: "tier-orange" },
+    { min: -Infinity, cls: "tier-red" },
+  ];
+  var ALLTIME_TIERS = [
+    { min: 800, cls: "tier-green" },
+    { min: 700, cls: "tier-yellow" },
+    { min: 600, cls: "tier-orange" },
+    { min: 500, cls: "tier-neutral" },
+    { min: 400, cls: "tier-accent" },
+    { min: -Infinity, cls: "tier-red" },
+  ];
+
+  function ratingClass(row) {
+    if (row.rating == null) return "rating-na";
+    var tiers = state.tab === "allTime" ? ALLTIME_TIERS : SESSION_TIERS;
+    for (var i = 0; i < tiers.length; i++) {
+      if (row.rating >= tiers[i].min) return tiers[i].cls;
+    }
+    return "tier-red";
+  }
+
+  function renderTable() {
+    if (noTableTab()) { document.getElementById("tableWrap").innerHTML = ""; return; }
+    var rows = sortedRows();
+    var columns = currentColumns();
+    var isMapsTab = state.tab === "maps";
+
+    var headHtml = "<tr>";
+    columns.forEach(function (c) {
+      headHtml += headerCell(c);
+    });
+    headHtml += "</tr>";
+
+    var bodyHtml = "";
+    var thresholdShown = false;
+    var showQualification = state.tab === "allTime";
+    rows.forEach(function (row) {
+      if (showQualification && !row.isQualified && !thresholdShown) {
+        thresholdShown = true;
+        bodyHtml += '<tr class="qual-divider"><td colspan="' + columns.length +
+          '">менее ' + Math.round(state.data.qualification.qualifyShare * 100) +
+          '% карт лидера (' + state.data.qualification.threshold + ')</td></tr>';
+      }
+      bodyHtml += isMapsTab ? mapRowHtml(row) : playerRowHtml(row, showQualification);
+      bodyHtml += detailRowHtml(row);
+    });
+
+    document.getElementById("tableWrap").innerHTML =
+      "<table><thead>" + headHtml + "</thead><tbody>" + bodyHtml + "</tbody></table>";
+
+    document.querySelectorAll("thead th[data-sort]").forEach(function (th) {
+      th.addEventListener("click", function () {
+        var col = th.dataset.sort;
+        if (getSortColumn() === col) {
+          setSort(col, getSortDirection() === "desc" ? "asc" : "desc");
+        } else {
+          setSort(col, "desc");
+        }
+        render();
+      });
+    });
+
+    document.querySelectorAll("tr.player-row").forEach(function (tr) {
+      tr.addEventListener("click", function () {
+        var id = tr.dataset.steamid;
+        state.expanded = state.expanded === id ? null : id;
+        render();
+      });
+    });
+  }
+
+  function headerCell(c) {
+    var sorted = getSortColumn() === c.id ? "sorted" : "";
+    var cls = (c.collapseMobile ? "req-collapse " : "") + sorted;
+    return '<th class="' + cls + '" data-sort="' + c.id + '">' + escapeHtml(c.label) + "</th>";
+  }
+
+  // Ссылка на профиль Steam — только на вкладке "За всё время"; на остальных
+  // (сессия, карты) ник просто текст, без гиперссылки.
+  function playerCellHtml(row, metaText, linked) {
+    var avatarHtml = row.avatarUrl
+      ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
+      : '<div class="avatar"></div>';
+    var inner = avatarHtml + '<span class="player-text">' +
+      '<span class="player-name">' + escapeHtml(row.name) + "</span>" +
+      '<span class="player-meta">' + metaText + "</span>" +
+      "</span>";
+    if (linked) {
+      inner = '<a href="' + escapeHtml(row.steamProfileUrl) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' +
+        inner + "</a>";
+    }
+    return '<td><div class="player-cell">' + inner + "</div></td>";
+  }
+
+  function playerRowHtml(row, showQualification) {
+    var isUnqualified = showQualification && !row.isQualified;
+    var cls = "player-row" + (isUnqualified ? " unqualified" : "");
+    var mapsCell = !isUnqualified
+      ? row.mapsPlayed
+      : row.mapsPlayed + ' <small>/ ' + state.data.qualification.threshold + "</small>";
+
+    var metaText = mapsCount(row.mapsPlayed) + " · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
+
+    var cells = "";
+    cells += playerCellHtml(row, metaText, state.tab === "allTime");
+    cells += '<td class="maps-cell req-collapse">' + mapsCell + "</td>";
+    cells += '<td class="req-collapse">' + row.k + "</td>";
+    cells += '<td class="req-collapse">' + row.d + "</td>";
+    cells += '<td class="req-collapse">' + fmt2(row.kd) + "</td>";
+    var ratingHtml = '<span class="rating-cell ' + ratingClass(row) + '">' + fmtRating(row.rating) + "</span>";
+    if (state.tab === "allTime" && row.ratingDelta != null) {
+      ratingHtml = '<span class="rating-with-delta">' +
+        '<span class="rating-delta ' + ratingDeltaClass(row.ratingDelta) + '">' + fmtRatingDelta(row.ratingDelta) + "</span>" +
+        ratingHtml + "</span>";
+    }
+    cells += "<td>" + ratingHtml + "</td>";
+
+    return '<tr class="' + cls + '" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
+  }
+
+  // Вкладка "Карты": на десктопе все метрики уже отдельными колонками, но на
+  // мобильном часть (К-D, WR) прячется — кликабельна, как остальные вкладки,
+  // чтобы на телефоне эти цифры тоже были доступны через detailRowHtml.
+  function mapRowHtml(row) {
+    var metaText = fmtInt(row.totalRounds) + " раундов · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
+    var cells = playerCellHtml(row, metaText, false);
+
+    MAP_COLUMNS.slice(1).forEach(function (c) {
+      var value = row[c.id];
+      var text = c.fmt ? c.fmt(value) : String(value);
+      var cls = c.collapseMobile ? "req-collapse" : "";
+      cells += '<td class="' + cls + '">' + text + "</td>";
+    });
+
+    return '<tr class="player-row" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
+  }
+
+  function detailRowHtml(row) {
+    var expanded = state.expanded === row.steamid64;
+    var colspan = currentColumns().length;
+    if (!expanded) {
+      return '<tr class="detail-row" hidden><td colspan="' + colspan + '"></td></tr>';
+    }
+
+    var metrics = [
+      ["Раунды", fmtInt(row.totalRounds)],
+      ["K-D (разница)", fmtDiff(row.k - row.d)],
+      ["WR", fmtWr(row.winRate) + " (" + row.wins + "-" + row.losses + ")"],
+    ];
+    var metricsHtml = metrics.map(function (m) {
+      return '<div class="detail-metric"><div class="label">' + m[0] + '</div><div class="value">' + m[1] + "</div></div>";
+    }).join("");
+
+    return '<tr class="detail-row"><td colspan="' + colspan + '">' +
+      '<div class="detail-grid">' + metricsHtml + "</div></td></tr>";
+  }
+
+  // "Динамика рейтинга": линейный график рейтинга "за всё время" по сессиям,
+  // до HIST_MAX игроков для сравнения (вкладка "За всё время", под таблицей).
+  // Цвета — 6 слотов тёмной палитры dataviz, проверенные валидатором против
+  // фона панели (#1b1e26). Цвет принадлежит игроку, пока он выбран.
+  var HIST_COLORS = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300"];
+  var HIST_MAX = 6;
+  var HIST_DEFAULT = 3;
+  var SVG_NS = "http://www.w3.org/2000/svg";
+  var histState = { ready: false, selected: [] }; // selected: [{ id, color }]
+
+  function svgEl(name, attrs, style) {
+    var el = document.createElementNS(SVG_NS, name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    if (style) el.setAttribute("style", style);
+    return el;
+  }
+  // Подписи сессий для оси X и шапки таблицы: "ДД.ММ"; если данные охватывают
+  // несколько лет — у всех добавляется год ("ДД.ММ.ГГ"), чтобы подписи не
+  // двоились; 2-я и следующие сессии одного дня получают суффикс " №N".
+  function histLabels(sessions) {
+    var years = {};
+    sessions.forEach(function (s) { years[s.id.slice(0, 4)] = true; });
+    var multiYear = Object.keys(years).length > 1;
+    return sessions.map(function (s) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})(?:-(\d+))?$/.exec(s.id);
+      if (!m) return s.id;
+      return m[3] + "." + m[2] + (multiYear ? "." + m[1].slice(2) : "") + (m[4] ? " №" + m[4] : "");
+    });
+  }
+  // Ось Y: округлённые границы и шаг, не более ~5 делений.
+  function histYScale(values) {
+    var lo = Math.min.apply(null, values.concat([500]));
+    var hi = Math.max.apply(null, values.concat([500]));
+    var span = Math.max(hi - lo, 50);
+    // шаг считаем по диапазону вместе с запасом по краям (+16%), иначе делений выходит больше 5
+    var step = [10, 25, 50, 100, 200, 250, 500].filter(function (s) { return span * 1.16 / s <= 5; })[0] || 500;
+    return {
+      min: Math.max(0, Math.floor((lo - span * 0.08) / step) * step),
+      max: Math.ceil((hi + span * 0.08) / step) * step,
+      step: step,
+    };
+  }
+  function histPlayers() {
+    var h = state.data.ratingHistory;
+    return state.data.allTime.players.filter(function (p) { return h.players[p.steamid64]; });
+  }
+  // В какие сессии игрок реально играл (по списку игроков каждой сессии).
+  function histPlayedIn() {
+    var played = {};
+    (state.data.sessions || []).forEach(function (s) {
+      played[s.id] = {};
+      s.players.forEach(function (p) { played[s.id][p.steamid64] = true; });
+    });
+    return played;
+  }
+
+  function renderHistorySection() {
+    var el = document.getElementById("historySection");
+    var h = state.data && state.data.ratingHistory;
+    if (state.tab !== "allTime" || !h || !h.sessions.length) { el.style.display = "none"; return; }
+    el.style.display = "";
+    if (!histState.ready) {
+      histState.selected = histPlayers()
+        .filter(function (p) { return p.isQualified; })
+        .slice(0, HIST_DEFAULT)
+        .map(function (p, i) { return { id: p.steamid64, color: HIST_COLORS[i] }; });
+      el.innerHTML =
+        '<div class="hist-section">' +
+          '<div class="hist-title">Динамика рейтинга</div>' +
+          '<div class="hist-chips" id="histChips"></div>' +
+          '<div class="hist-hint" id="histHint" aria-live="polite"></div>' +
+          '<div class="hist-chart" id="histChart"></div>' +
+          '<details class="hist-table-wrap"><summary>Таблица значений</summary>' +
+            '<div class="hist-table-scroll" id="histTable"></div></details>' +
+        "</div>";
+      // На телефоне resize приходит и при показе/скрытии адресной строки (меняется
+      // только высота) — перерисовываем, только когда изменилась ширина графика.
+      window.addEventListener("resize", function () {
+        var box = document.getElementById("histChart");
+        if (state.tab !== "allTime" || !box || box.clientWidth === histState.drawnWidth) return;
+        drawHistChart();
+      });
+      histState.ready = true;
+    }
+    renderHistChips();
+    drawHistChart();
+  }
+
+  function renderHistChips() {
+    var box = document.getElementById("histChips");
+    box.textContent = "";
+    histPlayers().forEach(function (p) {
+      var sel = histState.selected.filter(function (s) { return s.id === p.steamid64; })[0];
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "hist-chip" + (sel ? " on" : "");
+      btn.setAttribute("aria-pressed", sel ? "true" : "false");
+      if (sel) btn.style.borderColor = sel.color;
+      var dot = document.createElement("span");
+      dot.className = "hist-chip-dot";
+      if (sel) dot.style.background = sel.color;
+      var label = document.createElement("span");
+      label.className = "hist-chip-label";
+      label.textContent = p.name;
+      btn.appendChild(dot);
+      btn.appendChild(label);
+      btn.addEventListener("click", function () { toggleHistPlayer(p.steamid64); });
+      box.appendChild(btn);
+    });
+  }
+
+  function toggleHistPlayer(id) {
+    var hint = document.getElementById("histHint");
+    var idx = -1;
+    histState.selected.forEach(function (s, i) { if (s.id === id) idx = i; });
+    hint.textContent = "";
+    if (idx !== -1) {
+      histState.selected.splice(idx, 1);
+    } else {
+      if (histState.selected.length >= HIST_MAX) {
+        hint.textContent = "Максимум " + HIST_MAX + " игроков — сначала снимите кого-нибудь.";
+        return;
+      }
+      var used = histState.selected.map(function (s) { return s.color; });
+      var color = HIST_COLORS.filter(function (c) { return used.indexOf(c) === -1; })[0];
+      histState.selected.push({ id: id, color: color });
+    }
+    renderHistChips();
+    drawHistChart();
+  }
+
+  function drawHistChart() {
+    var box = document.getElementById("histChart");
+    if (!box || state.tab !== "allTime") return;
+    histState.drawnWidth = box.clientWidth;
+    var h = state.data.ratingHistory;
+    var names = {};
+    state.data.allTime.players.forEach(function (p) { names[p.steamid64] = p.name; });
+    var sel = histState.selected;
+    box.textContent = "";
+    drawHistTable(sel, names);
+    if (!sel.length) {
+      var empty = document.createElement("div");
+      empty.className = "hist-empty";
+      empty.textContent = "Выберите игроков, чтобы сравнить их рейтинг";
+      box.appendChild(empty);
+      return;
+    }
+
+    var n = h.sessions.length;
+    var width = box.clientWidth || 600;
+    var height = width < 480 ? 240 : 280;
+    var padL = 40, padR = 14, padT = 12, padB = 26, inner = 10;
+    var values = [];
+    sel.forEach(function (s) {
+      h.players[s.id].forEach(function (v) { if (v !== null) values.push(v); });
+    });
+    var ys = histYScale(values);
+    var plotW = width - padL - padR - inner * 2;
+    function xAt(i) { return padL + inner + (n === 1 ? plotW / 2 : i * plotW / (n - 1)); }
+    function yAt(v) { return padT + (ys.max - v) / (ys.max - ys.min) * (height - padT - padB); }
+
+    var svg = svgEl("svg", { width: width, height: height, viewBox: "0 0 " + width + " " + height, role: "img", tabindex: "0",
+      "aria-label": "График рейтинга по сессиям; стрелки влево и вправо переключают сессии" });
+
+    for (var t = ys.min; t <= ys.max; t += ys.step) {
+      svg.appendChild(svgEl("line", { x1: padL, x2: width - padR, y1: yAt(t), y2: yAt(t) }, "stroke: var(--border); stroke-width: 1;"));
+      var tl = svgEl("text", { x: padL - 6, y: yAt(t) + 4, "text-anchor": "end" }, "fill: var(--text-faint); font-size: 11px;");
+      tl.textContent = String(t);
+      svg.appendChild(tl);
+    }
+    if (500 >= ys.min && 500 <= ys.max) {
+      svg.appendChild(svgEl("line", { x1: padL, x2: width - padR, y1: yAt(500), y2: yAt(500) },
+        "stroke: var(--text-faint); stroke-width: 1; opacity: 0.7;"));
+      var ref = svgEl("text", { x: width - padR, y: yAt(500) - 4, "text-anchor": "end" }, "fill: var(--text-faint); font-size: 11px;");
+      ref.textContent = "500 — средний игрок";
+      svg.appendChild(ref);
+    }
+
+    // подписи оси X: не чаще, чем помещаются, последняя сессия всегда подписана
+    var labels = histLabels(h.sessions);
+    var maxLen = Math.max.apply(null, labels.map(function (l) { return l.length; }));
+    var labelWidth = Math.max(44, maxLen * 6 + 14); // ~6px на символ при 11px шрифте
+    var every = Math.max(1, Math.ceil(n * labelWidth / (width - padL - padR)));
+    h.sessions.forEach(function (s, i) {
+      if ((n - 1 - i) % every !== 0) return;
+      var xl = svgEl("text", { x: xAt(i), y: height - 8, "text-anchor": "middle" }, "fill: var(--text-faint); font-size: 11px;");
+      xl.textContent = labels[i];
+      svg.appendChild(xl);
+    });
+
+    var played = histPlayedIn();
+    sel.forEach(function (s) {
+      var arr = h.players[s.id];
+      var d = "";
+      arr.forEach(function (v, i) {
+        if (v === null) return;
+        d += (d ? " L" : "M") + xAt(i).toFixed(1) + " " + yAt(v).toFixed(1);
+      });
+      if (d.indexOf("L") !== -1) {
+        svg.appendChild(svgEl("path", { d: d }, "fill: none; stroke: " + s.color + "; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"));
+      }
+      arr.forEach(function (v, i) {
+        if (v === null || !(played[h.sessions[i].id] && played[h.sessions[i].id][s.id])) return;
+        svg.appendChild(svgEl("circle", { cx: xAt(i), cy: yAt(v), r: 4 },
+          "fill: " + s.color + "; stroke: var(--bg-panel); stroke-width: 2;"));
+      });
+    });
+
+    var guide = svgEl("line", { x1: 0, x2: 0, y1: padT, y2: height - padB }, "stroke: var(--text-faint); stroke-width: 1; display: none;");
+    svg.appendChild(guide);
+    var hit = svgEl("rect", { x: padL, y: 0, width: width - padL - padR, height: height }, "fill: transparent;");
+    svg.appendChild(hit);
+    box.appendChild(svg);
+
+    var tip = document.createElement("div");
+    tip.className = "hist-tip";
+    tip.style.display = "none";
+    box.appendChild(tip);
+
+    function showAt(i) {
+      var rows = sel.map(function (s) {
+        return { color: s.color, name: names[s.id] || s.id, value: h.players[s.id][i] };
+      }).sort(function (a, b) { return (b.value === null ? -1 : b.value) - (a.value === null ? -1 : a.value); });
+      tip.textContent = "";
+      var head = document.createElement("div");
+      head.className = "hist-tip-head";
+      head.textContent = sessionDate(h.sessions[i].id);
+      tip.appendChild(head);
+      rows.forEach(function (r) {
+        var row = document.createElement("div");
+        row.className = "hist-tip-row";
+        var key = document.createElement("span");
+        key.className = "hist-tip-key";
+        key.style.background = r.color;
+        var nm = document.createElement("span");
+        nm.className = "hist-tip-name";
+        nm.textContent = r.name;
+        var val = document.createElement("span");
+        val.className = "hist-tip-val";
+        val.textContent = r.value === null ? "—" : String(r.value);
+        row.appendChild(key);
+        row.appendChild(nm);
+        row.appendChild(val);
+        tip.appendChild(row);
+      });
+      guide.setAttribute("x1", xAt(i));
+      guide.setAttribute("x2", xAt(i));
+      guide.style.display = "";
+      tip.style.display = "";
+      var left = xAt(i) + 12;
+      if (left + tip.offsetWidth > width) left = xAt(i) - 12 - tip.offsetWidth;
+      tip.style.left = Math.max(0, Math.min(left, width - tip.offsetWidth)) + "px";
+      tip.style.top = padT + "px";
+    }
+    function hide() {
+      guide.style.display = "none";
+      tip.style.display = "none";
+    }
+    function nearest(clientX) {
+      var rect = svg.getBoundingClientRect();
+      var x = (clientX - rect.left) * (width / rect.width);
+      var best = 0;
+      for (var i = 1; i < n; i++) if (Math.abs(xAt(i) - x) < Math.abs(xAt(best) - x)) best = i;
+      return best;
+    }
+    var cursor = n - 1;
+    hit.addEventListener("pointermove", function (e) { cursor = nearest(e.clientX); showAt(cursor); });
+    hit.addEventListener("pointerdown", function (e) { cursor = nearest(e.clientX); showAt(cursor); });
+    // У касания pointerleave приходит сразу после pointerup, поэтому прячем
+    // только при уходе мыши; на телефоне подсказка живёт до blur (тап мимо графика).
+    svg.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") hide(); });
+    svg.addEventListener("focus", function () { showAt(cursor); });
+    svg.addEventListener("blur", hide);
+    svg.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") cursor = Math.max(0, cursor - 1);
+      else if (e.key === "ArrowRight") cursor = Math.min(n - 1, cursor + 1);
+      else return;
+      e.preventDefault();
+      showAt(cursor);
+    });
+  }
+
+  // Таблица значений — тот же набор данных без наведения (доступность).
+  function drawHistTable(sel, names) {
+    var host = document.getElementById("histTable");
+    var h = state.data.ratingHistory;
+    host.textContent = "";
+    if (!sel.length) return;
+    var table = document.createElement("table");
+    table.className = "hist-table";
+    var headRow = document.createElement("tr");
+    var corner = document.createElement("th");
+    corner.textContent = "Игрок";
+    headRow.appendChild(corner);
+    var labels = histLabels(h.sessions);
+    h.sessions.forEach(function (s, i) {
+      var th = document.createElement("th");
+      th.textContent = labels[i];
+      th.title = sessionDate(s.id); // полная дата при наведении
+      headRow.appendChild(th);
+    });
+    table.appendChild(headRow);
+    sel.forEach(function (s) {
+      var tr = document.createElement("tr");
+      var nameCell = document.createElement("td");
+      nameCell.textContent = names[s.id] || s.id;
+      tr.appendChild(nameCell);
+      h.players[s.id].forEach(function (v) {
+        var td = document.createElement("td");
+        td.textContent = v === null ? "—" : String(v);
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+    host.appendChild(table);
+  }
+
+
+  // Вкладка "Рекорды": карточки по четырём группам, у каждого рекорда топ-3
+  // (данные считает scripts/lib/records.mjs). Всё из данных — через textContent.
+  var RECORD_GROUPS = [
+    { id: "personal", title: "Личные рекорды" },
+    { id: "streaks", title: "Серии" },
+    { id: "matches", title: "Матчи" },
+    { id: "oops", title: "Бывает с каждым" },
+  ];
+
+  function formatDay(sec) {
+    if (sec == null) return "—";
+    return new Date(sec * 1000).toLocaleDateString("ru-RU", { timeZone: "Europe/Samara" });
+  }
+  function recordMapName(mapKey) {
+    var m = ((state.data && state.data.maps) || []).filter(function (x) { return x.mapKey === mapKey; })[0];
+    return m ? m.displayName : (mapKey || "—");
+  }
+  function recordValueText(rec, e) {
+    switch (rec.id) {
+      case "most-kills": return e.value + " " + pluralRu(e.value, "убийство", "убийства", "убийств");
+      case "best-kd-diff": case "carry-in-loss": case "worst-kd-diff": return fmtDiff(e.value);
+      case "best-kd": case "worst-kd": return e.value.toFixed(2);
+      case "most-deaths": return e.value + " " + pluralRu(e.value, "смерть", "смерти", "смертей");
+      case "win-streak": case "kd-streak": case "loss-streak": return mapsCount(e.value);
+      case "attendance-streak": return e.value + " " + pluralRu(e.value, "сессия", "сессии", "сессий");
+      case "biggest-win": case "closest-match": return e.score[0] + ":" + e.score[1];
+      case "longest-map": case "shortest-map":
+        return e.rounds + " " + pluralRu(e.rounds, "раунд", "раунда", "раундов");
+      default: // рекорд, которого страница ещё не знает: показываем, что есть в записи
+        if (e.value != null) return String(e.value);
+        if (e.score) return e.score[0] + ":" + e.score[1];
+        return "—";
+    }
+  }
+  // Подпись под строкой: серия — период, личный рекорд — карта · дата · K/D, матч — дата и раунды/счёт.
+  function recordContextText(rec, e) {
+    if (e.from !== undefined) {
+      var a = formatDay(e.from), b = formatDay(e.to);
+      return a === b ? a : a + " – " + b;
+    }
+    var bits = [recordMapName(e.map), formatDay(e.playedAt)];
+    if (e.k !== undefined) bits.push("K " + e.k + " / D " + e.d);
+    else if (rec.id === "longest-map" || rec.id === "shortest-map") bits.push("счёт " + e.score[0] + ":" + e.score[1]);
+    else bits.push(e.rounds + " " + pluralRu(e.rounds, "раунд", "раунда", "раундов"));
+    return bits.join(" · ");
+  }
+
+  function buildRecordRow(rec, e, place, playersById) {
+    var row = document.createElement("div");
+    row.className = "record-row";
+    var placeEl = document.createElement("span");
+    placeEl.className = "record-place";
+    placeEl.textContent = String(place);
+    var who = document.createElement("div");
+    who.className = "record-who";
+    var player = e.steamid64 ? playersById[e.steamid64] : null;
+    if (e.steamid64) {
+      if (player && player.avatarUrl) {
+        var img = document.createElement("img");
+        img.className = "avatar";
+        img.alt = "";
+        img.loading = "lazy";
+        img.src = player.avatarUrl;
+        who.appendChild(img);
+      }
+      var nameEl = document.createElement("span");
+      nameEl.textContent = player ? player.name : e.steamid64;
+      who.appendChild(nameEl);
+    } else {
+      var mapEl = document.createElement("span");
+      mapEl.textContent = recordMapName(e.map);
+      who.appendChild(mapEl);
+    }
+    var value = document.createElement("span");
+    value.className = "record-value";
+    value.textContent = recordValueText(rec, e);
+    var ctx = document.createElement("div");
+    ctx.className = "record-context";
+    ctx.appendChild(document.createTextNode(recordContextText(rec, e)));
+    if (e.url && /^https:\/\//.test(e.url)) {
+      ctx.appendChild(document.createTextNode(" · "));
+      var link = document.createElement("a");
+      link.href = e.url;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "матч";
+      ctx.appendChild(link);
+    }
+    row.appendChild(placeEl);
+    row.appendChild(who);
+    row.appendChild(value);
+    row.appendChild(ctx);
+    return row;
+  }
+
+  function renderRecordsSection() {
+    var el = document.getElementById("recordsSection");
+    if (state.tab !== "records") { el.style.display = "none"; return; }
+    el.style.display = "";
+    el.textContent = "";
+    var recs = state.data.records;
+    if (!recs || !recs.length) {
+      var none = document.createElement("div");
+      none.className = "session-header";
+      none.textContent = "Рекордов пока нет.";
+      el.appendChild(none);
+      return;
+    }
+    var playersById = {};
+    state.data.allTime.players.forEach(function (p) { playersById[p.steamid64] = p; });
+    RECORD_GROUPS.forEach(function (g) {
+      var items = recs.filter(function (r) { return r.group === g.id; });
+      if (!items.length) return;
+      var section = document.createElement("div");
+      section.className = "records-group records-group-" + g.id;
+      var h3 = document.createElement("h3");
+      h3.textContent = g.title;
+      var grid = document.createElement("div");
+      grid.className = "records-grid";
+      items.forEach(function (rec) {
+        var card = document.createElement("div");
+        card.className = "record-card";
+        var h4 = document.createElement("h4");
+        h4.textContent = rec.title;
+        var hint = document.createElement("p");
+        hint.className = "record-hint";
+        hint.textContent = rec.hint;
+        card.appendChild(h4);
+        card.appendChild(hint);
+        if (!rec.top.length) {
+          var empty = document.createElement("p");
+          empty.className = "record-empty";
+          empty.textContent = "Пока нет";
+          card.appendChild(empty);
+        }
+        // place — из данных: равные результаты делят место (1, 1, 1 / 1, 2, 2)
+        rec.top.forEach(function (e, i) { card.appendChild(buildRecordRow(rec, e, e.place || i + 1, playersById)); });
+        if (rec.more > 0) {
+          var more = document.createElement("p");
+          more.className = "record-more";
+          more.textContent = "и ещё " + rec.more + " с таким же результатом";
+          card.appendChild(more);
+        }
+        grid.appendChild(card);
+      });
+      section.appendChild(h3);
+      section.appendChild(grid);
+      el.appendChild(section);
+    });
+  }
+
+  // Чисто for fun: колесо фортуны на вкладке "Сессии" (для выбранной сессии). Категории
+  // "random" разыгрываются честным случайным выбором среди участников сессии
+  // (специально не завязаны на статистику, чтобы никого не обижать), а
+  // "best"/"worst" всегда указывают на реального лидера/последнего по
+  // рейтингу этой сессии — players уже отсортирован по рейтингу (см. build.mjs).
+  var WHEEL_CATEGORIES = [
+    { text: "Кто покупает всем пивасик?", type: "random" },
+    { text: "Кого баним на следующую сессию?", type: "random" },
+    { text: "Титул: Отец-Доминатор", type: "random" },
+    { text: "Лучше бы остался дома <3", type: "random" },
+    { text: "Тащер вечера", type: "best" },
+    { text: "Посмотрю пару стримов и в следующий раз всех нагну", type: "worst" },
+  ];
+  var WHEEL_COLORS = ["#6ea8ff", "#3ecf6e", "#e0c34c", "#e0923e", "#e0625c", "#9b6bff", "#4cd2e0", "#e05c9e"];
+  var WHEEL_GRAY = "#454a56";
+  var wheelState = { rotation: 0, spinning: false, lastCategoryIndex: -1, segments: [] };
+
+  function wheelShortName(name) {
+    return name.length > 12 ? name.slice(0, 11) + "…" : name;
+  }
+
+  function renderWheelSection() {
+    var el = document.getElementById("wheelSection");
+    var session = currentSession();
+    var hasSession = session && session.players.length > 0;
+    if (!hasSession) {
+      el.innerHTML = "";
+      el.dataset.built = "";
+      return;
+    }
+    if (el.dataset.built !== session.id) {
+      buildWheel(el, session.players);
+      el.dataset.built = session.id;
+    }
+    el.style.display = state.tab === "lastSession" ? "" : "none";
+  }
+
+  // conic-gradient со всеми секторами в цвете, или, если передан winnerIndex,
+  // все, кроме его сектора, перекрашены в серый (см. п.2 правки — победитель
+  // остаётся выделенным цветом, остальные гаснут).
+  function wheelBackground(winnerIndex) {
+    return "conic-gradient(" + wheelState.segments.map(function (s, i) {
+      var color = winnerIndex == null || i === winnerIndex ? s.color : WHEEL_GRAY;
+      return color + " " + s.from + "deg " + s.to + "deg";
+    }).join(", ") + ")";
+  }
+
+  function buildWheel(el, players) {
+    var n = players.length;
+    var seg = 360 / n;
+
+    wheelState.segments = players.map(function (p, i) {
+      return { color: WHEEL_COLORS[i % WHEEL_COLORS.length], from: i * seg, to: (i + 1) * seg };
+    });
+
+    // Подпись читается вдоль своего радиуса, от центра к краю: pivot стоит в
+    // центре колеса, а rotate(ci - 90) разворачивает локальную ось "вправо"
+    // (куда растёт текст) точно в сторону сектора ci.
+    var labelsHtml = players.map(function (p, i) {
+      var ci = i * seg + seg / 2;
+      return '<div class="wheel-seg-label" style="transform: rotate(' + (ci - 90) + 'deg);">' +
+        "<span>" + escapeHtml(wheelShortName(p.name)) + "</span></div>";
+    }).join("");
+
+    el.innerHTML =
+      '<div class="wheel-section">' +
+        '<div class="wheel-category" id="wheelCategory">Крути колесо!</div>' +
+        '<div class="wheel-stage">' +
+          '<div class="wheel-pointer">▼</div>' +
+          '<div class="wheel-dial" id="wheelDial" style="background: ' + wheelBackground(null) + ';">' + labelsHtml + "</div>" +
+        "</div>" +
+        '<button type="button" class="wheel-spin-btn" id="wheelSpinBtn">🎡 Крутить колесо</button>' +
+        '<div class="wheel-result" id="wheelResult"></div>' +
+      "</div>";
+
+    wheelState.rotation = 0;
+    wheelState.spinning = false;
+    wheelState.lastCategoryIndex = -1;
+    document.getElementById("wheelSpinBtn").addEventListener("click", spinWheel);
+  }
+
+  // Пока крутится колесо, список сессий недоступен (иначе выбор молча откатывался бы).
+  function setSessionSelectLocked(locked) {
+    var sel = document.getElementById("sessionSelect");
+    if (sel) sel.disabled = locked;
+  }
+
+  function spinWheel() {
+    var session = currentSession();
+    if (wheelState.spinning || !session) return;
+    var players = session.players;
+    var n = players.length;
+    var seg = 360 / n;
+
+    // Та же категория два раза подряд не выпадает — исключаем прошлый индекс
+    // из пула перед случайным выбором.
+    var categoryPool = WHEEL_CATEGORIES.map(function (c, i) { return i; })
+      .filter(function (i) { return i !== wheelState.lastCategoryIndex; });
+    var categoryIndex = categoryPool[Math.floor(Math.random() * categoryPool.length)];
+    wheelState.lastCategoryIndex = categoryIndex;
+    var category = WHEEL_CATEGORIES[categoryIndex];
+
+    var winnerIndex;
+    if (category.type === "best") {
+      winnerIndex = 0;
+    } else if (category.type === "worst") {
+      winnerIndex = n - 1;
+    } else {
+      winnerIndex = Math.floor(Math.random() * n);
+    }
+    var winner = players[winnerIndex];
+
+    var ci = winnerIndex * seg + seg / 2;
+    var curMod = wheelState.rotation % 360;
+    var targetMod = (360 - ci) % 360;
+    var delta = (targetMod - curMod + 360) % 360;
+    var extraSpins = 5;
+    wheelState.rotation += extraSpins * 360 + delta;
+
+    wheelState.spinning = true;
+    setSessionSelectLocked(true); // менять сессию во время вращения нельзя
+    document.getElementById("wheelCategory").textContent = category.text;
+    document.getElementById("wheelResult").textContent = "";
+    document.getElementById("wheelSpinBtn").disabled = true;
+    document.getElementById("wheelDial").style.background = wheelBackground(null);
+    document.getElementById("wheelDial").style.transform = "rotate(" + wheelState.rotation + "deg)";
+
+    setTimeout(function () {
+      wheelState.spinning = false;
+      setSessionSelectLocked(false);
+      document.getElementById("wheelSpinBtn").disabled = false;
+      document.getElementById("wheelDial").style.background = wheelBackground(winnerIndex);
+      document.getElementById("wheelResult").innerHTML =
+        escapeHtml(category.text) + ": <strong>" + escapeHtml(winner.name) + "</strong>";
+    }, 5000);
+  }
+
+  // Чисто for fun: "Оправдалка" на вкладке "Сессии" — облако мемных
+  // отмазок игроков CS2; кнопка по очереди зажигает 3–5 случайных (с ✅, как в
+  // меме), без привязки к конкретному игроку. Облако — 3D-сфера: теги
+  // лежат на сфере (спираль Фибоначчи), сама она медленно вращается и
+  // крутится перетаскиванием; ближние теги крупнее и ярче дальних.
+  var EXCUSES = [
+    "Не регает", "Первая разминочная", "Тайминг ебучий", "Инпут лаг",
+    "Кто добавил невидимую текстуру?", "Вторая разминочная", "Лагает",
+    "Начали за T", "Не повезло", "0 помощи", "-98хп", "Бомбу слили",
+    "Достал нож не в тайминг", "Неудобно сидеть", "На карту отвлекся",
+    "Команда бомжей", "Мышка отвалилась", "Пинг 200", "Фризы",
+    "Тиммейты не кидают смоки", "Сбился прицел", "Скин не тот", "Тильт",
+    "Солнце в глаза",
+  ];
+  var EXCUSE_STEP_MS = 700;
+  var EXCUSE_AUTO_SPEED = 0.006; // рад/кадр (при 60 fps)
+  var EXCUSE_DRAG_SPEED = 0.008; // рад на пиксель перетаскивания
+  var excuseState = { running: false, raf: 0, last: 0, ax: 0.35, ay: 0, vx: 0, vy: 0, dragging: false, base: [] };
+
+  // Равномерно раскладывает n точек по единичной сфере (спираль Фибоначчи).
+  function fibonacciSphere(n) {
+    var golden = Math.PI * (3 - Math.sqrt(5));
+    var pts = [];
+    for (var i = 0; i < n; i++) {
+      var y = 1 - 2 * (i + 0.5) / n;
+      var r = Math.sqrt(1 - y * y);
+      pts.push([Math.cos(i * golden) * r, y, Math.sin(i * golden) * r]);
+    }
+    return pts;
+  }
+
+  function tickExcuseSphere(ts) {
+    var cloud = document.getElementById("excuseCloud");
+    if (!cloud) { excuseState.raf = 0; return; } // блок перестроен/убран — цикл заканчиваем
+    excuseState.raf = requestAnimationFrame(tickExcuseSphere);
+
+    var w = cloud.clientWidth, h = cloud.clientHeight;
+    var dt = Math.min(ts - excuseState.last, 50) / 16.67;
+    excuseState.last = ts;
+    if (!w || !h) return; // вкладка скрыта (display: none)
+
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!excuseState.dragging) {
+      excuseState.ay += ((reduceMotion ? 0 : EXCUSE_AUTO_SPEED) + excuseState.vy) * dt;
+      excuseState.ax += excuseState.vx * dt;
+      var decay = Math.pow(0.95, dt);
+      excuseState.vx *= decay;
+      excuseState.vy *= decay;
+    }
+
+    var radius = Math.min(w * 0.26, h * 0.42);
+    var sinY = Math.sin(excuseState.ay), cosY = Math.cos(excuseState.ay);
+    var sinX = Math.sin(excuseState.ax), cosX = Math.cos(excuseState.ax);
+    var tags = cloud.querySelectorAll(".excuse-tag");
+    for (var i = 0; i < tags.length; i++) {
+      var b = excuseState.base[i];
+      var x1 = b[0] * cosY + b[2] * sinY;
+      var z1 = -b[0] * sinY + b[2] * cosY;
+      var y2 = b[1] * cosX - z1 * sinX;
+      var z2 = b[1] * sinX + z1 * cosX;
+      var depth = (z2 + 1) / 2; // 0 — дальняя точка сферы, 1 — ближняя
+      var lit = tags[i].classList.contains("on");
+      var scale = 0.65 + 0.55 * depth;
+      var opacity = 0.25 + 0.75 * depth;
+      if (lit) { scale = Math.max(scale, 0.9); opacity = Math.max(opacity, 0.95); }
+      tags[i].style.transform = "translate(-50%, -50%) translate(" + (x1 * radius).toFixed(1) + "px, " +
+        (y2 * radius).toFixed(1) + "px) scale(" + scale.toFixed(3) + ")";
+      tags[i].style.opacity = opacity.toFixed(2);
+      tags[i].style.zIndex = Math.round(depth * 100) + (lit ? 200 : 0);
+    }
+  }
+
+  function bindExcuseDrag(cloud) {
+    var lastX = 0, lastY = 0;
+    cloud.addEventListener("pointerdown", function (e) {
+      excuseState.dragging = true;
+      excuseState.vx = 0;
+      excuseState.vy = 0;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      cloud.classList.add("dragging");
+      cloud.setPointerCapture(e.pointerId);
+    });
+    cloud.addEventListener("pointermove", function (e) {
+      if (!excuseState.dragging) return;
+      var dx = (e.clientX - lastX) * EXCUSE_DRAG_SPEED;
+      var dy = (e.clientY - lastY) * EXCUSE_DRAG_SPEED;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      excuseState.ay += dx;
+      excuseState.ax += dy;
+      excuseState.vy = dx; // последняя дельта — инерция после отпускания
+      excuseState.vx = dy;
+    });
+    function stop() {
+      excuseState.dragging = false;
+      cloud.classList.remove("dragging");
+    }
+    cloud.addEventListener("pointerup", stop);
+    cloud.addEventListener("pointercancel", stop);
+  }
+
+  function renderExcuseSection() {
+    var el = document.getElementById("excuseSection");
+    if (el.dataset.built !== "1") {
+      buildExcuses(el);
+      el.dataset.built = "1";
+    }
+    el.style.display = state.tab === "lastSession" ? "" : "none";
+  }
+
+  function buildExcuses(el) {
+    var tagsHtml = EXCUSES.map(function (text) {
+      return '<span class="excuse-tag">' + escapeHtml(text) + "</span>";
+    }).join("");
+
+    el.innerHTML =
+      '<div class="excuse-section">' +
+        '<div class="excuse-title">Оправдалка</div>' +
+        '<div class="excuse-controls">' +
+          '<button type="button" class="wheel-spin-btn" id="excuseBtn">Найти оправдание</button>' +
+        "</div>" +
+        '<div class="excuse-cloud" id="excuseCloud">' + tagsHtml + "</div>" +
+        '<div class="excuse-result" id="excuseResult"></div>' +
+      "</div>";
+
+    excuseState.running = false;
+    excuseState.dragging = false;
+    excuseState.vx = 0;
+    excuseState.vy = 0;
+    excuseState.base = fibonacciSphere(EXCUSES.length);
+    document.getElementById("excuseBtn").addEventListener("click", runExcuses);
+    bindExcuseDrag(document.getElementById("excuseCloud"));
+    cancelAnimationFrame(excuseState.raf);
+    excuseState.last = performance.now();
+    excuseState.raf = requestAnimationFrame(tickExcuseSphere);
+  }
+
+  function runExcuses() {
+    if (excuseState.running) return;
+    excuseState.running = true;
+    var btn = document.getElementById("excuseBtn");
+    var resultEl = document.getElementById("excuseResult");
+    var tags = document.querySelectorAll("#excuseCloud .excuse-tag");
+
+    btn.disabled = true;
+    tags.forEach(function (t) { t.classList.remove("on"); });
+    resultEl.innerHTML = "";
+
+    var count = 3 + Math.floor(Math.random() * 3); // 3..5
+    var order = EXCUSES.map(function (_, i) { return i; });
+    for (var i = order.length - 1; i > 0; i--) { // Фишер–Йейтс
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+    }
+    var picked = order.slice(0, count);
+    var shown = [];
+
+    var timer = setInterval(function () {
+      var idx = picked[shown.length];
+      tags[idx].classList.add("on");
+      shown.push(EXCUSES[idx]);
+      resultEl.innerHTML = shown.map(function (t) { return escapeHtml(t) + " ✅"; }).join(" ");
+      if (shown.length === count) {
+        clearInterval(timer);
+        excuseState.running = false;
+        btn.disabled = false;
+      }
+    }, EXCUSE_STEP_MS);
+  }
+
+  // "Итоги вечера": карточка-картинка по выбранной сессии на canvas. Данные
+  // (top/rise/drop) считает scripts/lib/recap.mjs; здесь модель, рисование и
+  // кнопки. Без аватарок Steam: кросс-доменные картинки "пачкают" canvas и
+  // ломают toBlob. Имена рисуются только через fillText.
+  var RECAP_W = 1080;
+  var RECAP_PAD = 56;
+  var RECAP_MAX_MAPS = 8;
+  // Шрифт карточки — тот же, что у страницы (берётся с body), запасной — системный.
+  var RECAP_FALLBACK_FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
+  function recapFontFamily() {
+    return getComputedStyle(document.body).fontFamily || RECAP_FALLBACK_FONT;
+  }
+  var recapState = { open: false, joke: null };
+
+  function randomExcuse(except) {
+    var pool = EXCUSES.filter(function (e) { return e !== except; });
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function recapModel(s) {
+    var byId = {};
+    s.players.forEach(function (p) { byId[p.steamid64] = p; });
+    function nameOf(id) { return (byId[id] && byId[id].name) || "—"; }
+    var r = s.recap;
+    var hours = s.lastPlayedAt && s.firstPlayedAt ? Math.max(1, Math.round((s.lastPlayedAt - s.firstPlayedAt) / 3600)) : null;
+    var maps = s.maps.map(function (m) {
+      var ok = m.teams && m.teams.length === 2 && m.teams[0].score != null && m.teams[1].score != null;
+      return {
+        name: recordMapName(m.map),
+        score: ok ? Math.max(m.teams[0].score, m.teams[1].score) + ":" + Math.min(m.teams[0].score, m.teams[1].score) : "",
+      };
+    });
+    return {
+      date: sessionDate(s.id),
+      sub: mapsCount(s.maps.length) + (hours ? " · ~" + hours + " ч" : ""),
+      top: r.top.map(function (e) {
+        return { name: nameOf(e.steamid64), rating: e.rating, kd: e.kd, kdDiff: e.kdDiff, wins: e.wins, maps: e.maps };
+      }),
+      rise: r.rise ? { name: nameOf(r.rise.steamid64), delta: r.rise.delta } : null,
+      drop: r.drop ? { name: nameOf(r.drop.steamid64), delta: r.drop.delta } : null,
+      maps: maps.slice(0, RECAP_MAX_MAPS),
+      moreMaps: Math.max(0, maps.length - RECAP_MAX_MAPS),
+      joke: recapState.joke,
+    };
+  }
+
+  // Текстовая версия карточки: aria-label canvas и опора для проверок.
+  function recapAriaLabel(m) {
+    var parts = ["Итоги вечера " + m.date + ". " + m.sub + "."];
+    if (m.top.length) {
+      parts.push("MVP вечера: " + m.top[0].name + ", рейтинг " + fmtRating(m.top[0].rating) + ".");
+      parts.push("Топ-3: " + m.top.map(function (t, i) { return (i + 1) + ". " + t.name + " " + fmtRating(t.rating); }).join("; ") + ".");
+    }
+    if (m.rise) parts.push("Больше всего вырос: " + m.rise.name + " " + fmtRatingDelta(m.rise.delta) + ".");
+    if (m.drop) parts.push("Больше всего просел: " + m.drop.name + " " + fmtRatingDelta(m.drop.delta) + ".");
+    if (m.maps.length) {
+      parts.push("Карты: " + m.maps.map(function (x) { return x.name + (x.score ? " " + x.score : ""); }).join("; ") +
+        (m.moreMaps ? " и ещё " + m.moreMaps : "") + ".");
+    }
+    if (m.joke) parts.push("Шутка вечера: " + m.joke + ".");
+    return parts.join(" ");
+  }
+
+  // На картинке отрицательные числа со знаком "−" (типографский минус), а не дефисом.
+  function recapMinus(str) { return String(str).replace(/^-/, "−"); }
+
+  function recapColors() {
+    var cs = getComputedStyle(document.documentElement);
+    function v(name, fallback) { return cs.getPropertyValue(name).trim() || fallback; }
+    return {
+      bg: v("--bg", "#14161c"), panel: v("--bg-panel", "#1b1e26"), border: v("--border", "#2c303b"),
+      text: v("--text", "#e6e8ef"), dim: v("--text-dim", "#9096a6"), faint: v("--text-faint", "#5b6172"),
+      accent: v("--accent", "#6ea8ff"), green: v("--green", "#3ecf6e"), red: v("--red", "#e0625c"),
+    };
+  }
+  function fitText(ctx, str, maxW) {
+    if (ctx.measureText(str).width <= maxW) return str;
+    var s = str;
+    while (s.length > 1 && ctx.measureText(s + "…").width > maxW) s = s.slice(0, -1);
+    return s + "…";
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  // Один код и для замера (draw = false), и для рисования (draw = true):
+  // возвращает полную высоту карточки.
+  function renderRecapCard(ctx, m, C, draw) {
+    var W = RECAP_W, P = RECAP_PAD, inner = W - 2 * P;
+    var family = recapFontFamily();
+    var y = P;
+    function text(str, x, baseline, size, weight, color, align, maxW) {
+      ctx.font = weight + " " + size + "px " + family;
+      ctx.textAlign = align || "left";
+      var s = maxW ? fitText(ctx, String(str), maxW) : String(str);
+      if (draw) { ctx.fillStyle = color; ctx.fillText(s, x, baseline); }
+    }
+    function panel(x, top, w, h) {
+      if (!draw) return;
+      roundRect(ctx, x, top, w, h, 20);
+      ctx.fillStyle = C.panel;
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = C.border;
+      ctx.stroke();
+    }
+
+    text("Рейтинг игроков «ЛЛ»", P, y + 26, 26, "500", C.faint);
+    y += 52;
+    text("Итоги вечера", P, y + 56, 64, "700", C.text);
+    y += 86;
+    text(m.date + " · " + m.sub, P, y + 28, 30, "400", C.dim, "left", inner);
+    y += 64;
+
+    if (m.top.length) {
+      var mvp = m.top[0];
+      panel(P, y, inner, 236);
+      text("MVP вечера", P + 36, y + 56, 26, "600", C.accent);
+      text(mvp.name, P + 36, y + 128, 64, "700", C.text, "left", inner - 72);
+      var stats = "Рейтинг " + fmtRating(mvp.rating) + " · K/D " + fmt2(mvp.kd) + " · K-D " + recapMinus(fmtDiff(mvp.kdDiff));
+      if (typeof mvp.wins === "number" && typeof mvp.maps === "number") stats += " · побед " + mvp.wins + " из " + mvp.maps;
+      text(stats, P + 36, y + 188, 30, "400", C.dim, "left", inner - 72);
+      y += 236 + 32;
+
+      text("Топ-3 вечера", P, y + 28, 30, "600", C.dim);
+      y += 52;
+      m.top.forEach(function (t, i) {
+        text(String(i + 1), P + 8, y + 40, 38, "700", C.accent);
+        text(t.name, P + 64, y + 40, 38, "500", C.text, "left", inner - 64 - 330);
+        text(fmtRating(t.rating) + " · K/D " + fmt2(t.kd), W - P, y + 40, 32, "400", C.dim, "right");
+        y += 64;
+      });
+      y += 24;
+    }
+
+    var blocks = [];
+    if (m.rise) blocks.push({ label: "Больше всего вырос", name: m.rise.name, value: recapMinus(fmtRatingDelta(m.rise.delta)), color: C.green });
+    if (m.drop) blocks.push({ label: "Больше всего просел", name: m.drop.name, value: recapMinus(fmtRatingDelta(m.drop.delta)), color: C.red });
+    if (blocks.length) {
+      var gap = 24, bw = (inner - gap * (blocks.length - 1)) / blocks.length;
+      blocks.forEach(function (b, i) {
+        var x = P + i * (bw + gap);
+        panel(x, y, bw, 140);
+        text(b.label, x + 28, y + 44, 24, "600", C.dim, "left", bw - 56);
+        // ширину значения замеряем, чтобы длинное число не налезало на имя
+        ctx.font = "700 44px " + family;
+        var valueW = ctx.measureText(b.value).width;
+        text(b.name, x + 28, y + 104, 38, "700", C.text, "left", Math.max(40, bw - 56 - valueW - 24));
+        text(b.value, x + bw - 28, y + 104, 44, "700", b.color, "right");
+      });
+      y += 140 + 32;
+    }
+
+    if (m.maps.length) {
+      text("Карты вечера", P, y + 28, 30, "600", C.dim);
+      y += 52;
+      m.maps.forEach(function (mp) {
+        text(mp.name, P + 8, y + 34, 34, "500", C.text, "left", inner - 200);
+        if (mp.score) text(mp.score, W - P, y + 34, 34, "700", C.text, "right");
+        y += 52;
+      });
+      if (m.moreMaps) {
+        text("и ещё " + m.moreMaps, P + 8, y + 30, 28, "400", C.faint);
+        y += 48;
+      }
+      y += 16;
+    }
+
+    if (m.joke) {
+      panel(P, y, inner, 150);
+      text("Шутка вечера", P + 36, y + 46, 24, "600", C.dim);
+      text("«" + m.joke + "» ✅", P + 36, y + 108, 42, "600", C.text, "left", inner - 72);
+      y += 150 + 32;
+    }
+    return y - 32 + P;
+  }
+
+  function drawRecapCard(canvas, s) {
+    var ctx = canvas.getContext("2d");
+    var C = recapColors();
+    var m = recapModel(s);
+    canvas.width = RECAP_W;
+    var H = renderRecapCard(ctx, m, C, false); // замер
+    canvas.height = H; // сбрасывает состояние контекста
+    ctx.fillStyle = C.bg;
+    ctx.fillRect(0, 0, RECAP_W, H);
+    renderRecapCard(ctx, m, C, true);
+    canvas.setAttribute("aria-label", recapAriaLabel(m));
+  }
+
+  function renderRecapPanel(s) {
+    var host = document.getElementById("recapPanel");
+    if (!host) return;
+    host.textContent = "";
+    if (!recapState.open || !s.recap) return;
+    if (!recapState.joke) recapState.joke = randomExcuse();
+
+    var canvas = document.createElement("canvas");
+    canvas.className = "recap-canvas";
+    canvas.setAttribute("role", "img");
+    var bar = document.createElement("div");
+    bar.className = "recap-actions";
+    var status = document.createElement("span");
+    status.className = "recap-status";
+    status.setAttribute("aria-live", "polite");
+    status.id = "recapStatus";
+    function button(label, onClick) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = label;
+      b.addEventListener("click", onClick);
+      bar.appendChild(b);
+    }
+
+    button("Скачать PNG", function () {
+      status.textContent = ""; // не оставляем сообщение от прошлого действия
+      canvas.toBlob(function (blob) {
+        if (!blob) { status.textContent = "Не удалось сохранить картинку."; return; }
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "itogi-vechera-" + s.id + ".png";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+        status.textContent = "Файл сохранён.";
+      }, "image/png");
+    });
+    button("Копировать", function () {
+      status.textContent = "";
+      if (!navigator.clipboard || !window.ClipboardItem) {
+        status.textContent = "Браузер не умеет копировать картинку — скачайте файл.";
+        return;
+      }
+      // write вызываем сразу, пока длится жест пользователя (Safari иначе
+      // отказывает), а картинку отдаём промисом — так допускает ClipboardItem.
+      try {
+        var blobPromise = new Promise(function (resolve, reject) {
+          canvas.toBlob(function (blob) { if (blob) resolve(blob); else reject(new Error("no blob")); }, "image/png");
+        });
+        navigator.clipboard.write([new ClipboardItem({ "image/png": blobPromise })]).then(
+          function () { status.textContent = "Скопировано."; },
+          function () { status.textContent = "Не удалось скопировать — скачайте файл."; }
+        );
+      } catch (err) {
+        status.textContent = "Не удалось скопировать — скачайте файл.";
+      }
+    });
+    button("Другая фраза", function () {
+      recapState.joke = randomExcuse(recapState.joke);
+      drawRecapCard(canvas, s);
+      status.textContent = "";
+    });
+    bar.appendChild(status);
+
+    host.appendChild(canvas);
+    host.appendChild(bar);
+    drawRecapCard(canvas, s);
+  }
+
+  // Гости (игроки со стороны): минимум DRAFT_MIN_POOL человек из пула, остальные
+  // до десяти — гости с именем и "рейтингом на глаз". У гостей нет K/D и K-D,
+  // поэтому их оцениваем линейной регрессией по рейтингу на всех игроках
+  // "за всё время" (draftEstimator); сами оценённые числа на экран не выводим.
+  //
+  // "Выбор составов": делит ровно 10 человек на два состава 5×5,
+  // минимизируя разницу между командами сразу по трём сигналам — рейтингу
+  // "за всё время" (вес 0.3), суммарной K-D разнице (вес 0.3) и K/D (вес 0.4),
+  // каждый нормирован к своему разбросу среди выбранной десятки (иначе
+  // рейтинг, у которого диапазон в сотни, забил бы K/D с диапазоном порядка
+  // 1-2 — та же ошибка, что мы уже правили в весах рейтинга сессии). С 10
+  // игроками всего 126 уникальных разбиений 5/5 (C(10,5)/2) — перебираем все,
+  // без всякой эвристики, и берём точный оптимум.
+  var DRAFT_MAX = 10;
+  var DRAFT_GEN_PREFIX = "llstat:draftGen:";
+  var DRAFT_MIN_POOL = 4;
+  var DRAFT_GUEST_NAME_MAX = 40;
+  var DRAFT_RATING_MIN = 1;
+  var DRAFT_RATING_MAX = 1500;
+  var DRAFT_GUEST_DEFAULT_RATING = 500;
+  var draftState = { selected: new Set(), guests: [], nextGuestId: 1, lastKey: null, lastSplits: null, currentView: 0 };
+
+  function draftGuestRatingValid(g) {
+    return g.rating !== "" && isFinite(Number(g.rating)) &&
+      Number(g.rating) >= DRAFT_RATING_MIN && Number(g.rating) <= DRAFT_RATING_MAX;
+  }
+
+  function draftGuestWord(n) {
+    return pluralRu(n, "гость", "гостя", "гостей");
+  }
+
+  function draftKeyFor(ids, guests) {
+    var guestPart = guests.map(function (g) { return "g:" + g.name + "=" + g.rating; }).sort();
+    return DRAFT_GEN_PREFIX + ids.slice().sort().concat(guestPart).join(",");
+  }
+
+  // y ≈ a + b·x по методу наименьших квадратов; при нулевом разбросе x — среднее y.
+  function linFit(xs, ys) {
+    var n = xs.length;
+    var mx = xs.reduce(function (s, v) { return s + v; }, 0) / n;
+    var my = ys.reduce(function (s, v) { return s + v; }, 0) / n;
+    var sxx = 0, sxy = 0;
+    for (var i = 0; i < n; i++) {
+      sxx += (xs[i] - mx) * (xs[i] - mx);
+      sxy += (xs[i] - mx) * (ys[i] - my);
+    }
+    var b = sxx > 0 ? sxy / sxx : 0;
+    return { a: my - b * mx, b: b };
+  }
+
+  function draftEstimator(allPlayers) {
+    var pool = allPlayers.filter(function (p) {
+      return p.rating != null && p.kd != null && p.k != null && p.d != null;
+    });
+    var ratings = pool.map(function (p) { return p.rating; });
+    var kdFit = linFit(ratings, pool.map(function (p) { return p.kd; }));
+    var diffFit = linFit(ratings, pool.map(function (p) { return p.k - p.d; }));
+    return function (rating) {
+      return {
+        kd: Math.max(0, kdFit.a + kdFit.b * rating),
+        kdDiff: diffFit.a + diffFit.b * rating,
+      };
+    };
+  }
+  function loadDraftGenCount(key) {
+    try { return parseInt(localStorage.getItem(key), 10) || 0; } catch (err) { return 0; }
+  }
+  function saveDraftGenCount(key, n) {
+    try { localStorage.setItem(key, String(n)); } catch (err) {}
+  }
+
+  function renderDraftSection() {
+    var el = document.getElementById("draftSection");
+    if (el.dataset.built !== "1") {
+      buildDraft(el);
+      el.dataset.built = "1";
+    }
+    el.style.display = state.tab === "draft" ? "" : "none";
+  }
+
+  function buildDraft(el) {
+    var players = state.data.allTime.players.slice().sort(function (a, b) {
+      return a.name.localeCompare(b.name, "ru");
+    });
+
+    var rowsHtml = players.map(function (p) {
+      var avatarHtml = p.avatarUrl
+        ? '<img class="avatar" src="' + escapeHtml(p.avatarUrl) + '" alt="" loading="lazy">'
+        : '<div class="avatar"></div>';
+      return '<label class="draft-row">' +
+        '<input type="checkbox" data-steamid="' + escapeHtml(p.steamid64) + '">' +
+        avatarHtml +
+        '<span class="draft-name">' + escapeHtml(p.name) + "</span>" +
+        '<span class="draft-meta">рейтинг ' + fmtRating(p.rating) + " · K/D " + fmt2(p.kd) + "</span>" +
+        "</label>";
+    }).join("");
+
+    el.innerHTML =
+      '<div class="draft-section">' +
+        '<p class="draft-hint">Выбери 10 игроков: минимум ' + DRAFT_MIN_POOL + " из нашего списка, остальных добавь " +
+        "гостями с именем и примерным рейтингом. Поделим на два состава 5×5 максимально балансово " +
+        "по рейтингу, K-D и K/D (у гостей K-D и K/D оцениваются по рейтингу).</p>" +
+        '<div class="draft-list" id="draftList">' + rowsHtml + "</div>" +
+        '<div class="draft-guests">' +
+          '<button type="button" class="draft-guest-add" id="draftGuestAddBtn">+ Добавить гостя</button>' +
+          '<div id="draftGuestList"></div>' +
+        "</div>" +
+        '<div class="draft-toolbar">' +
+          '<div class="draft-counter" id="draftCounter">Выбрано: 0 / ' + DRAFT_MAX + "</div>" +
+          '<button type="button" class="draft-clear-btn" id="draftClearBtn">Очистить всё</button>' +
+        "</div>" +
+        '<button type="button" class="wheel-spin-btn" id="draftFormBtn" disabled>Сформировать состав</button>' +
+        '<div id="draftResult"></div>' +
+      "</div>";
+
+    el.querySelectorAll('#draftList input[type="checkbox"]').forEach(function (cb) {
+      cb.addEventListener("change", onDraftCheckboxChange);
+    });
+    document.getElementById("draftFormBtn").addEventListener("click", function () {
+      runDraft(false);
+    });
+    document.getElementById("draftClearBtn").addEventListener("click", clearDraftSelection);
+    document.getElementById("draftGuestAddBtn").addEventListener("click", addDraftGuest);
+    document.getElementById("draftGuestList").addEventListener("input", onDraftGuestInput);
+    document.getElementById("draftGuestList").addEventListener("click", onDraftGuestClick);
+    updateDraftCounter();
+  }
+
+  function addDraftGuest() {
+    var total = draftState.selected.size + draftState.guests.length;
+    if (total >= DRAFT_MAX || draftState.guests.length >= DRAFT_MAX - DRAFT_MIN_POOL) return;
+    draftState.guests.push({ id: draftState.nextGuestId++, name: "", rating: String(DRAFT_GUEST_DEFAULT_RATING) });
+    renderDraftGuests();
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
+    var inputs = document.querySelectorAll("#draftGuestList .draft-guest-name");
+    inputs[inputs.length - 1].focus();
+  }
+
+  function renderDraftGuests() {
+    document.getElementById("draftGuestList").innerHTML = draftState.guests.map(function (g, i) {
+      return '<div class="draft-guest-row" data-gid="' + g.id + '">' +
+        '<input type="text" class="draft-guest-name" maxlength="' + DRAFT_GUEST_NAME_MAX + '"' +
+          ' placeholder="Гость ' + (i + 1) + ': имя / плюс от…" value="' + escapeHtml(g.name) + '">' +
+        '<input type="number" class="draft-guest-rating' + (draftGuestRatingValid(g) ? "" : " invalid") + '"' +
+          ' min="' + DRAFT_RATING_MIN + '" max="' + DRAFT_RATING_MAX + '" step="1" value="' + escapeHtml(g.rating) + '">' +
+        '<button type="button" class="draft-guest-remove" aria-label="Удалить гостя">×</button>' +
+        '<div class="draft-guest-label">Рейтинг на глаз, ' + DRAFT_RATING_MIN + "–" + DRAFT_RATING_MAX +
+          " (" + DRAFT_GUEST_DEFAULT_RATING + " — средний игрок)</div>" +
+      "</div>";
+    }).join("");
+  }
+
+  function findDraftGuest(target) {
+    var row = target.closest(".draft-guest-row");
+    var id = row ? Number(row.dataset.gid) : null;
+    return draftState.guests.find(function (g) { return g.id === id; });
+  }
+
+  function onDraftGuestInput(e) {
+    var g = findDraftGuest(e.target);
+    if (!g) return;
+    if (e.target.classList.contains("draft-guest-name")) {
+      g.name = e.target.value;
+    } else {
+      g.rating = e.target.value;
+      e.target.classList.toggle("invalid", !draftGuestRatingValid(g));
+    }
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
+  }
+
+  function onDraftGuestClick(e) {
+    if (!e.target.classList.contains("draft-guest-remove")) return;
+    var g = findDraftGuest(e.target);
+    draftState.guests = draftState.guests.filter(function (x) { return x !== g; });
+    renderDraftGuests();
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
+  }
+
+  function clearDraftSelection() {
+    draftState.selected.clear();
+    draftState.guests = [];
+    renderDraftGuests();
+    document.querySelectorAll('#draftList input[type="checkbox"]').forEach(function (cb) {
+      cb.checked = false;
+      cb.disabled = false;
+    });
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
+  }
+
+  function onDraftCheckboxChange(e) {
+    var id = e.target.dataset.steamid;
+    if (e.target.checked) {
+      if (draftState.selected.size + draftState.guests.length >= DRAFT_MAX) {
+        e.target.checked = false;
+        return;
+      }
+      draftState.selected.add(id);
+    } else {
+      draftState.selected.delete(id);
+    }
+    updateDraftCounter();
+    document.getElementById("draftResult").innerHTML = "";
+  }
+
+  function updateDraftCounter() {
+    var pool = draftState.selected.size;
+    var guests = draftState.guests.length;
+    var n = pool + guests;
+    var counter = document.getElementById("draftCounter");
+    counter.textContent = guests
+      ? "Выбрано: " + pool + " из списка + " + guests + " " + draftGuestWord(guests) + " = " + n + " / " + DRAFT_MAX
+      : "Выбрано: " + n + " / " + DRAFT_MAX;
+    counter.classList.toggle("full", n === DRAFT_MAX);
+    document.getElementById("draftFormBtn").disabled = !draftReady();
+
+    var atMax = n >= DRAFT_MAX;
+    document.querySelectorAll('#draftList input[type="checkbox"]').forEach(function (cb) {
+      if (!cb.checked) cb.disabled = atMax;
+    });
+    document.getElementById("draftGuestAddBtn").disabled = atMax || guests >= DRAFT_MAX - DRAFT_MIN_POOL;
+  }
+
+  function draftReady() {
+    return draftState.selected.size >= DRAFT_MIN_POOL &&
+      draftState.selected.size + draftState.guests.length === DRAFT_MAX &&
+      draftState.guests.every(draftGuestRatingValid);
+  }
+
+  function draftAvgOf(list, accessor) {
+    var get = typeof accessor === "function" ? accessor : function (p) { return p[accessor]; };
+    return list.reduce(function (sum, p) { return sum + get(p); }, 0) / list.length;
+  }
+
+  function computeDraftSplits(players) {
+    var ratings = players.map(function (p) { return p.rating; });
+    var kdDiffs = players.map(function (p) { return p.k - p.d; });
+    var kds = players.map(function (p) { return p.kd; });
+    var ratingRange = Math.max.apply(null, ratings) - Math.min.apply(null, ratings);
+    var kdDiffRange = Math.max.apply(null, kdDiffs) - Math.min.apply(null, kdDiffs);
+    var kdRange = Math.max.apply(null, kds) - Math.min.apply(null, kds);
+
+    var splits = [];
+    for (var mask = 1; mask < 1024; mask += 2) { // нечётные маски: players[0] всегда в teamA
+      var bits = 0;
+      for (var b = 0; b < 10; b++) if (mask & (1 << b)) bits++;
+      if (bits !== 5) continue;
+
+      var teamA = [], teamB = [];
+      for (var i = 0; i < 10; i++) (mask & (1 << i) ? teamA : teamB).push(players[i]);
+
+      var avgA = draftAvgOf(teamA, "rating"), avgB = draftAvgOf(teamB, "rating");
+      var kdA = draftAvgOf(teamA, "kd"), kdB = draftAvgOf(teamB, "kd");
+      var diffA = draftAvgOf(teamA, function (p) { return p.k - p.d; }), diffB = draftAvgOf(teamB, function (p) { return p.k - p.d; });
+      var ratingDiff = Math.abs(avgA - avgB);
+      var kdDiff = Math.abs(kdA - kdB);
+      var kdDiffDiff = Math.abs(diffA - diffB);
+      var score = 0.3 * (ratingRange > 0 ? ratingDiff / ratingRange : 0) +
+                  0.3 * (kdDiffRange > 0 ? kdDiffDiff / kdDiffRange : 0) +
+                  0.4 * (kdRange > 0 ? kdDiff / kdRange : 0);
+
+      splits.push({
+        teamA: teamA, teamB: teamB, avgA: avgA, avgB: avgB, kdA: kdA, kdB: kdB,
+        diffA: diffA, diffB: diffB, ratingDiff: ratingDiff, kdDiff: kdDiff, kdDiffDiff: kdDiffDiff, score: score,
+      });
+    }
+    splits.sort(function (a, b) { return a.score - b.score; });
+    return splits;
+  }
+
+  // Оба варианта (лучший и второй по качеству) считаются один раз и кэшируются
+  // в draftState — переключение между ними после этого бесплатное и не тратит
+  // лимит генераций, лимит защищает только от появления третьего варианта.
+  function runDraft(isAgain) {
+    if (!draftReady()) return;
+    var ids = Array.from(draftState.selected);
+    var guests = draftState.guests.map(function (g, i) {
+      return { name: g.name.trim() || "Гость " + (i + 1), rating: Number(g.rating) };
+    });
+    var key = draftKeyFor(ids, guests);
+    var used = loadDraftGenCount(key);
+
+    if (isAgain) {
+      if (used < 2) saveDraftGenCount(key, 2);
+      showDraftVariant(1);
+      return;
+    }
+
+    if (draftState.lastKey !== key) {
+      var allPlayers = state.data.allTime.players;
+      var players = ids.map(function (id) {
+        return allPlayers.find(function (p) { return p.steamid64 === id; });
+      });
+      if (guests.length) {
+        var estimate = draftEstimator(allPlayers);
+        guests.forEach(function (g) {
+          var est = estimate(g.rating);
+          // computeDraftSplits берёт K-D как k - d, так что кладём оценку в k.
+          players.push({ name: g.name, rating: g.rating, kd: est.kd, k: est.kdDiff, d: 0, guest: true });
+        });
+      }
+      draftState.lastKey = key;
+      draftState.lastSplits = computeDraftSplits(players);
+    }
+    saveDraftGenCount(key, Math.max(used, 1));
+    showDraftVariant(0);
+  }
+
+  function showDraftVariant(index) {
+    draftState.currentView = index;
+    renderDraftResult(draftState.lastSplits[index], draftState.lastKey, index);
+  }
+
+  function renderDraftResult(split, key, variantIndex) {
+    var resultEl = document.getElementById("draftResult");
+
+    function teamHtml(title, team, avgRating, avgKdDiff, avgKd) {
+      var itemsHtml = team.map(function (p) {
+        var tag = p.guest ? '<span class="draft-guest-tag">гость</span>' : "";
+        return "<li><span>" + escapeHtml(p.name) + tag + "</span><span>" + fmtRating(p.rating) + "</span></li>";
+      }).join("");
+      return '<div class="draft-team"><h4>' + title + "</h4><ul>" + itemsHtml + "</ul>" +
+        '<div class="team-stats">Средний рейтинг: ' + Math.round(avgRating) +
+        " · средний K-D: " + fmtDiff(Math.round(avgKdDiff)) +
+        " · средний K/D: " + avgKd.toFixed(2) + "</div></div>";
+    }
+
+    var used = loadDraftGenCount(key);
+    var switchButtonHtml = variantIndex === 0
+      ? '<button type="button" class="wheel-spin-btn" id="draftSwitchBtn">' +
+        (used < 2 ? "🔁 Сгенерировать ещё раз" : "➡️ Показать 2-й вариант") + "</button>"
+      : '<button type="button" class="wheel-spin-btn" id="draftSwitchBtn">⬅️ Показать 1-й вариант</button>';
+
+    resultEl.innerHTML =
+      '<div class="draft-teams">' +
+        teamHtml("Состав A", split.teamA, split.avgA, split.diffA, split.kdA) +
+        teamHtml("Состав B", split.teamB, split.avgB, split.diffB, split.kdB) +
+      "</div>" +
+      '<div class="draft-summary">Разница в среднем рейтинге — <strong>' + Math.round(split.ratingDiff) +
+      "</strong>, в среднем K-D — <strong>" + split.kdDiffDiff.toFixed(1) +
+      "</strong>, в среднем K/D — <strong>" + split.kdDiff.toFixed(2) + "</strong>.</div>" +
+      (split.teamA.concat(split.teamB).some(function (p) { return p.guest; })
+        ? '<div class="draft-variant-note">У гостей K-D и K/D оценены по рейтингу, поэтому средние по составам приблизительные.</div>'
+        : "") +
+      '<div class="draft-again-wrap">' + switchButtonHtml + "</div>" +
+      '<div class="draft-variant-note">Вариант ' + (variantIndex + 1) + " из 2 — больше вариантов для этой десятки не будет.</div>";
+
+    document.getElementById("draftSwitchBtn").addEventListener("click", function () {
+      runDraft(variantIndex === 0);
+    });
+  }
+
+  function formatDateTime(iso) {
+    if (!iso) return "—";
+    var d = new Date(iso);
+    return d.toLocaleString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+})();
+</script>
+</body>
+</html>
