@@ -1373,9 +1373,8 @@
       var score = m.teams && m.teams.length === 2 && m.teams[0].score != null && m.teams[1].score != null
         ? Math.max(m.teams[0].score, m.teams[1].score) + ":" + Math.min(m.teams[0].score, m.teams[1].score)
         : "";
-      var tierNote = m.statsTier === "basic" ? " (basic)" : "";
       return '<a href="' + escapeHtml(m.url) + '" target="_blank" rel="noopener">' +
-        escapeHtml(m.map || "?") + " " + score + tierNote + "</a>";
+        escapeHtml(m.map || "?") + " " + score + "</a>";
     }).join("");
     var optionsHtml = state.data.sessions.map(function (x) {
       return '<option value="' + escapeHtml(x.id) + '"' + (x.id === s.id ? " selected" : "") + ">" +
@@ -2650,7 +2649,7 @@
     return '<div class="sm-matrix"><h4>Матрица убийств</h4>' +
       '<table class="sm-km"><thead><tr><th></th>' + head + '<th class="sm-km-sum">±</th></tr></thead><tbody>' + body +
       '<tr><th class="sm-km-row sm-km-sum">±</th>' + foot + "<td></td></tr></tbody></table>" +
-      '<div class="sm-matrix-note">По разбору демки: цифры могут отличаться от K/D на 1–2. Слева — сколько убил игрок из строки, справа — сколько убил его игрок из столбца.</div></div>';
+      '<div class="sm-matrix-note">По разбору демки: цифры могут отличаться от K/D на 1–2. Цифра слева — сколько убил игрок из строки, цифра справа — сколько убил его игрок из столбца.</div></div>';
   }
 
   function sessionMapBodyHtml(m, avatarOf) {
