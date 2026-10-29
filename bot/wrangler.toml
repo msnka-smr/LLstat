@@ -7,4 +7,5 @@ compatibility_date = "2026-10-01"
 [vars]
 GITHUB_REPO = "msnka-smr/LLstat"
 WORKFLOW_FILE = "update-stats.yml"
+WORKFLOW_MATCHDAY_FILE = "set-matchday.yml"
 GITHUB_REF = "master"

@@ -9,6 +9,7 @@ const ENV = {
   GITHUB_TOKEN_DISPATCH: "gh-token",
   GITHUB_REPO: "msnka-smr/LLstat",
   WORKFLOW_FILE: "update-stats.yml",
+  WORKFLOW_MATCHDAY_FILE: "set-matchday.yml",
   GITHUB_REF: "master",
 };
 
@@ -191,4 +192,92 @@ test("список запусков недоступен — всё равно �
   const f = fakeFetch([{ status: 204 }, { status: 200 }], { runsStatus: 500 });
   await handleRequest(LINK_MSG(), ENV, f);
   assert.ok(dispatchCall(f));
+});
+
+// --- MatchDay: команды /maps и /teams ---
+
+const future = (days) => {
+  const d = new Date(Date.now() + days * 24 * 3600 * 1000);
+  const p = (n) => String(n).padStart(2, "0");
+  return { ru: `${p(d.getUTCDate())}.${p(d.getUTCMonth() + 1)}.${d.getUTCFullYear()}`, iso: d.toISOString().slice(0, 10) };
+};
+const MAPS_LINE = "mirage nuke anubis inferno ancient dust2 cache";
+const id = (n) => "7656119800000000" + n;
+const TEAMS_LINE = `moloko=${id(1)}, b=${id(2)}, c=${id(3)}, d=${id(4)}, Вася~700 | e=${id(5)}, f=${id(6)}, g=${id(7)}, h=${id(8)}, Петя~900`;
+const matchdayCall = (f) => f.calls.find((c) => c.url.endsWith("/set-matchday.yml/dispatches"));
+const statsCall = (f) => f.calls.find((c) => c.url.endsWith("/update-stats.yml/dispatches"));
+
+test("/maps с датой: запускается set-matchday.yml с картами и ISO-датой", async () => {
+  const d = future(30);
+  const f = fakeFetch([{ status: 204 }, { status: 200 }]);
+  const res = await handleRequest(req({ body: message(`/maps ${d.ru} ${MAPS_LINE}`) }), ENV, f);
+  assert.equal(res.status, 200);
+  const body = JSON.parse(matchdayCall(f).init.body);
+  assert.equal(body.ref, "master");
+  assert.equal(body.inputs.kind, "maps");
+  assert.equal(body.inputs.session_date, d.iso);
+  assert.equal(JSON.parse(body.inputs.payload).order.length, 7);
+  assert.equal(statsCall(f), undefined);
+  assert.match(telegramTexts(f)[0], /карт/);
+});
+
+test("/maps без даты — session_date пустая", async () => {
+  const f = fakeFetch([{ status: 204 }, { status: 200 }]);
+  await handleRequest(req({ body: message(`/maps ${MAPS_LINE}`) }), ENV, f);
+  assert.equal(JSON.parse(matchdayCall(f).init.body).inputs.session_date, "");
+  assert.match(telegramTexts(f)[0], /Дату не меняю/);
+});
+
+test("/teams: запускается set-matchday.yml с двумя командами по 5", async () => {
+  const f = fakeFetch([{ status: 204 }, { status: 200 }]);
+  await handleRequest(req({ body: message(`/teams ${TEAMS_LINE}`) }), ENV, f);
+  const inputs = JSON.parse(matchdayCall(f).init.body).inputs;
+  assert.equal(inputs.kind, "teams");
+  const payload = JSON.parse(inputs.payload);
+  assert.equal(payload.teamA.length, 5);
+  assert.equal(payload.teamB.length, 5);
+  assert.deepEqual(payload.teamA[4], { guest: "Вася", rating: 700 });
+  assert.match(telegramTexts(f)[0], /состав/);
+});
+
+test("/maps с 6 картами — workflow не запускается, пользователь получает подсказку", async () => {
+  const f = fakeFetch([{ status: 200 }]);
+  const res = await handleRequest(req({ body: message("/maps mirage nuke anubis inferno ancient dust2") }), ENV, f);
+  assert.equal(res.status, 200);
+  assert.equal(dispatchCall(f), undefined);
+  assert.match(telegramTexts(f)[0], /7/);
+});
+
+test("/maps с датой без года — workflow не запускается, в ответе про год", async () => {
+  const f = fakeFetch([{ status: 200 }]);
+  await handleRequest(req({ body: message(`/maps 31.10 ${MAPS_LINE}`) }), ENV, f);
+  assert.equal(dispatchCall(f), undefined);
+  assert.match(telegramTexts(f)[0], /год|ГГГГ/);
+});
+
+test("/maps от чужого chat id — тишина", async () => {
+  const f = fakeFetch();
+  await handleRequest(req({ body: message(`/maps ${MAPS_LINE}`, 999) }), ENV, f);
+  assert.equal(f.calls.length, 0);
+});
+
+test("два активных запуска set-matchday — не запускаем третий", async () => {
+  const f = fakeFetch([{ status: 200 }], { runs: [run("in_progress"), run("pending")] });
+  await handleRequest(req({ body: message(`/maps ${MAPS_LINE}`) }), ENV, f);
+  assert.equal(dispatchCall(f), undefined);
+  assert.match(telegramTexts(f)[0], /MatchDay/);
+});
+
+test("ошибка GitHub при /maps: пользователь видит код, Telegram получает 200", async () => {
+  const f = fakeFetch([{ status: 422, body: "bad" }, { status: 200 }]);
+  const res = await handleRequest(req({ body: message(`/maps ${MAPS_LINE}`) }), ENV, f);
+  assert.equal(res.status, 200);
+  assert.match(telegramTexts(f)[0], /422/);
+});
+
+test("ссылка на матч после появления команд по-прежнему запускает update-stats.yml", async () => {
+  const f = fakeFetch([{ status: 204 }, { status: 200 }]);
+  await handleRequest(LINK_MSG(), ENV, f);
+  assert.ok(statsCall(f));
+  assert.equal(matchdayCall(f), undefined);
 });
