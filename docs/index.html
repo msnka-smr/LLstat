@@ -1422,7 +1422,7 @@
 
   // Абсолютные пороги (см. "Информация о рейтинге") — разные для двух вкладок,
   // потому что у них разные шкалы: сессия почти никогда не доходит до 800+,
-  // "за всё время" считается вокруг базы 500.
+  // "за всё время" считается вокруг базы 1000 (шкала 0–5000).
   var SESSION_TIERS = [
     { min: 800, cls: "tier-green" },
     { min: 600, cls: "tier-yellow" },
@@ -1430,11 +1430,11 @@
     { min: -Infinity, cls: "tier-red" },
   ];
   var ALLTIME_TIERS = [
-    { min: 800, cls: "tier-green" },
-    { min: 700, cls: "tier-yellow" },
-    { min: 600, cls: "tier-orange" },
-    { min: 500, cls: "tier-neutral" },
-    { min: 400, cls: "tier-accent" },
+    { min: 1600, cls: "tier-green" },
+    { min: 1400, cls: "tier-yellow" },
+    { min: 1200, cls: "tier-orange" },
+    { min: 1000, cls: "tier-neutral" },
+    { min: 800, cls: "tier-accent" },
     { min: -Infinity, cls: "tier-red" },
   ];
 
@@ -1603,6 +1603,7 @@
     });
     if (histState.ready) { renderHistChips(); drawHistChart(); }
   }
+  var HIST_BASE = 1000; // стартовый рейтинг «за всё время» (линия на графике)
   var HIST_MAX = 6;
   var HIST_DEFAULT = 3;
   var SVG_NS = "http://www.w3.org/2000/svg";
@@ -1629,11 +1630,11 @@
   }
   // Ось Y: округлённые границы и шаг, не более ~5 делений.
   function histYScale(values) {
-    var lo = Math.min.apply(null, values.concat([500]));
-    var hi = Math.max.apply(null, values.concat([500]));
+    var lo = Math.min.apply(null, values.concat([HIST_BASE]));
+    var hi = Math.max.apply(null, values.concat([HIST_BASE]));
     var span = Math.max(hi - lo, 50);
     // шаг считаем по диапазону вместе с запасом по краям (+16%), иначе делений выходит больше 5
-    var step = [10, 25, 50, 100, 200, 250, 500].filter(function (s) { return span * 1.16 / s <= 5; })[0] || 500;
+    var step = [10, 25, 50, 100, 200, 250, 500, 1000].filter(function (s) { return span * 1.16 / s <= 5; })[0] || 1000;
     return {
       min: Math.max(0, Math.floor((lo - span * 0.08) / step) * step),
       max: Math.ceil((hi + span * 0.08) / step) * step,
@@ -1769,11 +1770,11 @@
       tl.textContent = String(t);
       svg.appendChild(tl);
     }
-    if (500 >= ys.min && 500 <= ys.max) {
-      svg.appendChild(svgEl("line", { x1: padL, x2: width - padR, y1: yAt(500), y2: yAt(500) },
+    if (HIST_BASE >= ys.min && HIST_BASE <= ys.max) {
+      svg.appendChild(svgEl("line", { x1: padL, x2: width - padR, y1: yAt(HIST_BASE), y2: yAt(HIST_BASE) },
         "stroke: var(--text-faint); stroke-width: 1; opacity: 0.7;"));
-      var ref = svgEl("text", { x: width - padR, y: yAt(500) - 4, "text-anchor": "end" }, "fill: var(--text-faint); font-size: 11px;");
-      ref.textContent = "500 — средний игрок";
+      var ref = svgEl("text", { x: width - padR, y: yAt(HIST_BASE) - 4, "text-anchor": "end" }, "fill: var(--text-faint); font-size: 11px;");
+      ref.textContent = HIST_BASE + " — стартовая база";
       svg.appendChild(ref);
     }
 
@@ -2086,8 +2087,8 @@
   var DRAFT_MIN_POOL = 4;
   var DRAFT_GUEST_NAME_MAX = 40;
   var DRAFT_RATING_MIN = 1;
-  var DRAFT_RATING_MAX = 1500;
-  var DRAFT_GUEST_DEFAULT_RATING = 500;
+  var DRAFT_RATING_MAX = 5000; // шкала «за всё время» 0–5000
+  var DRAFT_GUEST_DEFAULT_RATING = 1000;
   var draftState = { selected: new Set(), guests: [], nextGuestId: 1, lastKey: null, lastSplits: null, currentView: 0, work: null };
 
   function draftGuestRatingValid(g) {
@@ -2230,7 +2231,7 @@
           ' min="' + DRAFT_RATING_MIN + '" max="' + DRAFT_RATING_MAX + '" step="1" value="' + escapeHtml(g.rating) + '">' +
         '<button type="button" class="draft-guest-remove" aria-label="Удалить гостя">×</button>' +
         '<div class="draft-guest-label">Рейтинг на глаз, ' + DRAFT_RATING_MIN + "–" + DRAFT_RATING_MAX +
-          " (" + DRAFT_GUEST_DEFAULT_RATING + " — средний игрок)</div>" +
+          " (" + DRAFT_GUEST_DEFAULT_RATING + " — стартовая база)</div>" +
       "</div>";
     }).join("");
   }

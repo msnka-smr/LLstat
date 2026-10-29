@@ -98,7 +98,7 @@ test("/maps: дата без года — ошибка про год, а не м
 
 const teamsLine = (a, b) => `/teams 31.10.2026 ${a.join(", ")} | ${b.join(", ")}`;
 const A = [`moloko=${id(1)}`, `Пикулинни=${id(2)}`, `Седой=${id(3)}`, `MrDrolik=${id(4)}`, "Вася~700"];
-const B = [`a=${id(5)}`, `b=${id(6)}`, `c=${id(7)}`, `d=${id(8)}`, "Петя ~ 1500".replace(" ~ ", "~")];
+const B = [`a=${id(5)}`, `b=${id(6)}`, `c=${id(7)}`, `d=${id(8)}`, "Петя ~ 5000".replace(" ~ ", "~")];
 
 test("/teams: игроки по steamid и гости", () => {
   const r = parseMatchdayCommand(teamsLine(A, B), NOW);
@@ -106,7 +106,7 @@ test("/teams: игроки по steamid и гости", () => {
   assert.equal(r.sessionDate, "2026-10-31");
   assert.deepEqual(r.payload.teamA[0], { steamid64: id(1) });
   assert.deepEqual(r.payload.teamA[4], { guest: "Вася", rating: 700 });
-  assert.deepEqual(r.payload.teamB[4], { guest: "Петя", rating: 1500 });
+  assert.deepEqual(r.payload.teamB[4], { guest: "Петя", rating: 5000 });
   assert.equal(r.payload.teamA.length, 5);
   assert.equal(r.payload.teamB.length, 5);
 });
@@ -132,8 +132,8 @@ test("/teams: нет разделителя | — ошибка", () => {
   assert.ok(parseMatchdayCommand(`/teams ${A.concat(B).join(", ")}`, NOW).error);
 });
 
-test("/teams: рейтинг гостя 0, 1501, не число — ошибка", () => {
-  for (const bad of ["Вася~0", "Вася~1501", "Вася~abc", "Вася~"]) {
+test("/teams: рейтинг гостя 0, 5001, не число — ошибка", () => {
+  for (const bad of ["Вася~0", "Вася~5001", "Вася~abc", "Вася~"]) {
     assert.ok(parseMatchdayCommand(teamsLine([...A.slice(0, 4), bad], B), NOW).error, bad);
   }
 });

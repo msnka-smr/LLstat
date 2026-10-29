@@ -2,39 +2,40 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { computeAllTimeRating, computeRatingDelta } from "../scripts/lib/allTimeRating.mjs";
 
-test("starts new players at 500", () => {
+test("starts new players at 1000", () => {
   const { rating } = computeAllTimeRating([]);
-  assert.equal(rating, 500);
+  assert.equal(rating, 1000);
 });
 
 test("delta = K * (result*0.2 + (kd-1.0)*0.8), fixed reference not a rolling average", () => {
-  // 6-я карта, чтобы K=5 (не в первых пяти): K/D=2.0, победа.
-  const priorMatches = Array(5).fill({ k: 12, d: 10, won: true }); // kd=1.2, K=8 каждая
+  // 6-я карта, чтобы K=10 (не в первых пяти): K/D=2.0, победа.
+  const priorMatches = Array(5).fill({ k: 12, d: 10, won: true }); // kd=1.2, K=16 каждая
   const sixthMatch = { k: 20, d: 10, won: true }; // kd=2.0
   const { history } = computeAllTimeRating([...priorMatches, sixthMatch]);
 
-  const expectedDelta = Math.round(5 * (1 * 0.2 + (2.0 - 1.0) * 0.8) * 100) / 100;
-  assert.equal(expectedDelta, 5, "5 * (0.2 + 0.8) = 5");
+  const expectedDelta = Math.round(10 * (1 * 0.2 + (2.0 - 1.0) * 0.8) * 100) / 100;
+  assert.equal(expectedDelta, 10, "10 * (0.2 + 0.8) = 10");
   assert.equal(history[5].delta, expectedDelta);
 });
 
-test("first 5 matches use K=8, matches after use K=5", () => {
+test("first 5 matches use K=16, matches after use K=10", () => {
   const winStreak = Array(10).fill({ k: 10, d: 10, won: true }); // kd=1.0 == база -> bonus=0
   const { history } = computeAllTimeRating(winStreak);
-  assert.equal(history[0].delta, 8 * 0.2);
-  assert.equal(history[4].delta, 8 * 0.2);
-  assert.equal(history[5].delta, 5 * 0.2);
-  assert.equal(history[9].delta, 5 * 0.2);
+  assert.equal(history[0].delta, 16 * 0.2);
+  assert.equal(history[4].delta, 16 * 0.2);
+  assert.equal(history[5].delta, 10 * 0.2);
+  assert.equal(history[9].delta, 10 * 0.2);
 });
 
-test("rating never leaves the 1-1500 range", () => {
+test("rating never leaves the 0-5000 range", () => {
   const badStreak = Array(200).fill({ k: 0, d: 20, won: false });
   const { rating } = computeAllTimeRating(badStreak);
-  assert.ok(rating >= 1);
+  assert.ok(rating >= 0);
+  assert.equal(rating, 0, "дно шкалы достигается и держится на 0");
 
   const greatStreak = Array(200).fill({ k: 40, d: 1, won: true });
   const { rating: highRating } = computeAllTimeRating(greatStreak);
-  assert.ok(highRating <= 1500);
+  assert.equal(highRating, 5000, "потолок шкалы достигается и держится на 5000");
 });
 
 // Регрессия на тот самый реальный кейс, который заставил пересмотреть формулу:
@@ -70,7 +71,7 @@ test("computeRatingDelta is 0 when the player didn't play the last session", () 
 });
 
 test("computeRatingDelta sums the rounded rating change across the last session's maps", () => {
-  const older = Array(6).fill({ k: 10, d: 10, won: true, sessionId: "2026-01-01" }); // kd=1.0, K=5 после 5-й карты
+  const older = Array(6).fill({ k: 10, d: 10, won: true, sessionId: "2026-01-01" }); // kd=1.0, K=10 после 5-й карты
   const lastSession = [
     { k: 20, d: 10, won: true, sessionId: "2026-01-02" }, // kd=2.0
     { k: 20, d: 10, won: true, sessionId: "2026-01-02" },
@@ -85,7 +86,7 @@ test("computeRatingDelta sums the rounded rating change across the last session'
 });
 
 test("computeRatingDelta is 0 when a mixed session nets out to zero", () => {
-  // established (K=5), победа с kd=0.75 даёт delta = 5*(0.2 + (0.75-1)*0.8) = 0 ровно
+  // established (K=10), победа с kd=0.75 даёт delta = 10*(0.2 + (0.75-1)*0.8) = 0 ровно
   const older = Array(5).fill({ k: 10, d: 10, won: true, sessionId: "2026-01-01" });
   const zeroNetMatch = { k: 6, d: 8, won: true, sessionId: "2026-01-02" };
   const matches = [...older, zeroNetMatch];

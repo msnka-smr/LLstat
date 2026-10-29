@@ -3,7 +3,7 @@
 // важна: гость или новичок с лучшим вечером тоже может стать MVP). Рост и
 // просадка — изменение рейтинга "за всё время" за этот вечер, из ratingHistory.
 export const TOP_N = 3;
-export const START_RATING = 500; // с него начинается рейтинг "за всё время"
+export const START_RATING = 1000; // с него начинается рейтинг "за всё время"
 
 const round2 = (v) => Math.round(v * 100) / 100;
 const byId = (a, b) => String(a.steamid64).localeCompare(String(b.steamid64));

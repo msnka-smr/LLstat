@@ -6,7 +6,7 @@ export const MAP_POOL = ["de_mirage", "de_dust2", "de_inferno", "de_nuke", "de_a
 const TEAM_SIZE = 5;
 const GUEST_NAME_MAX = 40;
 const GUEST_RATING_MIN = 1;
-const GUEST_RATING_MAX = 1500;
+const GUEST_RATING_MAX = 5000;
 const MOSCOW_OFFSET_MS = 3 * 3600 * 1000;
 
 const DATE_HINT = "Дату пиши с годом: ДД.ММ.ГГГГ, например 31.10.2026.";

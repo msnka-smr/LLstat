@@ -45,19 +45,19 @@ test("an empty session gives an empty recap", () => {
 });
 
 test("rise and drop come from the change in all-time rating over the session", () => {
-  const h = history(["S1", "S2"], { A: [530, 560], B: [510, 490], C: [null, 505], D: [520, 520] });
+  const h = history(["S1", "S2"], { A: [1030, 1060], B: [1010, 990], C: [null, 1005], D: [1020, 1020] });
   const s = session("S2", [row("A", 700), row("B", 650), row("C", 600), row("D", 550)]);
   const { rise, drop } = computeRecap(s, h);
-  assert.deepEqual(rise, { steamid64: "A", delta: 30 }); // C: +5 (до — старт 500), A: +30
+  assert.deepEqual(rise, { steamid64: "A", delta: 30 }); // C: +5 (до — старт 1000), A: +30
   assert.deepEqual(drop, { steamid64: "B", delta: -20 });
 });
 
 test("the first session measures the change from the starting rating", () => {
-  const h = history(["S1", "S2"], { A: [530, 540], B: [510, 510] });
+  const h = history(["S1", "S2"], { A: [1030, 1040], B: [1010, 1010] });
   const { rise, drop } = computeRecap(session("S1", [row("A", 700), row("B", 600)]), h);
   assert.deepEqual(rise, { steamid64: "A", delta: 30 });
   assert.equal(drop, null);
-  assert.equal(START_RATING, 500);
+  assert.equal(START_RATING, 1000);
 });
 
 test("rise is null when nobody grew, drop is null when nobody fell", () => {
@@ -74,7 +74,7 @@ test("only players of this session count for rise and drop", () => {
 });
 
 test("equal deltas are ordered by steamid64", () => {
-  const h = history(["S1"], { B: [520], A: [520] });
+  const h = history(["S1"], { B: [1020], A: [1020] });
   const { rise } = computeRecap(session("S1", [row("B", 600), row("A", 600)]), h);
   assert.equal(rise.steamid64, "A");
 });
@@ -106,7 +106,7 @@ test("a missing kd stays null instead of becoming NaN", () => {
 });
 
 test("a session player who is absent from the history is skipped", () => {
-  const h = history(["S1"], { A: [530] });
+  const h = history(["S1"], { A: [1030] });
   const { rise } = computeRecap(session("S1", [row("A", 700), row("NOHIST", 650)]), h);
   assert.deepEqual(rise, { steamid64: "A", delta: 30 });
 });
