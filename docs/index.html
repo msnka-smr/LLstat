@@ -549,6 +549,50 @@
   .excuse-result { font-size: 14px; min-height: 20px; }
   .excuse-result strong { color: var(--accent); }
 
+  .sm-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+  .sm-section h3 { margin: 0 0 10px; font-size: 15px; }
+  .sm-row { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+  .sm-head {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 54px;
+    padding: 0 14px;
+    border: 0;
+    background: var(--bg);
+    color: #fff;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .sm-head:disabled { cursor: default; }
+  .sm-head img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .sm-head::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10, 14, 22, 0.85) 0%, rgba(10, 14, 22, 0.35) 100%); }
+  .sm-head > span { position: relative; z-index: 1; }
+  .sm-n { width: 18px; color: rgba(255, 255, 255, 0.7); font-size: 13px; }
+  .sm-name { font-size: 16px; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); }
+  .sm-score { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .sm-chev { width: 12px; color: rgba(255, 255, 255, 0.7); }
+  .sm-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 10px; background: var(--bg); }
+  .sm-body[hidden] { display: none; }
+  @media (max-width: 640px) { .sm-body { grid-template-columns: minmax(0, 1fr); } }
+  .sm-team { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .sm-team h4 { margin: 0 0 4px; font-size: 13px; display: flex; justify-content: space-between; gap: 8px; }
+  .sm-team h4 .sm-trophy { color: var(--accent); }
+  .sm-cols { text-align: right; font-size: 11px; color: var(--text-faint); }
+  .sm-p { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 13px; }
+  .sm-avatar { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: var(--border); flex: none; }
+  .sm-pname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sm-kda { color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
   .md-section {
     background: var(--bg-panel);
     border: 1px solid var(--border);
@@ -925,6 +969,7 @@
   <div id="tableWrap"></div>
   <div id="historySection"></div>
   <div id="recordsSection"></div>
+  <div id="sessionMapsSection"></div>
   <div id="excuseSection"></div>
   <div id="draftSection"></div>
   <div id="matchdaySection"></div>
@@ -1095,6 +1140,7 @@
     renderExcuseSection();
     renderDraftSection();
     renderMatchdaySection();
+    renderSessionMapsSection();
   }
 
   function renderMapChips() {
@@ -2635,6 +2681,82 @@
     if (resetBtn) resetBtn.addEventListener("click", function () { showDraftVariant(work.variant); });
     document.getElementById("draftCopyTeamsBtn").addEventListener("click", function () {
       copyCommandText(teamsCommand(work.teamA, work.teamB), document.getElementById("draftCopyMsg"), document.getElementById("draftCmdText"));
+    });
+  }
+
+  // «Карты вечера» на вкладке «Сессии»: по плашке на карту, тап раскрывает две
+  // команды с K/D/A. Ассисты показываем только здесь (решение владельца
+  // 2026-10-29) — в рейтинги и таблицы они не идут.
+  var sessionMapsState = { open: {} };
+
+  function sessionMapScoreText(m) {
+    var t = m.teams || [];
+    if (t.length === 2 && t[0].score != null && t[1].score != null) {
+      return Math.max(t[0].score, t[1].score) + ":" + Math.min(t[0].score, t[1].score);
+    }
+    return "—";
+  }
+
+  function sessionMapBodyHtml(m, avatarOf) {
+    var teams = (m.teams || []).map(function (t, i) { return { key: t.key, name: t.name, isWinner: !!t.isWinner, idx: i }; });
+    teams.sort(function (a, b) { return (b.isWinner ? 1 : 0) - (a.isWinner ? 1 : 0); });
+    var known = {};
+    teams.forEach(function (t) { known[t.key] = true; });
+    var groups = teams.map(function (t, pos) {
+      return { title: t.name || "Команда " + (pos + 1), isWinner: t.isWinner, key: t.key };
+    });
+    var stray = (m.players || []).filter(function (p) { return !known[p.team]; });
+    if (stray.length) groups.push({ title: "Без команды", isWinner: false, key: null, stray: true });
+
+    return groups.map(function (g) {
+      var list = (g.stray ? stray : (m.players || []).filter(function (p) { return p.team === g.key; }))
+        .slice().sort(function (a, b) { return b.k - a.k; });
+      var rows = list.map(function (p) {
+        var av = avatarOf(p.steamid64);
+        var avatar = av ? '<img class="sm-avatar" src="' + escapeHtml(av) + '" alt="" loading="lazy">' : '<div class="sm-avatar"></div>';
+        return '<div class="sm-p">' + avatar + '<span class="sm-pname">' + escapeHtml(p.name) + "</span>" +
+          '<span class="sm-kda">' + p.k + "/" + p.d + "/" + p.a + "</span></div>";
+      }).join("");
+      return '<div class="sm-team"><h4><span>' + escapeHtml(g.title) + "</span>" +
+        (g.isWinner ? '<span class="sm-trophy" title="Победа">🏆</span>' : "") + "</h4>" +
+        '<div class="sm-cols">K / D / A</div>' + rows + "</div>";
+    }).join("");
+  }
+
+  function renderSessionMapsSection() {
+    var el = document.getElementById("sessionMapsSection");
+    var s = currentSession();
+    if (state.tab !== "lastSession" || !s || !s.maps.length) { el.innerHTML = ""; el.style.display = "none"; return; }
+    el.style.display = "";
+    var avatars = {};
+    ((state.data.allTime && state.data.allTime.players) || []).forEach(function (p) { avatars[p.steamid64] = p.avatarUrl; });
+    var avatarOf = function (id) { return avatars[id] || null; };
+
+    var rowsHtml = s.maps.map(function (m, i) {
+      var info = mapInfoFor(m.map);
+      var name = info ? info.displayName : (m.map || "?");
+      var img = info && info.bannerUrl ? '<img src="' + escapeHtml(info.bannerUrl) + '" alt="" loading="lazy">' : "";
+      var hasPlayers = m.players && m.players.length;
+      var open = !!sessionMapsState.open[m.mapId] && hasPlayers;
+      return '<div class="sm-row">' +
+        '<button type="button" class="sm-head" data-map-id="' + escapeHtml(m.mapId) + '" aria-expanded="' + (open ? "true" : "false") + '"' + (hasPlayers ? "" : " disabled") + ">" +
+          img + '<span class="sm-n">' + (i + 1) + '</span><span class="sm-name">' + escapeHtml(name) + "</span>" +
+          '<span class="sm-score">' + escapeHtml(sessionMapScoreText(m)) + '</span><span class="sm-chev">' + (hasPlayers ? (open ? "▾" : "▸") : "") + "</span>" +
+        "</button>" +
+        (hasPlayers ? '<div class="sm-body"' + (open ? "" : " hidden") + ">" + sessionMapBodyHtml(m, avatarOf) + "</div>" : "") +
+      "</div>";
+    }).join("");
+    el.innerHTML = '<div class="sm-section"><h3>Карты вечера</h3>' + rowsHtml + "</div>";
+
+    el.querySelectorAll(".sm-head").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = btn.dataset.mapId;
+        var open = !sessionMapsState.open[id];
+        sessionMapsState.open[id] = open;
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        btn.querySelector(".sm-chev").textContent = open ? "▾" : "▸";
+        btn.parentNode.querySelector(".sm-body").hidden = !open;
+      });
     });
   }
 

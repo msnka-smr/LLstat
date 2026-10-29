@@ -100,7 +100,26 @@ test("session output keeps its time range and the full map entries", () => {
   assert.deepEqual(out.maps[0], {
     mapId: "7-0", lobbyId: 7, map: "de_nuke", statsTier: "basic",
     teams: [{ score: 13 }, { score: 7 }], url: "https://cybershoke.net/match/7",
+    players: [{ steamid64: "A", name: "A", team: null, k: 20, d: 10, a: 0 }],
   });
+});
+
+test("map players carry team, K/D/A and the display name; assists stay out of player rows", () => {
+  const withA = { steamid64: "A", name: "nickA", team: "team1", k: 20, d: 10, a: 6, won: true };
+  const other = { steamid64: "B", name: "nickB", team: "team2", k: 5, d: 10, a: 1, won: false };
+  const out = buildSessionOutput(
+    sessionOf("S", [mapOf(1, [withA, other])]),
+    makeRow,
+    (id, fallback) => (id === "A" ? "Алекс" : fallback)
+  );
+  assert.deepEqual(out.maps[0].players, [
+    { steamid64: "A", name: "Алекс", team: "team1", k: 20, d: 10, a: 6 },
+    { steamid64: "B", name: "nickB", team: "team2", k: 5, d: 10, a: 1 },
+  ]);
+  for (const row of out.players) {
+    assert.equal("a" in row, false, "ассисты не должны попадать в строки игроков/рейтинг");
+    assert.equal("assists" in row, false);
+  }
 });
 
 test("the input sessions array is not mutated", () => {

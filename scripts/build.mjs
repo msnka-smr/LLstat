@@ -219,8 +219,10 @@ async function main() {
 
   // Все игровые вечера, от новых к старым. Пороги квалификации для строк те же,
   // что для таблицы "За всё время" (текущие), — как и раньше для последней сессии.
-  const sessionsOutput = buildSessionsOutput(sessions, (steamid64, mapsForPlayer, rating) =>
-    buildRow(steamid64, registry, mapsForPlayer, threshold, rating)
+  const sessionsOutput = buildSessionsOutput(
+    sessions,
+    (steamid64, mapsForPlayer, rating) => buildRow(steamid64, registry, mapsForPlayer, threshold, rating),
+    (steamid64) => displayName(registry, steamid64)
   );
 
   // "Итоги вечера": считаем после sessionsOutput и истории рейтинга, обоим нужен один и тот же набор сессий.

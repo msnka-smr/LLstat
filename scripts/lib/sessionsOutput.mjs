@@ -5,7 +5,8 @@ import { calcSessionRating } from "./sessionRating.mjs";
 import { sortRows } from "./sort.mjs";
 
 // makeRow(steamid64, mapsForPlayer, sessionRating) → строка игрока для таблицы.
-export function buildSessionOutput(session, makeRow) {
+// nameOf(steamid64, fallbackName) → отображаемое имя игрока (по умолчанию ник из матча).
+export function buildSessionOutput(session, makeRow, nameOf = (_id, fallback) => fallback) {
   const byPlayer = new Map();
   for (const map of session.maps) {
     for (const p of map.players) {
@@ -29,12 +30,22 @@ export function buildSessionOutput(session, makeRow) {
       statsTier: m.statsTier,
       teams: m.teams,
       url: `https://cybershoke.net/match/${m.lobbyId}`,
+      // Для списка «Карты вечера»: состав и K/D/A по этой карте. Ассисты живут
+      // только здесь — в строки игроков и рейтинги они не попадают.
+      players: m.players.map((p) => ({
+        steamid64: p.steamid64,
+        name: nameOf(p.steamid64, p.name ?? p.steamid64),
+        team: p.team ?? null,
+        k: p.k,
+        d: p.d,
+        a: p.a ?? 0,
+      })),
     })),
     players: sortRows(rows, "rating", "desc"),
   };
 }
 
 // sessions — от старой к новой (как отдаёт assignSessions); на выходе — наоборот.
-export function buildSessionsOutput(sessions, makeRow) {
-  return [...sessions].reverse().map((s) => buildSessionOutput(s, makeRow));
+export function buildSessionsOutput(sessions, makeRow, nameOf) {
+  return [...sessions].reverse().map((s) => buildSessionOutput(s, makeRow, nameOf));
 }

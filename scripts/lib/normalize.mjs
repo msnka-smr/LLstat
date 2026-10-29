@@ -5,7 +5,8 @@
 // (см. detectPhantomKnifeRound и normalizeFullMap). Демо-статы (team1/team2)
 // используются только чтобы понять состав команд, победителя и счёт по
 // раундам. Каждый игрок несёт только steamid64, имя, аватар, команду, победу
-// и K/D.
+// и K/D (плюс ассисты `a`: их показывает только список «Карты вечера», в
+// рейтинги и агрегаты они не идут).
 export function normalizeLobby(raw) {
   const data = raw?.data;
   if (!data) return [];
@@ -93,6 +94,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
         won: teamIsWinner,
         k: live?.kills ?? p.kills ?? 0,
         d: live?.deaths ?? (p.deaths ?? 0) - phantomDeaths,
+        a: live?.assists ?? 0,
       });
     }
   }
@@ -123,6 +125,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
       won: !!stats[teamKey]?.isWinner,
       k: live.kills ?? 0,
       d: live.deaths ?? 0,
+      a: live.assists ?? 0,
     });
   }
 
@@ -157,6 +160,7 @@ function normalizeBasicMap({ lobbyId, data, playedAtFallback }) {
       won: team != null && winnerSlot != null ? slot === winnerSlot : null,
       k: live.kills ?? 0,
       d: live.deaths ?? 0,
+      a: live.assists ?? 0,
     };
   });
 

@@ -154,3 +154,34 @@ test("a normal round 1 (not all-knife) leaves the score untouched", () => {
   assert.equal(map.totalRounds, 17);
   assert.equal(map.teams.find((t) => t.key === "team2").score, 4);
 });
+
+// Ассисты берутся из лобби (match_stats.live.assists) и нужны только для
+// списка «Карты вечера» на вкладке «Сессии»; в рейтинги они не попадают.
+test("assists come from match_stats.live for demo-parsed (full) maps, missing means 0", () => {
+  const raw = buildRawLobby({ dropSteamId: "3" }); // игрок 3 добирается из ростера
+  raw.data.players["1"].match_stats.live.assists = 4;
+  raw.data.players["3"].match_stats.live.assists = 2;
+  const [map] = normalizeLobby(raw);
+  assert.equal(map.players.find((p) => p.steamid64 === "1").a, 4);
+  assert.equal(map.players.find((p) => p.steamid64 === "3").a, 2, "добранный из ростера тоже");
+  assert.equal(map.players.find((p) => p.steamid64 === "2").a, 0, "нет assists в live — 0");
+});
+
+test("assists come from match_stats.live for lobby-only (basic) maps", () => {
+  const raw = {
+    data: {
+      id_lobby: 555,
+      dates: { unixtime_match_end: 1700000000 },
+      match_settings: { map_name: "de_nuke" },
+      match_stats: { base: { team_2: { score: 13 }, team_3: { score: 5 }, team_winner: 2 } },
+      players: {
+        1: { steamid64: "1", name: "a", id_slot: 2, match_stats: { live: { kills: 20, deaths: 10, assists: 7 } } },
+        2: { steamid64: "2", name: "b", id_slot: 3, match_stats: { live: { kills: 5, deaths: 15 } } },
+      },
+    },
+  };
+  const [map] = normalizeLobby(raw);
+  assert.equal(map.statsTier, "basic");
+  assert.equal(map.players.find((p) => p.steamid64 === "1").a, 7);
+  assert.equal(map.players.find((p) => p.steamid64 === "2").a, 0);
+});

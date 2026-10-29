@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-28T20:19:52.711Z",
+  "generatedAt": "2026-10-29T09:18:39.032Z",
   "totalMapsCollected": 59,
   "qualification": {
     "threshold": 24,
@@ -451,7 +451,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/13239728"
+          "url": "https://cybershoke.net/match/13239728",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 6,
+              "d": 15,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_2",
+              "k": 27,
+              "d": 7,
+              "a": 7
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 6,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 11,
+              "d": 13,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 11,
+              "d": 10,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 6,
+              "d": 12,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_2",
+              "k": 16,
+              "d": 10,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 10,
+              "d": 11,
+              "a": 8
+            },
+            {
+              "steamid64": "76561199482946683",
+              "name": "OlegEbasher",
+              "team": "team_3",
+              "k": 15,
+              "d": 14,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 12,
+              "d": 14,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "13241654:1",
@@ -472,7 +554,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/13241654"
+          "url": "https://cybershoke.net/match/13241654",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 18,
+              "d": 9,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_2",
+              "k": 17,
+              "d": 14,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 2,
+              "d": 15,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 20,
+              "d": 8,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 7,
+              "d": 15,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_2",
+              "k": 11,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 10,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 12,
+              "d": 10,
+              "a": 7
+            },
+            {
+              "steamid64": "76561199482946683",
+              "name": "OlegEbasher",
+              "team": "team_3",
+              "k": 13,
+              "d": 9,
+              "a": 6
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 10,
+              "d": 11,
+              "a": 5
+            }
+          ]
         },
         {
           "mapId": "13243177:1",
@@ -493,7 +657,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/13243177"
+          "url": "https://cybershoke.net/match/13243177",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 15,
+              "d": 18,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_2",
+              "k": 24,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 7,
+              "d": 18,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 21,
+              "d": 18,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 22,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_2",
+              "k": 15,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 22,
+              "d": 13,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 15,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199482946683",
+              "name": "OlegEbasher",
+              "team": "team_3",
+              "k": 12,
+              "d": 20,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 9,
+              "d": 20,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "13245781:1",
@@ -514,7 +760,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/13245781"
+          "url": "https://cybershoke.net/match/13245781",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 13,
+              "d": 18,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_2",
+              "k": 33,
+              "d": 12,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 13,
+              "d": 16,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 30,
+              "d": 18,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 10,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_2",
+              "k": 19,
+              "d": 15,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 15,
+              "d": 14,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 7,
+              "d": 20,
+              "a": 6
+            },
+            {
+              "steamid64": "76561199482946683",
+              "name": "OlegEbasher",
+              "team": "team_3",
+              "k": 6,
+              "d": 17,
+              "a": 2
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 16,
+              "d": 18,
+              "a": 5
+            }
+          ]
         },
         {
           "mapId": "13248013:1",
@@ -535,7 +863,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/13248013"
+          "url": "https://cybershoke.net/match/13248013",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 13,
+              "d": 12,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 7,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 2,
+              "d": 15,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 23,
+              "d": 6,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 12,
+              "d": 13,
+              "a": 0
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_2",
+              "k": 13,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 12,
+              "d": 10,
+              "a": 3
+            },
+            {
+              "steamid64": "76561199482946683",
+              "name": "OlegEbasher",
+              "team": "team_3",
+              "k": 14,
+              "d": 12,
+              "a": 1
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 8,
+              "d": 11,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_2",
+              "k": 16,
+              "d": 13,
+              "a": 2
+            }
+          ]
         },
         {
           "mapId": "13250284:1",
@@ -556,7 +966,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/13250284"
+          "url": "https://cybershoke.net/match/13250284",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 15,
+              "d": 16,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 16,
+              "d": 18,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 7,
+              "d": 18,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 20,
+              "d": 18,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 25,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_2",
+              "k": 15,
+              "d": 16,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_2",
+              "k": 20,
+              "d": 12,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 14,
+              "d": 16,
+              "a": 8
+            },
+            {
+              "steamid64": "76561199482946683",
+              "name": "OlegEbasher",
+              "team": "team_3",
+              "k": 17,
+              "d": 18,
+              "a": 3
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 12,
+              "d": 17,
+              "a": 5
+            }
+          ]
         },
         {
           "mapId": "13252627:1",
@@ -577,7 +1069,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/13252627"
+          "url": "https://cybershoke.net/match/13252627",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 15,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 17,
+              "d": 20,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 10,
+              "d": 18,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 25,
+              "d": 16,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 13,
+              "d": 16,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_2",
+              "k": 16,
+              "d": 19,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_2",
+              "k": 31,
+              "d": 16,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 20,
+              "d": 17,
+              "a": 1
+            },
+            {
+              "steamid64": "76561199482946683",
+              "name": "OlegEbasher",
+              "team": "team_3",
+              "k": 10,
+              "d": 19,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 16,
+              "d": 19,
+              "a": 7
+            }
+          ]
         }
       ],
       "players": [
@@ -813,7 +1387,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12974570"
+          "url": "https://cybershoke.net/match/12974570",
+          "players": [
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 24,
+              "d": 22,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 17,
+              "d": 24,
+              "a": 15
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 13,
+              "d": 24,
+              "a": 11
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team_3",
+              "k": 18,
+              "d": 25,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 32,
+              "d": 18,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_3",
+              "k": 26,
+              "d": 20,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team_2",
+              "k": 29,
+              "d": 21,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198197222927",
+              "name": "goodipAN",
+              "team": "team_2",
+              "k": 34,
+              "d": 20,
+              "a": 12
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 13,
+              "d": 23,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 14,
+              "d": 25,
+              "a": 7
+            }
+          ]
         },
         {
           "mapId": "12977545:1",
@@ -834,7 +1490,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12977545"
+          "url": "https://cybershoke.net/match/12977545",
+          "players": [
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 12,
+              "d": 18,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 19,
+              "d": 20,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_3",
+              "k": 15,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 20,
+              "d": 16,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team_3",
+              "k": 17,
+              "d": 18,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 27,
+              "d": 11,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 7,
+              "d": 19,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team_2",
+              "k": 18,
+              "d": 18,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 9,
+              "d": 20,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198197222927",
+              "name": "goodipAN",
+              "team": "team_2",
+              "k": 26,
+              "d": 17,
+              "a": 7
+            }
+          ]
         },
         {
           "mapId": "12979759:1",
@@ -855,7 +1593,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/12979759"
+          "url": "https://cybershoke.net/match/12979759",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 18,
+              "d": 13,
+              "a": 7
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 5,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 11,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_3",
+              "k": 9,
+              "d": 16,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team_3",
+              "k": 15,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team_2",
+              "k": 22,
+              "d": 13,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 17,
+              "d": 14,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 19,
+              "d": 13,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198197222927",
+              "name": "goodipAN",
+              "team": "team_2",
+              "k": 10,
+              "d": 13,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 13,
+              "d": 12,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "12981577:1",
@@ -876,7 +1696,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12981577"
+          "url": "https://cybershoke.net/match/12981577",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 11,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 10,
+              "d": 14,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 12,
+              "d": 17,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_3",
+              "k": 20,
+              "d": 16,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team_3",
+              "k": 16,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team_2",
+              "k": 18,
+              "d": 18,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 12,
+              "d": 13,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 28,
+              "d": 10,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198197222927",
+              "name": "goodipAN",
+              "team": "team_2",
+              "k": 17,
+              "d": 18,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 11,
+              "d": 16,
+              "a": 2
+            }
+          ]
         },
         {
           "mapId": "12983746:1",
@@ -897,7 +1799,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12983746"
+          "url": "https://cybershoke.net/match/12983746",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 9,
+              "d": 17,
+              "a": 11
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 8,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 4,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_3",
+              "k": 16,
+              "d": 17,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team_3",
+              "k": 21,
+              "d": 12,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team_2",
+              "k": 16,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 14,
+              "d": 13,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 22,
+              "d": 14,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198197222927",
+              "name": "goodipAN",
+              "team": "team_2",
+              "k": 22,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 16,
+              "d": 16,
+              "a": 1
+            }
+          ]
         },
         {
           "mapId": "12985438:1",
@@ -918,7 +1902,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/12985438"
+          "url": "https://cybershoke.net/match/12985438",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 18,
+              "d": 15,
+              "a": 6
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 5,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 7,
+              "d": 20,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_3",
+              "k": 16,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team_3",
+              "k": 11,
+              "d": 19,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team_2",
+              "k": 29,
+              "d": 15,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 16,
+              "d": 14,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 25,
+              "d": 16,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198197222927",
+              "name": "goodipAN",
+              "team": "team_2",
+              "k": 12,
+              "d": 13,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 14,
+              "d": 11,
+              "a": 6
+            }
+          ]
         },
         {
           "mapId": "12987148:1",
@@ -939,7 +2005,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12987148"
+          "url": "https://cybershoke.net/match/12987148",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 24,
+              "d": 16,
+              "a": 9
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 10,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 4,
+              "d": 18,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_3",
+              "k": 17,
+              "d": 13,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team_3",
+              "k": 17,
+              "d": 20,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team_2",
+              "k": 17,
+              "d": 15,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 16,
+              "d": 19,
+              "a": 12
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 28,
+              "d": 10,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198197222927",
+              "name": "goodipAN",
+              "team": "team_2",
+              "k": 19,
+              "d": 19,
+              "a": 13
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 12,
+              "d": 18,
+              "a": 6
+            }
+          ]
         }
       ],
       "players": [
@@ -1175,7 +2323,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12736132"
+          "url": "https://cybershoke.net/match/12736132",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 14,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 10,
+              "d": 18,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 12,
+              "d": 11,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team_2",
+              "k": 18,
+              "d": 14,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 4,
+              "d": 17,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 13,
+              "d": 18,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 17,
+              "d": 17,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 14,
+              "d": 12,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 20,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198835346787",
+              "name": "Take this L",
+              "team": "team_3",
+              "k": 22,
+              "d": 13,
+              "a": 11
+            }
+          ]
         },
         {
           "mapId": "12738005:1",
@@ -1196,7 +2426,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12738005"
+          "url": "https://cybershoke.net/match/12738005",
+          "players": [
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 3,
+              "d": 18,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 15,
+              "d": 11,
+              "a": 0
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 15,
+              "d": 13,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 14,
+              "d": 12,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 13,
+              "d": 14,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team_2",
+              "k": 20,
+              "d": 13,
+              "a": 0
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 9,
+              "d": 15,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 11,
+              "d": 12,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 11,
+              "d": 17,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198835346787",
+              "name": "Take this L",
+              "team": "team_3",
+              "k": 22,
+              "d": 9,
+              "a": 6
+            }
+          ]
         },
         {
           "mapId": "12739843:1",
@@ -1217,7 +2529,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12739843"
+          "url": "https://cybershoke.net/match/12739843",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 12,
+              "d": 15,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 20,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 7,
+              "d": 19,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 17,
+              "d": 14,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 8,
+              "d": 13,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 10,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198835346787",
+              "name": "Take this L",
+              "team": "team_3",
+              "k": 18,
+              "d": 9,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 16,
+              "d": 6,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 8,
+              "d": 11,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team_2",
+              "k": 11,
+              "d": 12,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "12742364:1",
@@ -1238,7 +2632,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12742364"
+          "url": "https://cybershoke.net/match/12742364",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 22,
+              "d": 13,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 17,
+              "d": 14,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 4,
+              "d": 19,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 12,
+              "d": 14,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 19,
+              "d": 11,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team_2",
+              "k": 14,
+              "d": 14,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 10,
+              "d": 16,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 6,
+              "d": 12,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 11,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198835346787",
+              "name": "Take this L",
+              "team": "team_3",
+              "k": 23,
+              "d": 14,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "12744184:1",
@@ -1259,7 +2735,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12744184"
+          "url": "https://cybershoke.net/match/12744184",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 12,
+              "d": 16,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 14,
+              "d": 12,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 6,
+              "d": 14,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 12,
+              "d": 10,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 17,
+              "d": 11,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team_2",
+              "k": 10,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 16,
+              "d": 14,
+              "a": 0
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 10,
+              "d": 12,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 16,
+              "d": 17,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198835346787",
+              "name": "Take this L",
+              "team": "team_3",
+              "k": 20,
+              "d": 15,
+              "a": 7
+            }
+          ]
         },
         {
           "mapId": "12745821:1",
@@ -1280,7 +2838,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12745821"
+          "url": "https://cybershoke.net/match/12745821",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 15,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 11,
+              "d": 15,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 6,
+              "d": 16,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 11,
+              "d": 10,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 18,
+              "d": 11,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team_2",
+              "k": 16,
+              "d": 15,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 9,
+              "d": 15,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 11,
+              "d": 10,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 9,
+              "d": 16,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198835346787",
+              "name": "Take this L",
+              "team": "team_3",
+              "k": 27,
+              "d": 10,
+              "a": 7
+            }
+          ]
         },
         {
           "mapId": "12747159:1",
@@ -1301,7 +2941,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12747159"
+          "url": "https://cybershoke.net/match/12747159",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 14,
+              "d": 15,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 13,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 3,
+              "d": 17,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 18,
+              "d": 13,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198129162397",
+              "name": "sajyyee",
+              "team": "team_3",
+              "k": 18,
+              "d": 10,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team_2",
+              "k": 20,
+              "d": 14,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 12,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 15,
+              "d": 12,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 12,
+              "d": 16,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198835346787",
+              "name": "Take this L",
+              "team": "team_3",
+              "k": 14,
+              "d": 15,
+              "a": 6
+            }
+          ]
         }
       ],
       "players": [
@@ -1537,7 +3259,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12282511"
+          "url": "https://cybershoke.net/match/12282511",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 21,
+              "d": 10,
+              "a": 3
+            },
+            {
+              "steamid64": "76561199144510024",
+              "name": "LITE | 63dealer",
+              "team": "team1",
+              "k": 19,
+              "d": 9,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 13,
+              "d": 9,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 14,
+              "d": 11,
+              "a": 0
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 7,
+              "d": 10,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 13,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 9,
+              "d": 13,
+              "a": 3
+            },
+            {
+              "steamid64": "76561199686171590",
+              "name": "DisterMick",
+              "team": "team2",
+              "k": 9,
+              "d": 16,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 9,
+              "d": 16,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 8,
+              "d": 14,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "12284896:1",
@@ -1558,7 +3362,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12284896"
+          "url": "https://cybershoke.net/match/12284896",
+          "players": [
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 25,
+              "d": 10,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199144510024",
+              "name": "LITE | 63dealer",
+              "team": "team1",
+              "k": 24,
+              "d": 18,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 19,
+              "d": 14,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 11,
+              "d": 15,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 11,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 23,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 21,
+              "d": 19,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 14,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 7,
+              "d": 17,
+              "a": 3
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 8,
+              "d": 20,
+              "a": 2
+            }
+          ]
         },
         {
           "mapId": "12286984:1",
@@ -1579,7 +3465,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12286984"
+          "url": "https://cybershoke.net/match/12286984",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 26,
+              "d": 10,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team1",
+              "k": 20,
+              "d": 15,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 17,
+              "d": 12,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 8,
+              "d": 12,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 7,
+              "d": 12,
+              "a": 3
+            },
+            {
+              "steamid64": "76561199144510024",
+              "name": "LITE | 63dealer",
+              "team": "team2",
+              "k": 22,
+              "d": 15,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 15,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 10,
+              "d": 15,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 9,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 5,
+              "d": 17,
+              "a": 4
+            }
+          ]
         },
         {
           "mapId": "12288624:1",
@@ -1600,7 +3568,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12288624"
+          "url": "https://cybershoke.net/match/12288624",
+          "players": [
+            {
+              "steamid64": "76561199144510024",
+              "name": "LITE | 63dealer",
+              "team": "team1",
+              "k": 24,
+              "d": 8,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 20,
+              "d": 7,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 11,
+              "d": 8,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 10,
+              "d": 7,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 7,
+              "d": 13,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 15,
+              "d": 14,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 11,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 9,
+              "d": 15,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 5,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 3,
+              "d": 16,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "12290185:1",
@@ -1621,7 +3671,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12290185"
+          "url": "https://cybershoke.net/match/12290185",
+          "players": [
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team1",
+              "k": 35,
+              "d": 13,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 17,
+              "d": 10,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 9,
+              "d": 15,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 12,
+              "d": 14,
+              "a": 1
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 9,
+              "d": 16,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 19,
+              "d": 16,
+              "a": 1
+            },
+            {
+              "steamid64": "76561199144510024",
+              "name": "LITE | 63dealer",
+              "team": "team2",
+              "k": 18,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 15,
+              "d": 16,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 9,
+              "d": 16,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 7,
+              "d": 17,
+              "a": 4
+            }
+          ]
         },
         {
           "mapId": "12291946:1",
@@ -1642,7 +3774,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/12291946"
+          "url": "https://cybershoke.net/match/12291946",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 18,
+              "d": 13,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team1",
+              "k": 19,
+              "d": 15,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 15,
+              "d": 11,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 15,
+              "d": 11,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 16,
+              "d": 13,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 23,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199144510024",
+              "name": "LITE | 63dealer",
+              "team": "team2",
+              "k": 17,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 9,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 7,
+              "d": 19,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 5,
+              "d": 16,
+              "a": 6
+            }
+          ]
         }
       ],
       "players": [
@@ -1895,7 +4109,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/11817269"
+          "url": "https://cybershoke.net/match/11817269",
+          "players": [
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 14,
+              "d": 15,
+              "a": 11
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 20,
+              "d": 15,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 17,
+              "d": 15,
+              "a": 11
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 15,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 10,
+              "d": 13,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 11,
+              "d": 17,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198070734509",
+              "name": "乃卂尺丨ㄥㄥ卂",
+              "team": "team2",
+              "k": 20,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198137980826",
+              "name": "LetsStats",
+              "team": "team2",
+              "k": 17,
+              "d": 15,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 19,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 4,
+              "d": 17,
+              "a": 4
+            }
+          ]
         },
         {
           "mapId": "11818759:1",
@@ -1916,7 +4212,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/11818759"
+          "url": "https://cybershoke.net/match/11818759",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 24,
+              "d": 13,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 24,
+              "d": 11,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 12,
+              "d": 14,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 6,
+              "d": 14,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 16,
+              "d": 15,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198070734509",
+              "name": "乃卂尺丨ㄥㄥ卂",
+              "team": "team2",
+              "k": 18,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198137980826",
+              "name": "LetsStats",
+              "team": "team2",
+              "k": 22,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 7,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 10,
+              "d": 17,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 10,
+              "d": 17,
+              "a": 4
+            }
+          ]
         },
         {
           "mapId": "11820488:1",
@@ -1937,7 +4315,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/11820488"
+          "url": "https://cybershoke.net/match/11820488",
+          "players": [
+            {
+              "steamid64": "76561198137980826",
+              "name": "LetsStats",
+              "team": "team1",
+              "k": 20,
+              "d": 10,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198070734509",
+              "name": "乃卂尺丨ㄥㄥ卂",
+              "team": "team1",
+              "k": 20,
+              "d": 7,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 7,
+              "d": 10,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 13,
+              "d": 9,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 12,
+              "d": 9,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 10,
+              "d": 13,
+              "a": 1
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 12,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 10,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 9,
+              "d": 14,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 3,
+              "d": 15,
+              "a": 6
+            }
+          ]
         },
         {
           "mapId": "11822304:1",
@@ -1958,7 +4418,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/11822304"
+          "url": "https://cybershoke.net/match/11822304",
+          "players": [
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 22,
+              "d": 21,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 18,
+              "d": 21,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 10,
+              "d": 21,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 34,
+              "d": 20,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 19,
+              "d": 21,
+              "a": 12
+            },
+            {
+              "steamid64": "76561198070734509",
+              "name": "乃卂尺丨ㄥㄥ卂",
+              "team": "team_2",
+              "k": 30,
+              "d": 19,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198137980826",
+              "name": "LetsStats",
+              "team": "team_2",
+              "k": 34,
+              "d": 19,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 12,
+              "d": 24,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 17,
+              "d": 21,
+              "a": 6
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 16,
+              "d": 26,
+              "a": 5
+            }
+          ]
         },
         {
           "mapId": "11824873:1",
@@ -1979,7 +4521,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/11824873"
+          "url": "https://cybershoke.net/match/11824873",
+          "players": [
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 13,
+              "d": 11,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 13,
+              "d": 16,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 4,
+              "d": 13,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 13,
+              "d": 15,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 14,
+              "d": 15,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198070734509",
+              "name": "乃卂尺丨ㄥㄥ卂",
+              "team": "team_2",
+              "k": 22,
+              "d": 12,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198137980826",
+              "name": "LetsStats",
+              "team": "team_2",
+              "k": 22,
+              "d": 10,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 15,
+              "d": 5,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 4,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 7,
+              "d": 15,
+              "a": 2
+            }
+          ]
         },
         {
           "mapId": "11826620:1",
@@ -2000,7 +4624,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/11826620"
+          "url": "https://cybershoke.net/match/11826620",
+          "players": [
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 19,
+              "d": 22,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 25,
+              "d": 18,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 10,
+              "d": 21,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 34,
+              "d": 18,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 16,
+              "d": 19,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198070734509",
+              "name": "乃卂尺丨ㄥㄥ卂",
+              "team": "team_2",
+              "k": 28,
+              "d": 19,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198137980826",
+              "name": "LetsStats",
+              "team": "team_2",
+              "k": 26,
+              "d": 27,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 12,
+              "d": 21,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 16,
+              "d": 21,
+              "a": 6
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 14,
+              "d": 20,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "11829543:1",
@@ -2021,7 +4727,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/11829543"
+          "url": "https://cybershoke.net/match/11829543",
+          "players": [
+            {
+              "steamid64": "76561198137980826",
+              "name": "LetsStats",
+              "team": "team_2",
+              "k": 27,
+              "d": 13,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_3",
+              "k": 8,
+              "d": 15,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 15,
+              "d": 13,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_3",
+              "k": 16,
+              "d": 15,
+              "a": 6
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 11,
+              "d": 17,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 6,
+              "d": 12,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198070734509",
+              "name": "乃卂尺丨ㄥㄥ卂",
+              "team": "team_2",
+              "k": 20,
+              "d": 12,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 10,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team_2",
+              "k": 7,
+              "d": 14,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 14,
+              "d": 10,
+              "a": 3
+            }
+          ]
         }
       ],
       "players": [
@@ -2257,7 +5045,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/11393084"
+          "url": "https://cybershoke.net/match/11393084",
+          "players": [
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team1",
+              "k": 28,
+              "d": 12,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198042805941",
+              "name": "PRADA_CODE",
+              "team": "team1",
+              "k": 26,
+              "d": 14,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 2,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 15,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 15,
+              "d": 12,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 15,
+              "d": 18,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 22,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 15,
+              "d": 18,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 10,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 6,
+              "d": 18,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "11394970:1",
@@ -2278,7 +5148,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/11394970"
+          "url": "https://cybershoke.net/match/11394970",
+          "players": [
+            {
+              "steamid64": "76561198042805941",
+              "name": "PRADA_CODE",
+              "team": "team1",
+              "k": 41,
+              "d": 27,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team1",
+              "k": 31,
+              "d": 25,
+              "a": 14
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 28,
+              "d": 21,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 21,
+              "d": 29,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 18,
+              "d": 24,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 23,
+              "d": 26,
+              "a": 11
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 24,
+              "d": 28,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 32,
+              "d": 27,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 24,
+              "d": 30,
+              "a": 9
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 23,
+              "d": 29,
+              "a": 11
+            }
+          ]
         },
         {
           "mapId": "11397654:1",
@@ -2299,7 +5251,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/11397654"
+          "url": "https://cybershoke.net/match/11397654",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 29,
+              "d": 17,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 20,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 18,
+              "d": 18,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 14,
+              "d": 19,
+              "a": 8
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 6,
+              "d": 18,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team2",
+              "k": 27,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198042805941",
+              "name": "PRADA_CODE",
+              "team": "team2",
+              "k": 16,
+              "d": 17,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 22,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 8,
+              "d": 20,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 12,
+              "d": 18,
+              "a": 1
+            }
+          ]
         },
         {
           "mapId": "11399948:1",
@@ -2320,7 +5354,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/11399948"
+          "url": "https://cybershoke.net/match/11399948",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 27,
+              "d": 12,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 16,
+              "d": 15,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 14,
+              "d": 14,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 16,
+              "d": 12,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 9,
+              "d": 12,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team2",
+              "k": 29,
+              "d": 12,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198728309900",
+              "name": "BB-00",
+              "team": "team2",
+              "k": 9,
+              "d": 17,
+              "a": 12
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 13,
+              "d": 19,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 10,
+              "d": 18,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 3,
+              "d": 19,
+              "a": 4
+            }
+          ]
         },
         {
           "mapId": "11401895:1",
@@ -2341,7 +5457,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/11401895"
+          "url": "https://cybershoke.net/match/11401895",
+          "players": [
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 20,
+              "d": 13,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198728309900",
+              "name": "BB-00",
+              "team": "team1",
+              "k": 22,
+              "d": 13,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team1",
+              "k": 28,
+              "d": 10,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 10,
+              "d": 15,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 8,
+              "d": 14,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 17,
+              "d": 17,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 13,
+              "d": 19,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 14,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 14,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 5,
+              "d": 19,
+              "a": 5
+            }
+          ]
         }
       ],
       "players": [
@@ -2594,7 +5792,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10949401"
+          "url": "https://cybershoke.net/match/10949401",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 24,
+              "d": 13,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 22,
+              "d": 13,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 16,
+              "d": 11,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 13,
+              "d": 10,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 6,
+              "d": 13,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team2",
+              "k": 17,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 16,
+              "d": 12,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 12,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 9,
+              "d": 18,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 2,
+              "d": 17,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "10951164:1",
@@ -2615,7 +5895,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10951164"
+          "url": "https://cybershoke.net/match/10951164",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 30,
+              "d": 14,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 19,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 13,
+              "d": 12,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 10,
+              "d": 12,
+              "a": 6
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 9,
+              "d": 17,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team2",
+              "k": 25,
+              "d": 15,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 18,
+              "d": 17,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 12,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 11,
+              "d": 18,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 4,
+              "d": 17,
+              "a": 4
+            }
+          ]
         },
         {
           "mapId": "10952783:1",
@@ -2636,7 +5998,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10952783"
+          "url": "https://cybershoke.net/match/10952783",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 21,
+              "d": 12,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 20,
+              "d": 17,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 16,
+              "d": 17,
+              "a": 6
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 18,
+              "d": 20,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 10,
+              "d": 16,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 26,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team2",
+              "k": 20,
+              "d": 17,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 18,
+              "d": 20,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 13,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 3,
+              "d": 18,
+              "a": 5
+            }
+          ]
         },
         {
           "mapId": "10954410:1",
@@ -2657,7 +6101,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10954410"
+          "url": "https://cybershoke.net/match/10954410",
+          "players": [
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team1",
+              "k": 24,
+              "d": 10,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 18,
+              "d": 11,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 15,
+              "d": 14,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team1",
+              "k": 14,
+              "d": 12,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 9,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 25,
+              "d": 13,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 13,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 10,
+              "d": 18,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 10,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 5,
+              "d": 16,
+              "a": 9
+            }
+          ]
         },
         {
           "mapId": "10956149:1",
@@ -2678,7 +6204,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10956149"
+          "url": "https://cybershoke.net/match/10956149",
+          "players": [
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team1",
+              "k": 34,
+              "d": 12,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team1",
+              "k": 18,
+              "d": 14,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 18,
+              "d": 15,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 13,
+              "d": 15,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 7,
+              "d": 15,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 22,
+              "d": 17,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 21,
+              "d": 19,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 9,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 10,
+              "d": 19,
+              "a": 9
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 6,
+              "d": 20,
+              "a": 4
+            }
+          ]
         },
         {
           "mapId": "10957894:1",
@@ -2699,7 +6307,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10957894"
+          "url": "https://cybershoke.net/match/10957894",
+          "players": [
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 22,
+              "d": 14,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 21,
+              "d": 17,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 25,
+              "d": 18,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 15,
+              "d": 19,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 8,
+              "d": 21,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198054359751",
+              "name": "Tioma**",
+              "team": "team2",
+              "k": 32,
+              "d": 17,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 22,
+              "d": 21,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 15,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 14,
+              "d": 18,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 3,
+              "d": 21,
+              "a": 6
+            }
+          ]
         }
       ],
       "players": [
@@ -2935,7 +6625,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10550233"
+          "url": "https://cybershoke.net/match/10550233",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 24,
+              "d": 10,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 17,
+              "d": 12,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 17,
+              "d": 13,
+              "a": 0
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 12,
+              "d": 14,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 11,
+              "d": 12,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 20,
+              "d": 15,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 16,
+              "d": 17,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team2",
+              "k": 15,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 7,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 3,
+              "d": 18,
+              "a": 1
+            }
+          ]
         },
         {
           "mapId": "10552874:1",
@@ -2956,7 +6728,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10552874"
+          "url": "https://cybershoke.net/match/10552874",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 32,
+              "d": 14,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 18,
+              "d": 13,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 11,
+              "d": 15,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 5,
+              "d": 12,
+              "a": 9
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 10,
+              "d": 16,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team2",
+              "k": 30,
+              "d": 13,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 2,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 8,
+              "d": 14,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 9,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 19,
+              "d": 17,
+              "a": 3
+            }
+          ]
         },
         {
           "mapId": "10554428:1",
@@ -2977,7 +6831,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10554428"
+          "url": "https://cybershoke.net/match/10554428",
+          "players": [
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 22,
+              "d": 18,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 20,
+              "d": 19,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 19,
+              "d": 15,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 13,
+              "d": 19,
+              "a": 2
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 11,
+              "d": 18,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 28,
+              "d": 18,
+              "a": 13
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team2",
+              "k": 26,
+              "d": 15,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 18,
+              "d": 17,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 11,
+              "d": 17,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 6,
+              "d": 18,
+              "a": 5
+            }
+          ]
         },
         {
           "mapId": "10556260:1",
@@ -2998,7 +6934,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10556260"
+          "url": "https://cybershoke.net/match/10556260",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 22,
+              "d": 8,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 13,
+              "d": 8,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 12,
+              "d": 10,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 10,
+              "d": 9,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 10,
+              "d": 10,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team2",
+              "k": 16,
+              "d": 14,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 12,
+              "d": 14,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 10,
+              "d": 13,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 6,
+              "d": 13,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 1,
+              "d": 13,
+              "a": 2
+            }
+          ]
         },
         {
           "mapId": "10557706:1",
@@ -3019,7 +7037,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10557706"
+          "url": "https://cybershoke.net/match/10557706",
+          "players": [
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team1",
+              "k": 27,
+              "d": 14,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team1",
+              "k": 23,
+              "d": 13,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team1",
+              "k": 19,
+              "d": 13,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team1",
+              "k": 15,
+              "d": 14,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team1",
+              "k": 8,
+              "d": 15,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team2",
+              "k": 25,
+              "d": 17,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team2",
+              "k": 13,
+              "d": 18,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 13,
+              "d": 19,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 12,
+              "d": 18,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team2",
+              "k": 2,
+              "d": 20,
+              "a": 4
+            }
+          ]
         },
         {
           "mapId": "10559522:1",
@@ -3040,7 +7140,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10559522"
+          "url": "https://cybershoke.net/match/10559522",
+          "players": [
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 21,
+              "d": 12,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 22,
+              "d": 15,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 20,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team1",
+              "k": 12,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team1",
+              "k": 6,
+              "d": 18,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198272167310",
+              "name": "Джуззи.",
+              "team": "team2",
+              "k": 26,
+              "d": 17,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 19,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198048534904",
+              "name": "SKU4NO",
+              "team": "team2",
+              "k": 13,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 7,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 7,
+              "d": 18,
+              "a": 4
+            }
+          ]
         }
       ],
       "players": [
@@ -3276,7 +7458,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10127963"
+          "url": "https://cybershoke.net/match/10127963",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 57,
+              "d": 38,
+              "a": 13
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 44,
+              "d": 38,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 38,
+              "d": 38,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199686171590",
+              "name": "DisterMick",
+              "team": "team1",
+              "k": 26,
+              "d": 42,
+              "a": 16
+            },
+            {
+              "steamid64": "76561198357423221",
+              "name": "Cедой",
+              "team": "team1",
+              "k": 23,
+              "d": 39,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 60,
+              "d": 33,
+              "a": 11
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 49,
+              "d": 39,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 33,
+              "d": 38,
+              "a": 18
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 33,
+              "d": 41,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 14,
+              "d": 39,
+              "a": 6
+            }
+          ]
         },
         {
           "mapId": "10131986:1",
@@ -3297,7 +7561,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10131986"
+          "url": "https://cybershoke.net/match/10131986",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 33,
+              "d": 18,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 21,
+              "d": 20,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 15,
+              "d": 24,
+              "a": 5
+            },
+            {
+              "steamid64": "76561199686171590",
+              "name": "DisterMick",
+              "team": "team1",
+              "k": 14,
+              "d": 22,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198357423221",
+              "name": "Cедой",
+              "team": "team1",
+              "k": 11,
+              "d": 24,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 32,
+              "d": 20,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 26,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 22,
+              "d": 16,
+              "a": 3
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 16,
+              "d": 19,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 10,
+              "d": 24,
+              "a": 8
+            }
+          ]
         },
         {
           "mapId": "10134827:1",
@@ -3318,7 +7664,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10134827"
+          "url": "https://cybershoke.net/match/10134827",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 26,
+              "d": 5,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 12,
+              "d": 7,
+              "a": 7
+            },
+            {
+              "steamid64": "76561199686171590",
+              "name": "DisterMick",
+              "team": "team1",
+              "k": 10,
+              "d": 9,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198357423221",
+              "name": "Cедой",
+              "team": "team1",
+              "k": 12,
+              "d": 11,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 8,
+              "d": 9,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 16,
+              "d": 13,
+              "a": 2
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 8,
+              "d": 13,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 6,
+              "d": 14,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 4,
+              "d": 13,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 5,
+              "d": 14,
+              "a": 0
+            }
+          ]
         },
         {
           "mapId": "10136087:1",
@@ -3339,7 +7767,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/10136087"
+          "url": "https://cybershoke.net/match/10136087",
+          "players": [
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team1",
+              "k": 38,
+              "d": 20,
+              "a": 8
+            },
+            {
+              "steamid64": "76561199686171590",
+              "name": "DisterMick",
+              "team": "team1",
+              "k": 18,
+              "d": 21,
+              "a": 12
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team1",
+              "k": 21,
+              "d": 22,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team1",
+              "k": 21,
+              "d": 23,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198357423221",
+              "name": "Cедой",
+              "team": "team1",
+              "k": 7,
+              "d": 24,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team2",
+              "k": 32,
+              "d": 18,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team2",
+              "k": 22,
+              "d": 21,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team2",
+              "k": 23,
+              "d": 20,
+              "a": 1
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team2",
+              "k": 17,
+              "d": 21,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198007494757",
+              "name": "Ooops",
+              "team": "team2",
+              "k": 13,
+              "d": 25,
+              "a": 5
+            }
+          ]
         }
       ],
       "players": [
@@ -3575,7 +8085,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/9115489"
+          "url": "https://cybershoke.net/match/9115489",
+          "players": [
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 14,
+              "d": 26,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 22,
+              "d": 20,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 29,
+              "d": 19,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198357423221",
+              "name": "Cедой",
+              "team": "team_2",
+              "k": 12,
+              "d": 23,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 36,
+              "d": 16,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 13,
+              "d": 27,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 21,
+              "d": 21,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198728309900",
+              "name": "BB-00",
+              "team": "team_3",
+              "k": 27,
+              "d": 23,
+              "a": 10
+            },
+            {
+              "steamid64": "76561198696282357",
+              "name": "iiad0h0k16",
+              "team": "team_3",
+              "k": 8,
+              "d": 22,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 34,
+              "d": 20,
+              "a": 5
+            }
+          ]
         },
         {
           "mapId": "9117454:1",
@@ -3596,7 +8188,89 @@
               "isWinner": true
             }
           ],
-          "url": "https://cybershoke.net/match/9117454"
+          "url": "https://cybershoke.net/match/9117454",
+          "players": [
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 8,
+              "d": 11,
+              "a": 6
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 7,
+              "d": 17,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 17,
+              "d": 11,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 25,
+              "d": 13,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 10,
+              "d": 18,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 11,
+              "d": 17,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 15,
+              "d": 13,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198357423221",
+              "name": "Cедой",
+              "team": "team_2",
+              "k": 17,
+              "d": 16,
+              "a": 1
+            },
+            {
+              "steamid64": "76561198696282357",
+              "name": "iiad0h0k16",
+              "team": "team_3",
+              "k": 9,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198728309900",
+              "name": "BB-00",
+              "team": "team_3",
+              "k": 23,
+              "d": 16,
+              "a": 1
+            }
+          ]
         },
         {
           "mapId": "9119022:1",
@@ -3617,7 +8291,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/9119022"
+          "url": "https://cybershoke.net/match/9119022",
+          "players": [
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 10,
+              "d": 19,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 8,
+              "d": 20,
+              "a": 8
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 32,
+              "d": 15,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 24,
+              "d": 18,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 11,
+              "d": 19,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 32,
+              "d": 18,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 14,
+              "d": 20,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198357423221",
+              "name": "Cедой",
+              "team": "team_2",
+              "k": 14,
+              "d": 15,
+              "a": 7
+            },
+            {
+              "steamid64": "76561198696282357",
+              "name": "iiad0h0k16",
+              "team": "team_3",
+              "k": 12,
+              "d": 20,
+              "a": 5
+            },
+            {
+              "steamid64": "76561198728309900",
+              "name": "BB-00",
+              "team": "team_3",
+              "k": 23,
+              "d": 18,
+              "a": 9
+            }
+          ]
         },
         {
           "mapId": "9122596:1",
@@ -3638,7 +8394,89 @@
               "isWinner": false
             }
           ],
-          "url": "https://cybershoke.net/match/9122596"
+          "url": "https://cybershoke.net/match/9122596",
+          "players": [
+            {
+              "steamid64": "76561198681103731",
+              "name": "Анальный бур",
+              "team": "team_2",
+              "k": 11,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561199852434358",
+              "name": "Volbe",
+              "team": "team_3",
+              "k": 12,
+              "d": 15,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198014367879",
+              "name": "Player",
+              "team": "team_2",
+              "k": 19,
+              "d": 15,
+              "a": 9
+            },
+            {
+              "steamid64": "76561198017244485",
+              "name": "moloko",
+              "team": "team_2",
+              "k": 17,
+              "d": 15,
+              "a": 0
+            },
+            {
+              "steamid64": "76561198039138241",
+              "name": "AlexMax",
+              "team": "team_3",
+              "k": 35,
+              "d": 9,
+              "a": 3
+            },
+            {
+              "steamid64": "76561198064889555",
+              "name": "msn",
+              "team": "team_3",
+              "k": 13,
+              "d": 12,
+              "a": 6
+            },
+            {
+              "steamid64": "76561198303379150",
+              "name": "MrDrolik",
+              "team": "team_2",
+              "k": 8,
+              "d": 17,
+              "a": 2
+            },
+            {
+              "steamid64": "76561198357423221",
+              "name": "Cедой",
+              "team": "team_2",
+              "k": 7,
+              "d": 16,
+              "a": 4
+            },
+            {
+              "steamid64": "76561198696282357",
+              "name": "iiad0h0k16",
+              "team": "team_3",
+              "k": 2,
+              "d": 14,
+              "a": 0
+            },
+            {
+              "steamid64": "76561198728309900",
+              "name": "BB-00",
+              "team": "team_3",
+              "k": 17,
+              "d": 13,
+              "a": 5
+            }
+          ]
         }
       ],
       "players": [
