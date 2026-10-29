@@ -5,8 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Рейтинг игроков "ЛЛ"</title>
 <link rel="icon" type="image/png" href="favicon.png" />
+<script>
+  // Тема выставляется до отрисовки (без вспышки): сохранённый выбор, иначе системная.
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("llstat:theme"); } catch (e) {}
+    if (t !== "light" && t !== "dark") {
+      t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    }
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 <style>
   :root {
+    color-scheme: dark;
+    --on-accent: #0c1420; /* текст на акцентной заливке */
     --bg: #14161c;
     --bg-panel: #1b1e26;
     --bg-row: #1b1e26;
@@ -30,6 +43,34 @@
     --maroon-bg: rgba(155, 45, 48, 0.18);
   }
 
+  /* Светлая тема: тот же набор переменных. Цвета статусов — тёмные оттенки,
+     чтобы текст на светлой плашке читался (≥ 4.5:1). */
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --on-accent: #ffffff;
+    --bg: #f1f3f7;
+    --bg-panel: #ffffff;
+    --bg-row: #ffffff;
+    --bg-row-alt: #f6f8fb;
+    --bg-row-hover: #e9edf4;
+    --border: #d6dbe5;
+    --text: #1a1f2b;
+    --text-dim: #556074;
+    --text-faint: #6b7487;
+    --accent: #2563eb;
+    --accent-bg: rgba(37, 99, 235, 0.10);
+    --green: #157a3d;
+    --green-bg: rgba(21, 122, 61, 0.12);
+    --yellow: #8a6700;
+    --yellow-bg: rgba(190, 140, 0, 0.16);
+    --orange: #b4530a;
+    --orange-bg: rgba(200, 100, 10, 0.14);
+    --red: #c42d28;
+    --red-bg: rgba(196, 45, 40, 0.12);
+    --maroon: #8f1d22;
+    --maroon-bg: rgba(143, 29, 34, 0.12);
+  }
+
   * { box-sizing: border-box; }
 
   body {
@@ -51,6 +92,25 @@
     gap: 8px;
     margin: 0 0 4px;
   }
+  .theme-toggle {
+    margin-left: auto;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-panel);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .theme-toggle:hover { color: var(--text); border-color: var(--text-dim); }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  .theme-toggle .i-moon { display: none; }
+  :root[data-theme="light"] .theme-toggle .i-sun { display: none; }
+  :root[data-theme="light"] .theme-toggle .i-moon { display: block; }
   .title-row img {
     width: 26px;
     height: 26px;
@@ -108,7 +168,7 @@
 
   .tab.active {
     background: var(--accent);
-    color: #0c1420;
+    color: var(--on-accent);
     font-weight: 600;
   }
 
@@ -222,11 +282,11 @@
   .map-chip.active {
     background: var(--accent);
     border-color: var(--accent);
-    color: #0c1420;
+    color: var(--on-accent);
     font-weight: 600;
   }
   .map-chip-count { color: var(--text-faint); font-size: 11px; }
-  .map-chip.active .map-chip-count { color: #0c1420; opacity: 0.7; }
+  .map-chip.active .map-chip-count { color: var(--on-accent); opacity: 0.7; }
   .map-chip-icon {
     width: 22px;
     height: 22px;
@@ -243,7 +303,7 @@
     margin-bottom: 12px;
     border-radius: 8px;
     overflow: hidden;
-    background: linear-gradient(135deg, #252b3b 0%, var(--bg-panel) 60%, var(--bg) 100%);
+    background: linear-gradient(135deg, #252b3b 0%, #1b1e26 60%, #14161c 100%); /* баннер карты тёмный в обеих темах */
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -297,9 +357,9 @@
   .map-hero .map-chip.active {
     background: var(--accent);
     border-color: var(--accent);
-    color: #0c1420;
+    color: var(--on-accent);
   }
-  .map-hero .map-chip.active .map-chip-count { color: #0c1420; }
+  .map-hero .map-chip.active .map-chip-count { color: var(--on-accent); }
   @media (prefers-reduced-motion: reduce) {
     .map-hero-bg { transition: none; }
   }
@@ -486,7 +546,7 @@
 
   .wheel-spin-btn {
     background: var(--accent);
-    color: #0c1420;
+    color: var(--on-accent);
     border: none;
     border-radius: 8px;
     padding: 10px 22px;
@@ -593,7 +653,7 @@
     padding: 1px 8px;
     border-radius: 999px;
     background: var(--accent);
-    color: #0c1420;
+    color: var(--on-accent);
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -614,7 +674,7 @@
   }
   /* Фон "радар" в стиле миникарты CS2 (SVG, рисуется кодом, цвета темы сайта)
      только у пустой вкладки; контент лежит выше (z-index). */
-  .md-bg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+  .md-bg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; color: var(--accent); }
   .md-section > :not(.md-bg) { position: relative; z-index: 2; }
   .md-section.md-empty-state { min-height: 240px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
   .md-empty-title { margin: 0; font-size: 20px; font-weight: 700; }
@@ -651,7 +711,7 @@
     height: 30px;
     border-radius: 50%;
     background: var(--accent);
-    color: #0c1420;
+    color: var(--on-accent);
     font-weight: 700;
     font-size: 14px;
     display: flex;
@@ -836,11 +896,12 @@
   .draft-again-wrap { text-align: center; margin-top: 14px; }
   .draft-team li.draft-swap { cursor: pointer; padding: 5px 6px; border-radius: 6px; }
   .draft-team li.draft-swap:hover { background: var(--bg-panel); }
-  .draft-team li.draft-swap.picked { background: var(--accent); color: #0c1420; }
+  .draft-team li.draft-swap.picked { background: var(--accent); color: var(--on-accent); }
   .draft-link-btn { background: none; border: none; padding: 0; color: var(--accent); font: inherit; cursor: pointer; text-decoration: underline; }
   .draft-pin { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); text-align: center; }
   .draft-pin h4 { margin: 0 0 10px; font-size: 14px; }
   .draft-link { margin-left: 8px; color: var(--accent); font-size: 14px; }
+  .draft-cmd[hidden] { display: none; }
   .draft-cmd { display: block; width: 100%; margin-top: 10px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px; font: 12px/1.4 monospace; }
   .draft-limit-note {
     margin-top: 10px;
@@ -966,6 +1027,10 @@
   <div class="title-row">
     <img src="favicon.png" alt="" />
     <h1>Рейтинг игроков "ЛЛ"</h1>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
   </div>
   <div class="subtitle" id="subtitle">Загрузка…</div>
 
@@ -1133,6 +1198,26 @@
       });
   }
   loadMatchday();
+
+  // Тема: сохранённый выбор (llstat:theme) или системная; начальное значение ставит
+  // скрипт в <head>, здесь только переключатель.
+  function currentTheme() { return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark"; }
+  function updateThemeToggle() {
+    var light = currentTheme() === "light";
+    var btn = document.getElementById("themeToggle");
+    var label = light ? "Включить тёмную тему" : "Включить светлую тему";
+    btn.setAttribute("aria-label", label);
+    btn.title = label;
+  }
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var prev = currentTheme();
+    var next = prev === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("llstat:theme", next); } catch (e) {}
+    updateThemeToggle();
+    histRemapTheme(prev, next);
+  });
+  updateThemeToggle();
 
   var tabEls = document.querySelectorAll(".tab");
   tabEls.forEach(function (tab) {
@@ -1555,9 +1640,24 @@
 
   // "Динамика рейтинга": линейный график рейтинга "за всё время" по сессиям,
   // до HIST_MAX игроков для сравнения (вкладка "За всё время", под таблицей).
-  // Цвета — 6 слотов тёмной палитры dataviz, проверенные валидатором против
-  // фона панели (#1b1e26). Цвет принадлежит игроку, пока он выбран.
-  var HIST_COLORS = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300"];
+  // Цвета — 6 слотов палитры dataviz, проверенные валидатором: тёмная против
+  // фона панели (#1b1e26), светлая против белой панели (#ffffff; три слота
+  // ниже 3:1 по контрасту — это допустимо, потому что есть чипы-легенда,
+  // подсказка и таблица значений). Цвет принадлежит игроку, пока он выбран;
+  // при смене темы слот тот же, меняется только оттенок.
+  var HIST_PALETTES = {
+    dark: ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300"],
+    light: ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"],
+  };
+  function histPalette() { return HIST_PALETTES[currentTheme()]; }
+  function histRemapTheme(prev, next) {
+    var from = HIST_PALETTES[prev], to = HIST_PALETTES[next];
+    histState.selected.forEach(function (sel) {
+      var i = from.indexOf(sel.color);
+      if (i !== -1) sel.color = to[i];
+    });
+    if (histState.ready) { renderHistChips(); drawHistChart(); }
+  }
   var HIST_MAX = 6;
   var HIST_DEFAULT = 3;
   var SVG_NS = "http://www.w3.org/2000/svg";
@@ -1618,7 +1718,7 @@
       histState.selected = histPlayers()
         .filter(function (p) { return p.isQualified; })
         .slice(0, HIST_DEFAULT)
-        .map(function (p, i) { return { id: p.steamid64, color: HIST_COLORS[i] }; });
+        .map(function (p, i) { return { id: p.steamid64, color: histPalette()[i] }; });
       el.innerHTML =
         '<div class="hist-section">' +
           '<div class="hist-title">Динамика рейтинга</div>' +
@@ -1677,7 +1777,7 @@
         return;
       }
       var used = histState.selected.map(function (s) { return s.color; });
-      var color = HIST_COLORS.filter(function (c) { return used.indexOf(c) === -1; })[0];
+      var color = histPalette().filter(function (c) { return used.indexOf(c) === -1; })[0];
       histState.selected.push({ id: id, color: color });
     }
     renderHistChips();
@@ -2839,11 +2939,11 @@
   var MATCHDAY_RADAR_SVG =
     '<svg class="md-bg" viewBox="0 0 600 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
       "<defs>" +
-        '<linearGradient id="mdRadarSweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6ea8ff" stop-opacity="0"/><stop offset="1" stop-color="#6ea8ff" stop-opacity=".35"/></linearGradient>' +
-        '<radialGradient id="mdRadarGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#6ea8ff" stop-opacity=".12"/><stop offset="1" stop-color="#6ea8ff" stop-opacity="0"/></radialGradient>' +
+        '<linearGradient id="mdRadarSweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="currentColor" stop-opacity="0"/><stop offset="1" stop-color="currentColor" stop-opacity=".35"/></linearGradient>' +
+        '<radialGradient id="mdRadarGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="currentColor" stop-opacity=".12"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></radialGradient>' +
       "</defs>" +
       '<circle cx="300" cy="105" r="230" fill="url(#mdRadarGlow)"/>' +
-      '<g fill="none" stroke="#6ea8ff" stroke-opacity=".28" stroke-width="1.2"><circle cx="300" cy="105" r="40"/><circle cx="300" cy="105" r="80"/><circle cx="300" cy="105" r="120"/><circle cx="300" cy="105" r="160"/><path d="M0 105H600M300 -60V270" stroke-opacity=".18"/></g>' +
+      '<g fill="none" stroke="currentColor" stroke-opacity=".28" stroke-width="1.2"><circle cx="300" cy="105" r="40"/><circle cx="300" cy="105" r="80"/><circle cx="300" cy="105" r="120"/><circle cx="300" cy="105" r="160"/><path d="M0 105H600M300 -60V270" stroke-opacity=".18"/></g>' +
       '<path d="M300 105 L520 18 A236 236 0 0 1 538 100 Z" fill="url(#mdRadarSweep)"/>' +
       '<circle cx="215" cy="70" r="4" fill="#3ecf6e"/><circle cx="390" cy="150" r="4" fill="#e0923e"/><circle cx="470" cy="70" r="3" fill="#3ecf6e" opacity=".6"/><circle cx="130" cy="150" r="3" fill="#e0923e" opacity=".6"/>' +
     "</svg>";

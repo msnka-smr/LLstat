@@ -5,8 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Как считается рейтинг</title>
 <link rel="icon" type="image/png" href="favicon.png" />
+<script>
+  // Тема из index.html (llstat:theme) или системная; ставится до отрисовки.
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("llstat:theme"); } catch (e) {}
+    if (t !== "light" && t !== "dark") {
+      t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    }
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 <style>
   :root {
+    color-scheme: dark;
     --bg: #14161c;
     --bg-panel: #1b1e26;
     --bg-panel-alt: #20232c;
@@ -26,6 +38,29 @@
     --red-bg: rgba(224, 98, 92, 0.14);
     --maroon: #9b2d30;
     --maroon-bg: rgba(155, 45, 48, 0.18);
+  }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f1f3f7;
+    --bg-panel: #ffffff;
+    --bg-panel-alt: #f6f8fb;
+    --border: #d6dbe5;
+    --text: #1a1f2b;
+    --text-dim: #556074;
+    --text-faint: #6b7487;
+    --accent: #2563eb;
+    --accent-bg: rgba(37, 99, 235, 0.10);
+    --green: #157a3d;
+    --green-bg: rgba(21, 122, 61, 0.12);
+    --yellow: #8a6700;
+    --yellow-bg: rgba(190, 140, 0, 0.16);
+    --orange: #b4530a;
+    --orange-bg: rgba(200, 100, 10, 0.14);
+    --red: #c42d28;
+    --red-bg: rgba(196, 45, 40, 0.12);
+    --maroon: #8f1d22;
+    --maroon-bg: rgba(143, 29, 34, 0.12);
   }
 
   * { box-sizing: border-box; }
