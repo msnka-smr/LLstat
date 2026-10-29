@@ -2548,6 +2548,19 @@
         "</div>" +
         '<button type="button" class="wheel-spin-btn" id="draftFormBtn" disabled>Сформировать состав</button>' +
         '<div id="draftResult"></div>' +
+        '<div class="draft-pin" id="draftMaps">' +
+          "<h4>Порядок карт</h4>" +
+          '<button type="button" class="wheel-spin-btn" id="draftMapsBtn">Определить порядок карт</button>' +
+          '<div id="draftMapsRoute"></div>' +
+          '<div id="draftMapsActions" hidden>' +
+            '<div class="draft-variant-note">Черновик: виден только тебе, пока не отправишь команду боту.</div>' +
+            '<button type="button" class="wheel-spin-btn" id="draftCopyMapsBtn">Копировать команду для карт</button> ' +
+            '<a class="draft-link" href="' + BOT_URL + '" target="_blank" rel="noopener">Открыть бота</a>' +
+            '<div class="draft-variant-note" id="draftMapsMsg"></div>' +
+            '<textarea class="draft-cmd" id="draftMapsCmdText" readonly hidden rows="2"></textarea>' +
+            '<div class="draft-variant-note">Вставь команду в чат с ботом. Дату сессии можно дописать после /maps: ДД.ММ.ГГГГ.</div>' +
+          "</div>" +
+        "</div>" +
       "</div>";
 
     el.querySelectorAll('#draftList input[type="checkbox"]').forEach(function (cb) {
@@ -2560,6 +2573,7 @@
     document.getElementById("draftGuestAddBtn").addEventListener("click", addDraftGuest);
     document.getElementById("draftGuestList").addEventListener("input", onDraftGuestInput);
     document.getElementById("draftGuestList").addEventListener("click", onDraftGuestClick);
+    wireDraftMaps();
     updateDraftCounter();
   }
 
@@ -2785,6 +2799,48 @@
   }
 
   var BOT_URL = "https://t.me/cs2_stats_tracking_bot";
+
+  // Пул карт вечера; тот же порядок, что MAP_POOL в scripts/lib/matchday.mjs (сверяет тест).
+  var MATCHDAY_MAP_POOL = ["de_mirage", "de_dust2", "de_inferno", "de_nuke", "de_ancient", "de_anubis", "de_cache"];
+
+  // Равномерное целое в [0, n) на crypto.getRandomValues (отбрасываем хвост, чтобы не было перекоса).
+  function randomBelow(n) {
+    var limit = Math.floor(4294967296 / n) * n;
+    var buf = new Uint32Array(1);
+    do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
+    return buf[0] % n;
+  }
+
+  // Случайный порядок всех карт пула (Fisher–Yates).
+  function shuffleMaps() {
+    var order = MATCHDAY_MAP_POOL.slice();
+    for (var i = order.length - 1; i > 0; i--) {
+      var j = randomBelow(i + 1);
+      var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+    }
+    return order;
+  }
+
+  // Команда для бота: /maps mirage nuke ... (ключи без de_).
+  function mapsCommand(order) {
+    return "/maps " + order.map(function (k) { return k.replace(/^de_/, ""); }).join(" ");
+  }
+
+  var draftMapsOrder = null;
+
+  function wireDraftMaps() {
+    document.getElementById("draftMapsBtn").addEventListener("click", function () {
+      draftMapsOrder = shuffleMaps();
+      document.getElementById("draftMapsRoute").innerHTML = routeHtml(draftMapsOrder);
+      document.getElementById("draftMapsActions").hidden = false;
+      document.getElementById("draftMapsMsg").textContent = "";
+      document.getElementById("draftMapsCmdText").hidden = true;
+    });
+    document.getElementById("draftCopyMapsBtn").addEventListener("click", function () {
+      if (!draftMapsOrder) return;
+      copyCommandText(mapsCommand(draftMapsOrder), document.getElementById("draftMapsMsg"), document.getElementById("draftMapsCmdText"));
+    });
+  }
 
   // Копирование в буфер; при отказе браузера показываем текст, чтобы скопировать руками.
   function copyCommandText(text, msgEl, textareaEl) {
