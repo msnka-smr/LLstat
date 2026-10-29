@@ -94,9 +94,9 @@
     user-select: none;
     white-space: nowrap;
   }
-  /* пять вкладок (~430px) не помещаются в один ряд на телефоне — делаем два
-     ряда на всю ширину блока без пустоты справа: в первом три вкладки поровну,
-     во втором две поровну (сетка из 6 колонок: 2+2+2 и 3+3) */
+  /* шесть вкладок не помещаются в один ряд на телефоне — делаем два ряда по три
+     вкладки поровну на всю ширину блока (сетка из 6 колонок, каждая вкладка
+     занимает по 2) */
   @media (max-width: 520px) {
     .tabs {
       display: grid;
@@ -104,7 +104,6 @@
       flex: 1 1 100%;
     }
     .tab { grid-column: span 2; padding: 6px 4px; text-align: center; }
-    .tab:nth-child(n + 4) { grid-column: span 3; }
   }
 
   .tab.active {
@@ -574,6 +573,16 @@
   .excuse-result { font-size: 14px; min-height: 20px; }
   .excuse-result strong { color: var(--accent); }
 
+  .md-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .md-title { margin: 0 0 4px; font-size: 18px; }
+  .md-date { margin: 0 0 14px; font-size: 15px; color: var(--accent); text-transform: capitalize; }
+  .md-empty { color: var(--text-dim); font-size: 14px; margin: 0; }
+
   .draft-section {
     background: var(--bg-panel);
     border: 1px solid var(--border);
@@ -868,8 +877,9 @@
     <div class="tabs">
       <div class="tab active" data-tab="allTime">За всё время</div>
       <div class="tab" data-tab="lastSession">Сессии</div>
-      <div class="tab" data-tab="maps">Карты</div>
       <div class="tab" data-tab="draft">Выбор составов</div>
+      <div class="tab" data-tab="matchday">MatchDay</div>
+      <div class="tab" data-tab="maps">Карты</div>
       <div class="tab" data-tab="records">Рекорды</div>
     </div>
     <a class="rating-info-link" href="rating-info.html" target="_blank" rel="noopener">Информация о рейтинге →</a>
@@ -883,6 +893,7 @@
   <div id="recordsSection"></div>
   <div id="excuseSection"></div>
   <div id="draftSection"></div>
+  <div id="matchdaySection"></div>
 
   <footer id="footer"></footer>
 
@@ -932,7 +943,7 @@
   function ratingDeltaClass(v) { return v > 0 ? "rating-delta-up" : v < 0 ? "rating-delta-down" : "rating-delta-flat"; }
 
   var TAB_STORAGE_KEY = "llstat:selectedTab";
-  var VALID_TABS = ["allTime", "lastSession", "draft", "maps", "records"];
+  var VALID_TABS = ["allTime", "lastSession", "draft", "matchday", "maps", "records"];
   function loadSavedTab() {
     try { return localStorage.getItem(TAB_STORAGE_KEY); } catch (err) { return null; }
   }
@@ -950,6 +961,7 @@
     selectedMapKey: null,
     expanded: null,
     sessionId: null,
+    matchday: null,
   };
 
   // "За всё время"/"Сессии" используют одну общую пару
@@ -1010,6 +1022,19 @@
       document.getElementById("subtitle").textContent = "Не удалось загрузить data/stats.json: " + err.message;
     });
 
+  // MatchDay лежит отдельным файлом (его пишет бот, build.mjs не трогает); файла
+  // может не быть (404) — тогда вкладка показывает "вечер не запланирован".
+  function loadMatchday() {
+    fetch("data/matchday.json", { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; })
+      .then(function (doc) {
+        state.matchday = doc;
+        render();
+      });
+  }
+  loadMatchday();
+
   var tabEls = document.querySelectorAll(".tab");
   tabEls.forEach(function (tab) {
     tab.classList.toggle("active", tab.dataset.tab === state.tab);
@@ -1035,6 +1060,7 @@
     renderFooter();
     renderExcuseSection();
     renderDraftSection();
+    renderMatchdaySection();
   }
 
   function renderMapChips() {
@@ -1241,7 +1267,7 @@
   }
 
   // Вкладки, на которых нет общей таблицы игроков (у них свой блок).
-  function noTableTab() { return state.tab === "draft" || state.tab === "records"; }
+  function noTableTab() { return state.tab === "draft" || state.tab === "matchday" || state.tab === "records"; }
 
   function getRows() {
     if (noTableTab()) return [];
@@ -2704,6 +2730,28 @@
     document.getElementById("draftSwitchBtn").addEventListener("click", function () {
       runDraft(variantIndex === 0);
     });
+  }
+
+  // "2026-10-31" -> "пятница, 31 октября" (календарная дата без часового пояса).
+  function matchdayDateLabel(iso) {
+    var m = /^(d{4})-(d{2})-(d{2})$/.exec(iso || "");
+    if (!m) return "";
+    var d = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+    return d.toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+  }
+
+  function renderMatchdaySection() {
+    var el = document.getElementById("matchdaySection");
+    if (state.tab !== "matchday") { el.style.display = "none"; return; }
+    el.style.display = "";
+    var md = state.matchday;
+    var empty = !md || (!md.maps && !md.teams);
+    el.innerHTML =
+      '<div class="md-section">' +
+        '<h2 class="md-title">MatchDay</h2>' +
+        (md && md.sessionDate ? '<div class="md-date">' + escapeHtml(matchdayDateLabel(md.sessionDate)) + "</div>" : "") +
+        (empty ? '<p class="md-empty">Вечер пока не запланирован.</p>' : "") +
+      "</div>";
   }
 
   function formatDateTime(iso) {
