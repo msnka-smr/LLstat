@@ -4,6 +4,7 @@
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { pushWithRebaseRetry } from "./lib/gitPush.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -44,7 +45,7 @@ function main() {
   run("git", ["add", "-A"]);
   const stamp = new Date().toISOString().slice(0, 16).replace("T", " ");
   run("git", ["commit", "-m", `Update stats (${stamp})`]);
-  run("git", ["push"]);
+  pushWithRebaseRetry(run);
 }
 
 main();

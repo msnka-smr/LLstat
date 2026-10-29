@@ -64,8 +64,9 @@ jobs:
           else
             git commit -m "MatchDay: закреплены составы"
           fi
+          # между pull и push мог успеть запушить бот статистики — один повтор
           git pull --rebase
-          git push
+          git push || { git pull --rebase && git push; }
 
       # Коммит от github-actions[bot] через GITHUB_TOKEN не запускает деплой Pages
       # сам, поэтому сборку просим явно (как в update-stats.yml).
