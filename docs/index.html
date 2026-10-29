@@ -612,16 +612,9 @@
     border-radius: 8px;
     padding: 16px;
   }
-  /* Фон вкладки — "радар" в стиле миникарты CS2 (SVG, рисуется кодом, цвета
-     темы сайта); контент лежит выше (z-index). В заполненной вкладке радар
-     занимает верхние 420px и плавно уходит в фон. */
+  /* Фон "радар" в стиле миникарты CS2 (SVG, рисуется кодом, цвета темы сайта)
+     только у пустой вкладки; контент лежит выше (z-index). */
   .md-bg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
-  .md-section:not(.md-empty-state) .md-bg {
-    height: 420px;
-    opacity: 0.6; /* под карточками команд радар не должен спорить с текстом */
-    -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
-  }
   .md-section > :not(.md-bg) { position: relative; z-index: 2; }
   .md-section.md-empty-state { min-height: 240px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
   .md-empty-title { margin: 0; font-size: 20px; font-weight: 700; }
@@ -2872,7 +2865,7 @@
       return;
     }
     el.innerHTML =
-      '<div class="md-section">' + bg +
+      '<div class="md-section">' +
         '<h2 class="md-title">MatchDay</h2>' +
         (md && md.sessionDate ? '<div class="md-date">' + escapeHtml(matchdayDateLabel(md.sessionDate)) + "</div>" : "") +
         (
