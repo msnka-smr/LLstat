@@ -1,10 +1,10 @@
 // Закрепляет часть MatchDay (карты или составы) в docs/data/matchday.json.
 // Запускается из workflow set-matchday.yml; вход — переменные окружения:
-//   KIND          maps | teams
+//   KIND          maps | teams | reset (reset удаляет файл целиком)
 //   PAYLOAD       JSON с данными части (см. scripts/lib/matchday.mjs)
 //   SESSION_DATE  YYYY-MM-DD или пусто (пусто — дату не менять)
 // Печатает итоговую дату сессии (или «-»). Любая ошибка — код 1, файл не тронут.
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { applyUpdate, validatePayload } from "./lib/matchday.mjs";
 
@@ -32,6 +32,12 @@ const error = validatePayload(kind, payload);
 if (error) fail(error);
 if (sessionDate !== null && !/^\d{4}-\d{2}-\d{2}$/.test(sessionDate)) {
   fail(`SESSION_DATE должна быть в формате YYYY-MM-DD, получено «${sessionDate}»`);
+}
+
+if (kind === "reset") {
+  if (existsSync(file)) unlinkSync(file);
+  console.log("-");
+  process.exit(0);
 }
 
 let existing = null;

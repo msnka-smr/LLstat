@@ -215,3 +215,22 @@ test("applyUpdate: порядок ключей sessionDate, maps, teams", () => 
   doc = applyUpdate(doc, "maps", { order: ORDER }, null, "2026-10-29T11:00:00Z");
   assert.deepEqual(Object.keys(doc), ["sessionDate", "maps", "teams"]);
 });
+
+// --- /reset ---
+
+test("/reset — сброс MatchDay без данных и без даты", () => {
+  assert.deepEqual(parseMatchdayCommand("/reset", NOW), { kind: "reset", payload: {}, sessionDate: null });
+});
+
+test("/RESET@имя_бота разбирается как /reset", () => {
+  assert.equal(parseMatchdayCommand("/RESET@cs2_stats_tracking_bot", NOW).kind, "reset");
+});
+
+test("/reset с лишними аргументами — ошибка (чтобы не сбросить случайно)", () => {
+  assert.ok(parseMatchdayCommand("/reset 31.10.2026", NOW).error);
+  assert.ok(parseMatchdayCommand("/reset всё", NOW).error);
+});
+
+test("validatePayload reset: пустой объект допустим", () => {
+  assert.equal(validatePayload("reset", {}), null);
+});

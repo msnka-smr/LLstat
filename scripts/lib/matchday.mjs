@@ -11,6 +11,7 @@ const MOSCOW_OFFSET_MS = 3 * 3600 * 1000;
 
 const DATE_HINT = "Дату пиши с годом: ДД.ММ.ГГГГ, например 31.10.2026.";
 const MAPS_HINT = "Формат: /maps [ДД.ММ.ГГГГ] и 7 разных карт через пробел, например /maps 31.10.2026 mirage nuke anubis inferno ancient dust2 cache.";
+const RESET_HINT = "Команда /reset сбрасывает MatchDay целиком и пишется без параметров.";
 const TEAMS_HINT = "Формат: /teams [ДД.ММ.ГГГГ] пять игроков через запятую | пять игроков через запятую. Игрок — Имя=steamid64, гость — Имя~рейтинг. Проще всего скопировать команду с сайта.";
 
 export function todayMoscow(now) {
@@ -99,6 +100,7 @@ function memberOk(m) {
 }
 
 export function validatePayload(kind, payload) {
+  if (kind === "reset") return null;
   if (kind === "maps") {
     const order = payload && payload.order;
     if (!Array.isArray(order) || order.length !== MAP_POOL.length) {
@@ -123,13 +125,19 @@ export function validatePayload(kind, payload) {
   return `Неизвестный вид данных «${kind}».`;
 }
 
-const COMMAND = /^\s*\/(maps|teams)(?:@\w+)?(?:\s+([\s\S]*))?$/i;
+const COMMAND = /^\s*\/(maps|teams|reset)(?:@\w+)?(?:\s+([\s\S]*))?$/i;
 
 export function parseMatchdayCommand(text, now) {
   const m = COMMAND.exec(String(text ?? ""));
   if (!m) return null;
   const kind = m[1].toLowerCase();
   let args = (m[2] ?? "").trim();
+
+  // Сброс после сыгранного вечера: убирает дату, составы и карты. Параметры
+  // запрещены, чтобы случайный хвост («/reset 31.10.2026») не стёр данные.
+  if (kind === "reset") {
+    return args ? { error: RESET_HINT } : { kind, payload: {}, sessionDate: null };
+  }
 
   let sessionDate = null;
   const first = args.split(/\s+/)[0];

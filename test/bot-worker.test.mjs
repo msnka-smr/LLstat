@@ -281,3 +281,20 @@ test("ссылка на матч после появления команд по
   assert.ok(statsCall(f));
   assert.equal(matchdayCall(f), undefined);
 });
+
+test("/reset: запускается set-matchday.yml с kind reset, пользователь получает подтверждение", async () => {
+  const f = fakeFetch([{ status: 204 }, { status: 200 }]);
+  await handleRequest(req({ body: message("/reset") }), ENV, f);
+  const inputs = JSON.parse(matchdayCall(f).init.body).inputs;
+  assert.equal(inputs.kind, "reset");
+  assert.equal(inputs.payload, "{}");
+  assert.equal(inputs.session_date, "");
+  assert.match(telegramTexts(f)[0], /сбрасываю/i);
+  assert.equal(statsCall(f), undefined);
+});
+
+test("/reset от чужого chat id — тишина", async () => {
+  const f = fakeFetch();
+  await handleRequest(req({ body: message("/reset", 999) }), ENV, f);
+  assert.equal(f.calls.length, 0);
+});

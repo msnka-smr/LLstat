@@ -110,6 +110,10 @@ async function handleMatchdayCommand(env, chatId, command, fetchFn) {
     await sendMessage(env, chatId, `Не удалось запустить закрепление: GitHub ответил ${result.status}. ${result.body}`, fetchFn);
     return;
   }
+  if (command.kind === "reset") {
+    await sendMessage(env, chatId, "Принял, сбрасываю MatchDay. Напишу, когда закончу.", fetchFn);
+    return;
+  }
   const what = command.kind === "maps" ? "порядок карт" : "составы";
   const date = command.sessionDate ? `Дата сессии: ${ruDate(command.sessionDate)}.` : "Дату не меняю.";
   await sendMessage(env, chatId, `Принял, закрепляю ${what}. ${date} Напишу, когда закончу.`, fetchFn);

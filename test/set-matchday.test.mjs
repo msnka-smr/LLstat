@@ -83,3 +83,18 @@ test("испорченный существующий файл: код 1, фай
   assert.equal(r.status, 1);
   assert.equal(readFileSync(file, "utf8"), "{oops");
 });
+
+test("reset удаляет matchday.json, stdout «-»", () => {
+  const file = tmpFile();
+  run(file, { kind: "maps", payload: { order: ORDER }, date: "2026-10-31" });
+  assert.equal(existsSync(file), true);
+  const r = run(file, { kind: "reset", payload: {} });
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(r.stdout.trim(), "-");
+  assert.equal(existsSync(file), false);
+});
+
+test("reset без существующего файла — не ошибка", () => {
+  const r = run(tmpFile(), { kind: "reset", payload: {} });
+  assert.equal(r.status, 0, r.stderr);
+});

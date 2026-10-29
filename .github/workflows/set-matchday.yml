@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       kind:
-        description: "Что закрепляем: maps или teams"
+        description: "Что делаем: maps, teams или reset (сброс MatchDay целиком)"
         required: true
         type: string
       payload:
@@ -54,13 +54,16 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/matchday.json
+          # -A, чтобы при reset попало и удаление файла
+          git add -A docs/data
           if git diff --cached --quiet; then
             echo "Изменений нет — коммит не нужен"
             exit 0
           fi
           if [ "$KIND" = "maps" ]; then
             git commit -m "MatchDay: закреплён порядок карт"
+          elif [ "$KIND" = "reset" ]; then
+            git commit -m "MatchDay: сброс"
           else
             git commit -m "MatchDay: закреплены составы"
           fi
@@ -97,7 +100,9 @@ jobs:
             echo "Секреты Telegram не заданы — пропускаю оповещение"
             exit 0
           fi
-          if [ "$JOB_STATUS" = "success" ]; then
+          if [ "$JOB_STATUS" = "success" ] && [ "$KIND" = "reset" ]; then
+            TEXT="Готово: MatchDay сброшен. Сайт обновится через минуту-две."
+          elif [ "$JOB_STATUS" = "success" ]; then
             if [ "$KIND" = "maps" ]; then WHAT="порядок карт закреплён"; else WHAT="составы закреплены"; fi
             DATE=$(node -e '
               const d = JSON.parse(require("fs").readFileSync("docs/data/matchday.json", "utf8")).sessionDate;
