@@ -41,6 +41,8 @@
     --red-bg: rgba(224, 98, 92, 0.14);
     --maroon: #9b2d30;
     --maroon-bg: rgba(155, 45, 48, 0.18);
+    --duel-win: rgba(224, 170, 40, 0.28);  /* ячейка матрицы: игрок из строки выигрывает дуэль */
+    --duel-loss: rgba(110, 168, 255, 0.24); /* проигрывает */
   }
 
   /* Светлая тема: тот же набор переменных. Цвета статусов — тёмные оттенки,
@@ -69,6 +71,8 @@
     --red-bg: rgba(196, 45, 40, 0.12);
     --maroon: #8f1d22;
     --maroon-bg: rgba(143, 29, 34, 0.12);
+    --duel-win: rgba(224, 170, 40, 0.35);
+    --duel-loss: rgba(37, 99, 235, 0.18);
   }
 
   * { box-sizing: border-box; }
@@ -610,6 +614,29 @@
   .sm-avatar { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: var(--border); flex: none; }
   .sm-pname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .sm-kda { color: var(--text-dim); font-variant-numeric: tabular-nums; }
+  .sm-matrix { grid-column: 1 / -1; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .sm-matrix h4 { margin: 0 0 4px; font-size: 13px; }
+  .sm-km { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 3px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .sm-km th { font-size: 12px; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--text-dim); text-align: center; padding: 4px 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sm-km th.sm-km-row { width: 28%; text-align: left; color: var(--text); padding-left: 6px; border-left: 3px solid var(--orange); }
+  .sm-km th.sm-km-sum { width: 11%; color: var(--text-faint); }
+  .sm-km td { text-align: center; padding: 5px 2px; border-radius: 5px; background: var(--bg-row-alt); white-space: nowrap; }
+  .sm-km td.win { background: var(--duel-win); }
+  .sm-km td.loss { background: var(--duel-loss); }
+  .sm-km td b { color: var(--yellow); }
+  .sm-km td i { font-style: normal; opacity: 0.5; margin: 0 1px; }
+  .sm-km td.sm-km-sum { background: transparent; font-weight: 700; }
+  .sm-km td.pos { color: var(--green); }
+  .sm-km td.neg { color: var(--red); }
+  .sm-matrix-note { margin-top: 6px; font-size: 11px; color: var(--text-faint); }
+  @media (max-width: 640px) {
+    .sm-matrix { padding: 8px 6px; }
+    .sm-km { font-size: 11.5px; border-spacing: 2px; }
+    .sm-km th { font-size: 11px; padding: 4px 1px; }
+    .sm-km td { padding: 4px 0; letter-spacing: -0.2px; }
+    .sm-km th.sm-km-row { width: 34%; padding-left: 4px; }
+    .sm-km th.sm-km-sum { width: 9%; }
+  }
 
   .md-section {
     position: relative;
@@ -2592,6 +2619,37 @@
     return "—";
   }
 
+  // Матрица дуэлей: строки — игроки первой (победившей) команды, столбцы — второй.
+  // Ячейка «убил игрок строки : убил его игрок столбца», подсветка — кто выигрывает
+  // дуэль; справа и снизу «±» — убийства минус смерти в дуэлях. Данные берутся из
+  // разбора демки, поэтому могут отличаться от K/D на 1–2 (K/D из лобби главнее).
+  function sessionMapMatrixHtml(m, rowPlayers, colPlayers) {
+    var kills = m.duels && m.duels.kills;
+    if (!kills || !rowPlayers.length || !colPlayers.length) return "";
+    function k(a, b) { return (kills[a] && kills[a][b]) || 0; }
+    function signed(n) { return (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n); }
+    function sumCell(n) { return '<td class="sm-km-sum ' + (n >= 0 ? "pos" : "neg") + '">' + signed(n) + "</td>"; }
+    var head = colPlayers.map(function (c) { return '<th title="' + escapeHtml(c.name) + '">' + escapeHtml(c.name) + "</th>"; }).join("");
+    var body = rowPlayers.map(function (r) {
+      var total = 0;
+      var cells = colPlayers.map(function (c) {
+        var a = k(r.steamid64, c.steamid64), b = k(c.steamid64, r.steamid64);
+        total += a - b;
+        return '<td class="' + (a > b ? "win" : a < b ? "loss" : "") + '"><b>' + a + "</b><i>:</i>" + b + "</td>";
+      }).join("");
+      return '<tr><th class="sm-km-row" title="' + escapeHtml(r.name) + '">' + escapeHtml(r.name) + "</th>" + cells + sumCell(total) + "</tr>";
+    }).join("");
+    var foot = colPlayers.map(function (c) {
+      var total = 0;
+      rowPlayers.forEach(function (r) { total += k(c.steamid64, r.steamid64) - k(r.steamid64, c.steamid64); });
+      return sumCell(total);
+    }).join("");
+    return '<div class="sm-matrix"><h4>Матрица убийств</h4>' +
+      '<table class="sm-km"><thead><tr><th></th>' + head + '<th class="sm-km-sum">±</th></tr></thead><tbody>' + body +
+      '<tr><th class="sm-km-row sm-km-sum">±</th>' + foot + "<td></td></tr></tbody></table>" +
+      '<div class="sm-matrix-note">По разбору демки: цифры могут отличаться от K/D на 1–2. Слева — сколько убил игрок из строки, справа — сколько убил его игрок из столбца.</div></div>';
+  }
+
   function sessionMapBodyHtml(m, avatarOf) {
     var teams = (m.teams || []).map(function (t, i) { return { key: t.key, name: t.name, isWinner: !!t.isWinner, idx: i }; });
     teams.sort(function (a, b) { return (b.isWinner ? 1 : 0) - (a.isWinner ? 1 : 0); });
@@ -2604,9 +2662,11 @@
     var stray = (m.players || []).filter(function (p) { return !known[p.team]; });
     if (stray.length) groups.push({ title: "Без команды", isWinner: false, key: null, stray: true });
 
-    return groups.map(function (g) {
+    var teamLists = [];
+    var teamsHtml = groups.map(function (g) {
       var list = (g.stray ? stray : (m.players || []).filter(function (p) { return p.team === g.key; }))
         .slice().sort(function (a, b) { return b.k - a.k; });
+      if (!g.stray) teamLists.push(list);
       var rows = list.map(function (p) {
         var av = avatarOf(p.steamid64);
         var avatar = av ? '<img class="sm-avatar" src="' + escapeHtml(av) + '" alt="" loading="lazy">' : '<div class="sm-avatar"></div>';
@@ -2618,6 +2678,7 @@
         (g.isWinner ? '<span class="sm-badge">ПОБЕДА</span>' : "") + "</h4>" +
         '<div class="sm-cols">K / D / A</div>' + rows + "</div>";
     }).join("");
+    return teamsHtml + (teamLists.length === 2 ? sessionMapMatrixHtml(m, teamLists[0], teamLists[1]) : "");
   }
 
   function renderSessionMapsSection() {

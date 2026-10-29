@@ -185,3 +185,37 @@ test("assists come from match_stats.live for lobby-only (basic) maps", () => {
   assert.equal(map.players.find((p) => p.steamid64 === "1").a, 7);
   assert.equal(map.players.find((p) => p.steamid64 === "2").a, 0);
 });
+
+// Матрица дуэлей («кто кого убил») нужна только для списка «Карты вечера».
+// У cybershoke два формата разбора демки: старый (match_more_stats.stats.status ===
+// "finished", maps[i].stats.duels.kills) и новый (maps[1].state === "ready",
+// maps[1].stats.duels.matrix.kills). Читаем оба; без разбора демки duels = null.
+test("duels are read from the old demo-parse format (full maps)", () => {
+  const raw = buildRawLobby({ dropSteamId: null });
+  raw.data.match_more_stats.maps[1].stats.duels = { kills: { 1: { 2: 4, 3: 0 }, 2: { 1: 6 } }, headToHead: {} };
+  const [map] = normalizeLobby(raw);
+  assert.deepEqual(map.duels, { kills: { 1: { 2: 4 }, 2: { 1: 6 } } }, "нулевые дуэли не храним");
+});
+
+test("duels are read from the new demo-parse format (lobby-only maps with a ready analysis)", () => {
+  const raw = {
+    data: {
+      id_lobby: 556,
+      dates: { unixtime_match_end: 1700000000 },
+      match_settings: { map_name: "de_mirage" },
+      match_stats: { base: { team_2: { score: 13 }, team_3: { score: 5 }, team_winner: 2 } },
+      players: {
+        1: { steamid64: "1", name: "a", id_slot: 2, match_stats: { live: { kills: 20, deaths: 10, assists: 1 } } },
+        2: { steamid64: "2", name: "b", id_slot: 3, match_stats: { live: { kills: 5, deaths: 15, assists: 0 } } },
+      },
+      match_more_stats: { maps: { 1: { state: "ready", stats: { duels: { matrix: { kills: { 1: { 2: 7 }, 2: { 1: 3 } } } } } } } },
+    },
+  };
+  const [map] = normalizeLobby(raw);
+  assert.equal(map.statsTier, "basic");
+  assert.deepEqual(map.duels, { kills: { 1: { 2: 7 }, 2: { 1: 3 } } });
+});
+
+test("no demo analysis means duels is null", () => {
+  assert.equal(normalizeLobby(buildRawLobby({ dropSteamId: null }))[0].duels, null);
+});

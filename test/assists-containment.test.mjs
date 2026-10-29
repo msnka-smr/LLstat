@@ -20,6 +20,20 @@ test("ассисты есть в sessions[].maps[].players", () => {
   assert.ok(players.every((p) => Number.isInteger(p.a) && p.a >= 0));
 });
 
+test("матрица дуэлей есть только в sessions[].maps[]; ни в allTime, ни в строках сессий, ни в картах, ни в рейтинге, ни в рекордах, ни в итогах", () => {
+  const withDuels = stats.sessions.flatMap((s) => s.maps).filter((m) => m.duels && m.duels.kills);
+  assert.ok(withDuels.length > 0, "у карт с разбором демки должна быть матрица");
+  const rest = {
+    allTime: stats.allTime,
+    sessionRows: stats.sessions.map((s) => s.players),
+    recaps: stats.sessions.map((s) => s.recap),
+    ratingHistory: stats.ratingHistory,
+    records: stats.records,
+    maps: stats.maps,
+  };
+  assert.equal(keysDeep(rest).has("duels"), false);
+});
+
 test("ассистов нет ни в allTime, ни в строках сессий, ни в картах, ни в истории рейтинга, ни в рекордах, ни в итогах", () => {
   const rest = {
     allTime: stats.allTime,

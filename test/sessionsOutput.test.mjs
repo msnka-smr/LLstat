@@ -101,6 +101,7 @@ test("session output keeps its time range and the full map entries", () => {
     mapId: "7-0", lobbyId: 7, map: "de_nuke", statsTier: "basic",
     teams: [{ score: 13 }, { score: 7 }], url: "https://cybershoke.net/match/7",
     players: [{ steamid64: "A", name: "A", team: null, k: 20, d: 10, a: 0 }],
+    duels: null,
   });
 });
 
@@ -126,4 +127,11 @@ test("the input sessions array is not mutated", () => {
   const sessions = [sessionOf("A", [mapOf(1, [strong])]), sessionOf("B", [mapOf(2, [strong])])];
   buildSessionsOutput(sessions, makeRow);
   assert.deepEqual(sessions.map((s) => s.id), ["A", "B"]);
+});
+
+test("a map's duels matrix goes to the session map entry and nowhere else", () => {
+  const duels = { kills: { A: { B: 7 }, B: { A: 3 } } };
+  const out = buildSessionOutput(sessionOf("S", [mapOf(1, [strong, weak], { duels })]), makeRow);
+  assert.deepEqual(out.maps[0].duels, duels);
+  for (const row of out.players) assert.equal("duels" in row, false);
 });

@@ -29,6 +29,7 @@ export function buildSessionOutput(session, makeRow, nameOf = (_id, fallback) =>
       map: m.map,
       statsTier: m.statsTier,
       teams: m.teams,
+      duels: m.duels ?? null, // матрица дуэлей: только для списка «Карты вечера»
       url: `https://cybershoke.net/match/${m.lobbyId}`,
       // Для списка «Карты вечера»: состав и K/D/A по этой карте. Ассисты живут
       // только здесь — в строки игроков и рейтинги они не попадают.

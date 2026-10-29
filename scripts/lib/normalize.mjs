@@ -7,6 +7,21 @@
 // раундам. Каждый игрок несёт только steamid64, имя, аватар, команду, победу
 // и K/D (плюс ассисты `a`: их показывает только список «Карты вечера», в
 // рейтинги и агрегаты они не идут).
+// Матрица дуэлей «убийца → жертва → сколько раз» без нулей; null, если пусто.
+// Нужна только списку «Карты вечера» — в рейтинги и агрегаты не идёт, а K/D
+// по-прежнему берётся из лобби (суммы по матрице могут отличаться на 1–2: демо
+// не видит самоубийств, огонь/падения и иногда теряет события).
+function compactDuels(kills) {
+  if (!kills || typeof kills !== "object") return null;
+  const out = {};
+  for (const [killer, victims] of Object.entries(kills)) {
+    for (const [victim, n] of Object.entries(victims ?? {})) {
+      if (n > 0) (out[killer] ??= {})[victim] = n;
+    }
+  }
+  return Object.keys(out).length ? { kills: out } : null;
+}
+
 export function normalizeLobby(raw) {
   const data = raw?.data;
   if (!data) return [];
@@ -138,6 +153,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
     totalRounds: totalRounds || null,
     teams,
     players,
+    duels: compactDuels(stats.duels?.kills), // старый формат разбора демки
     statsTier: "full",
   };
 }
@@ -178,6 +194,9 @@ function normalizeBasicMap({ lobbyId, data, playedAtFallback }) {
       isWinner: k === `team_${winnerSlot}`,
     })),
     players,
+    // новый формат разбора демки (maps[1].state === "ready"): cybershoke отдаёт его
+    // и там, где старого блока stats нет, — такие карты у нас "basic" по счёту/K/D.
+    duels: compactDuels(Object.values(data.match_more_stats?.maps ?? {})[0]?.stats?.duels?.matrix?.kills),
     statsTier: "basic",
   };
 }
