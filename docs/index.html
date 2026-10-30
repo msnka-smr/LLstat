@@ -563,6 +563,62 @@
   }
   .wheel-spin-btn:disabled { opacity: 0.5; cursor: default; }
 
+  /* Вкладка «Дуэли» */
+  .duel-pick { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .duel-pick select {
+    background: var(--bg-panel); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; font-size: 13px; min-width: 150px; max-width: 100%;
+  }
+  .duel-vs { color: var(--text-dim); font-weight: 700; }
+  .duel-btn {
+    margin-left: auto; background: var(--bg-panel); color: var(--text-dim); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer;
+  }
+  .duel-btn:hover { color: var(--text); }
+  .duel-periods { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .duel-chip {
+    background: var(--bg-panel); color: var(--text-dim); border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px 12px; font-size: 12px; cursor: pointer;
+  }
+  .duel-chip.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+  .duel-hero {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; margin-bottom: 12px;
+  }
+  .duel-side { text-align: center; width: 28%; min-width: 0; }
+  .duel-side .duel-name { color: var(--text-dim); font-size: 13px; margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .duel-side .duel-big { font-size: 40px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .duel-side .duel-cap { color: var(--text-dim); font-size: 12px; margin-top: 4px; }
+  .duel-big.lead { color: var(--yellow); }
+  .duel-big.trail { color: var(--accent); }
+  .duel-mid { flex: 1; text-align: center; color: var(--text-dim); font-size: 12px; min-width: 0; }
+  .duel-mid b { color: var(--text); }
+  .duel-bar { height: 8px; border-radius: 4px; background: var(--accent); overflow: hidden; margin: 10px 0 6px; }
+  .duel-bar i { display: block; height: 100%; background: var(--yellow); }
+  .duel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .duel-box { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 13px; }
+  .duel-box h4 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); }
+  .duel-box p { margin: 0 0 6px; }
+  .duel-box .duel-dim { color: var(--text-dim); }
+  .duel-hist { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .duel-hist th { color: var(--text-dim); font-weight: 500; font-size: 12px; padding: 6px 8px; text-align: center; }
+  .duel-hist td { padding: 7px 8px; text-align: center; border-top: 1px solid var(--border); }
+  .duel-hist th:first-child, .duel-hist td:first-child, .duel-hist th:nth-child(2), .duel-hist td:nth-child(2) { text-align: left; }
+  .duel-hist td.duel-a-lead { background: var(--duel-win); }
+  .duel-hist td.duel-b-lead { background: var(--duel-loss); }
+  .duel-hist td.duel-none { color: var(--text-faint); }
+  .duel-note { margin-top: 10px; font-size: 11px; color: var(--text-faint); }
+  .duel-hint { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--text-dim); margin-bottom: 12px; }
+  @media (max-width: 640px) {
+    .duel-hero { padding: 12px; gap: 6px; }
+    .duel-side .duel-big { font-size: 28px; }
+    .duel-grid { grid-template-columns: minmax(0, 1fr); }
+    .duel-btn { margin-left: 0; }
+    .duel-hist { font-size: 12px; }
+    .duel-hist th, .duel-hist td { padding: 6px 3px; }
+  }
+
   .sm-section {
     background: var(--bg-panel);
     border: 1px solid var(--border);
@@ -1020,6 +1076,7 @@
       <div class="tab" data-tab="draft">Выбор составов</div>
       <div class="tab" data-tab="matchday">MatchDay</div>
       <div class="tab" data-tab="maps">Карты</div>
+      <div class="tab" data-tab="duels">Дуэли</div>
       <div class="tab" data-tab="records">Рекорды</div>
     </div>
     <a class="rating-info-link" href="rating-info.html" target="_blank" rel="noopener">Информация о рейтинге →</a>
@@ -1034,9 +1091,11 @@
   <div id="sessionMapsSection"></div>
   <div id="draftSection"></div>
   <div id="matchdaySection"></div>
+  <div id="duelSection"></div>
 
   <footer id="footer"></footer>
 
+<script src="duel.js"></script>
 <script>
 (function () {
   "use strict";
@@ -1083,17 +1142,31 @@
   function ratingDeltaClass(v) { return v > 0 ? "rating-delta-up" : v < 0 ? "rating-delta-down" : "rating-delta-flat"; }
 
   var TAB_STORAGE_KEY = "llstat:selectedTab";
-  var VALID_TABS = ["allTime", "lastSession", "draft", "matchday", "maps", "records"];
+  var VALID_TABS = ["allTime", "lastSession", "draft", "matchday", "maps", "duels", "records"];
+  var DUEL_ME_KEY = "llstat:duelMe";
+  // Ссылка вида #duel=<id>,<id>,<период> сразу открывает вкладку «Дуэли» с этой парой.
+  var hashDuel = window.Duel.parseDuelHash(location.hash);
   function loadSavedTab() {
     try { return localStorage.getItem(TAB_STORAGE_KEY); } catch (err) { return null; }
   }
   function saveTab(tab) {
     try { localStorage.setItem(TAB_STORAGE_KEY, tab); } catch (err) {}
   }
+  function loadDuelMe() {
+    try { return localStorage.getItem(DUEL_ME_KEY); } catch (err) { return null; }
+  }
+  function saveDuelMe(id) {
+    try { localStorage.setItem(DUEL_ME_KEY, id); } catch (err) {}
+  }
 
   var state = {
     data: null,
-    tab: VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
+    tab: hashDuel ? "duels" : VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
+    duel: {
+      a: hashDuel ? hashDuel.a : loadDuelMe(),
+      b: hashDuel ? hashDuel.b : null,
+      period: hashDuel ? hashDuel.period : "all",
+    },
     sortColumn: "rating",
     sortDirection: "desc",
     mapSortColumn: "mapsPlayed",
@@ -1221,6 +1294,7 @@
     renderDraftSection();
     renderMatchdaySection();
     renderSessionMapsSection();
+    renderDuelSection();
   }
 
   function renderMapChips() {
@@ -1409,7 +1483,7 @@
   }
 
   // Вкладки, на которых нет общей таблицы игроков (у них свой блок).
-  function noTableTab() { return state.tab === "draft" || state.tab === "matchday" || state.tab === "records"; }
+  function noTableTab() { return state.tab === "draft" || state.tab === "matchday" || state.tab === "duels" || state.tab === "records"; }
 
   function getRows() {
     if (noTableTab()) return [];
@@ -2819,6 +2893,146 @@
               : '<p class="md-empty">Порядок карт пока не определён.</p>') +
           "</div>") +
       "</div>";
+  }
+
+  var DUEL_PERIOD_LABELS = [
+    { id: "all", label: "Всё время" },
+    { id: "month", label: "Последний месяц" },
+    { id: "last5", label: "Последние 5 вечеров" },
+  ];
+
+  function duelDateLabel(sec) {
+    return new Date(sec * 1000).toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "2-digit" });
+  }
+  function duelMapName(key) {
+    var info = mapInfoFor(key);
+    return info ? info.displayName : (key || "?");
+  }
+
+  function duelHeroHtml(d, nameA, nameB) {
+    var total = d.killsA + d.killsB;
+    var share = total ? Math.round((d.killsA / total) * 100) : 50;
+    var clsA = d.killsA === d.killsB ? "" : d.killsA > d.killsB ? "lead" : "trail";
+    var clsB = d.killsA === d.killsB ? "" : d.killsB > d.killsA ? "lead" : "trail";
+    var score = d.winsA + " : " + d.winsB + (d.draws ? ", ничьих " + d.draws : "");
+    return '<div class="duel-hero">' +
+      '<div class="duel-side"><div class="duel-name">' + escapeHtml(nameA) + '</div><div class="duel-big ' + clsA + '">' + d.killsA +
+        '</div><div class="duel-cap">убил соперника</div></div>' +
+      '<div class="duel-mid"><div>' + d.maps.length + " " + pluralRu(d.maps.length, "общая карта", "общие карты", "общих карт") + ' друг против друга</div>' +
+        '<div class="duel-bar"><i style="width:' + share + '%"></i></div>' +
+        '<div>счёт по картам <b>' + score + '</b></div>' +
+        '<div style="margin-top:4px">K/D дуэли <b>' + (d.kd == null ? "—" : d.kd.toFixed(2)) + '</b></div></div>' +
+      '<div class="duel-side"><div class="duel-name">' + escapeHtml(nameB) + '</div><div class="duel-big ' + clsB + '">' + d.killsB +
+        '</div><div class="duel-cap">убил соперника</div></div>' +
+    '</div>';
+  }
+
+  function duelRecordsHtml(d, nameA, nameB) {
+    var bloody = d.bloodiest
+      ? "<p>Самая кровавая карта: <b>" + escapeHtml(duelMapName(d.bloodiest.map)) + " " + duelDateLabel(d.bloodiest.playedAt) + "</b>, " +
+        (d.bloodiest.a + d.bloodiest.b) + " " + pluralRu(d.bloodiest.a + d.bloodiest.b, "убийство", "убийства", "убийств") +
+        " между ними (" + d.bloodiest.a + " : " + d.bloodiest.b + ")</p>"
+      : '<p class="duel-dim">Самая кровавая карта: —</p>';
+    var big = d.biggest
+      ? "<p>Крупнейший перевес: <b>" + escapeHtml(duelMapName(d.biggest.map)) + " " + duelDateLabel(d.biggest.playedAt) + "</b>, " +
+        d.biggest.a + " : " + d.biggest.b + " в пользу " + escapeHtml(d.biggest.leader === "a" ? nameA : nameB) + "</p>"
+      : '<p class="duel-dim">Крупнейший перевес: —</p>';
+    var t = d.together;
+    var together = t.maps
+      ? "<p>Карт вместе: <b>" + t.maps + "</b>, побед <b>" + t.wins + "</b> (" + Math.round((t.wins / t.maps) * 100) + "%)</p>"
+      : '<p class="duel-dim">Ни разу не играли в одной команде</p>';
+    return '<div class="duel-grid">' +
+      '<div class="duel-box"><h4>Рекорды дуэли</h4>' + bloody + big + "</div>" +
+      '<div class="duel-box"><h4>Вместе, в одной команде</h4>' + together + "</div>" +
+    "</div>";
+  }
+
+  function duelHistoryHtml(d, nameA, nameB) {
+    var rows = d.history.map(function (m) {
+      var head = "<td>" + duelDateLabel(m.playedAt) + "</td><td>" + escapeHtml(duelMapName(m.map)) + "</td>";
+      if (m.winner === undefined) {
+        return "<tr>" + head + '<td colspan="3" class="duel-none">нет разбора демки, карта не учтена</td></tr>';
+      }
+      var win = m.winner === "a" ? nameA : m.winner === "b" ? nameB : "ничья";
+      return "<tr>" + head +
+        '<td class="' + (m.a > m.b ? "duel-a-lead" : "") + '">' + m.a + "</td>" +
+        '<td class="' + (m.b > m.a ? "duel-b-lead" : "") + '">' + m.b + "</td>" +
+        "<td>" + escapeHtml(win) + "</td></tr>";
+    }).join("");
+    return '<div class="duel-box"><h4>История по картам</h4><table class="duel-hist"><tr><th>Дата</th><th>Карта</th>' +
+      "<th>" + escapeHtml(nameA) + " убил</th><th>" + escapeHtml(nameB) + " убил</th><th>Выиграл карту</th></tr>" + rows + "</table>" +
+      '<div class="duel-note">Убийства считаются по разбору демки, поэтому могут отличаться от K/D лобби на 1–2. ' +
+      "Карты без разбора демки в счёт не входят. Считаются только карты, где игроки были в разных командах.</div></div>";
+  }
+
+  function renderDuelSection() {
+    var el = document.getElementById("duelSection");
+    if (state.tab !== "duels") { el.style.display = "none"; return; }
+    el.style.display = "";
+    var players = state.data.allTime.players.slice().sort(function (x, y) {
+      return String(x.name).localeCompare(String(y.name), "ru");
+    });
+    var byId = {};
+    players.forEach(function (p) { byId[p.steamid64] = p; });
+    if (!byId[state.duel.a]) state.duel.a = null;
+    if (!byId[state.duel.b]) state.duel.b = null;
+
+    function selectHtml(id, selected, placeholder, label) {
+      return '<select id="' + id + '" aria-label="' + label + '"><option value="">' + placeholder + "</option>" +
+        players.map(function (p) {
+          return '<option value="' + escapeHtml(p.steamid64) + '"' + (p.steamid64 === selected ? " selected" : "") + ">" + escapeHtml(p.name) + "</option>";
+        }).join("") + "</select>";
+    }
+    var html = '<div class="duel-pick">' +
+        selectHtml("duelA", state.duel.a, "Выберите себя", "Игрок 1") + '<span class="duel-vs">VS</span>' +
+        selectHtml("duelB", state.duel.b, "Выберите соперника", "Игрок 2") +
+        '<button type="button" class="duel-btn" id="duelShare"' + (state.duel.a && state.duel.b ? "" : " disabled") + ">🔗 Поделиться</button></div>" +
+      '<div class="duel-periods">' + DUEL_PERIOD_LABELS.map(function (p) {
+        return '<button type="button" class="duel-chip' + (p.id === state.duel.period ? " active" : "") + '" data-period="' + p.id + '">' + p.label + "</button>";
+      }).join("") + "</div>";
+
+    if (!state.duel.a || !state.duel.b) {
+      html += '<div class="duel-hint">Выберите себя и соперника, чтобы увидеть счёт вашей личной дуэли.</div>';
+    } else if (state.duel.a === state.duel.b) {
+      html += '<div class="duel-hint">Выберите двух разных игроков.</div>';
+    } else {
+      var d = window.Duel.computeDuel(state.data.sessions, state.duel.a, state.duel.b, { period: state.duel.period });
+      var nameA = byId[state.duel.a].name, nameB = byId[state.duel.b].name;
+      if (!d.history.length) {
+        html += '<div class="duel-hint">В этом периоде ' + escapeHtml(nameA) + " и " + escapeHtml(nameB) + " не играли друг против друга.</div>" +
+          duelRecordsHtml(d, nameA, nameB);
+      } else {
+        html += duelHeroHtml(d, nameA, nameB) + duelRecordsHtml(d, nameA, nameB) + duelHistoryHtml(d, nameA, nameB);
+      }
+    }
+    el.innerHTML = html;
+
+    el.querySelector("#duelA").addEventListener("change", function (e) {
+      state.duel.a = e.target.value || null;
+      if (state.duel.a) saveDuelMe(state.duel.a);
+      renderDuelSection();
+    });
+    el.querySelector("#duelB").addEventListener("change", function (e) {
+      state.duel.b = e.target.value || null;
+      renderDuelSection();
+    });
+    el.querySelectorAll(".duel-chip").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.duel.period = btn.dataset.period;
+        renderDuelSection();
+      });
+    });
+    var share = el.querySelector("#duelShare");
+    share.addEventListener("click", function () {
+      var url = location.origin + location.pathname + window.Duel.duelHash(state.duel.a, state.duel.b, state.duel.period);
+      try { history.replaceState(null, "", url); } catch (err) {}
+      var done = function () {
+        share.textContent = "Ссылка скопирована ✓";
+        setTimeout(function () { share.textContent = "🔗 Поделиться"; }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { window.prompt("Скопируйте ссылку:", url); });
+      else window.prompt("Скопируйте ссылку:", url);
+    });
   }
 
   function formatDateTime(iso) {
