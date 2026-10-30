@@ -2914,13 +2914,11 @@
     var share = total ? Math.round((d.killsA / total) * 100) : 50;
     var clsA = d.killsA === d.killsB ? "" : d.killsA > d.killsB ? "lead" : "trail";
     var clsB = d.killsA === d.killsB ? "" : d.killsB > d.killsA ? "lead" : "trail";
-    var score = d.winsA + " : " + d.winsB + (d.draws ? ", ничьих " + d.draws : "");
     return '<div class="duel-hero">' +
       '<div class="duel-side"><div class="duel-name">' + escapeHtml(nameA) + '</div><div class="duel-big ' + clsA + '">' + d.killsA +
         '</div><div class="duel-cap">убил соперника</div></div>' +
       '<div class="duel-mid"><div>' + d.maps.length + " " + pluralRu(d.maps.length, "общая карта", "общие карты", "общих карт") + ' друг против друга</div>' +
         '<div class="duel-bar"><i style="width:' + share + '%"></i></div>' +
-        '<div>счёт по картам <b>' + score + '</b></div>' +
         '<div style="margin-top:4px">K/D дуэли <b>' + (d.kd == null ? "—" : d.kd.toFixed(2)) + '</b></div></div>' +
       '<div class="duel-side"><div class="duel-name">' + escapeHtml(nameB) + '</div><div class="duel-big ' + clsB + '">' + d.killsB +
         '</div><div class="duel-cap">убил соперника</div></div>' +
@@ -2951,16 +2949,14 @@
     var rows = d.history.map(function (m) {
       var head = "<td>" + duelDateLabel(m.playedAt) + "</td><td>" + escapeHtml(duelMapName(m.map)) + "</td>";
       if (m.winner === undefined) {
-        return "<tr>" + head + '<td colspan="3" class="duel-none">нет разбора демки, карта не учтена</td></tr>';
+        return "<tr>" + head + '<td colspan="2" class="duel-none">нет разбора демки, карта не учтена</td></tr>';
       }
-      var win = m.winner === "a" ? nameA : m.winner === "b" ? nameB : "ничья";
       return "<tr>" + head +
         '<td class="' + (m.a > m.b ? "duel-a-lead" : "") + '">' + m.a + "</td>" +
-        '<td class="' + (m.b > m.a ? "duel-b-lead" : "") + '">' + m.b + "</td>" +
-        "<td>" + escapeHtml(win) + "</td></tr>";
+        '<td class="' + (m.b > m.a ? "duel-b-lead" : "") + '">' + m.b + "</td></tr>";
     }).join("");
     return '<div class="duel-box"><h4>История по картам</h4><table class="duel-hist"><tr><th>Дата</th><th>Карта</th>' +
-      "<th>" + escapeHtml(nameA) + " убил</th><th>" + escapeHtml(nameB) + " убил</th><th>Выиграл карту</th></tr>" + rows + "</table>" +
+      "<th>" + escapeHtml(nameA) + " убил</th><th>" + escapeHtml(nameB) + " убил</th></tr>" + rows + "</table>" +
       '<div class="duel-note">Убийства считаются по разбору демки, поэтому могут отличаться от K/D лобби на 1–2. ' +
       "Карты без разбора демки в счёт не входят. Считаются только карты, где игроки были в разных командах.</div></div>";
   }
