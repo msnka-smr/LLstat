@@ -601,8 +601,10 @@
   .duel-box h4 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); }
   .duel-box p { margin: 0 0 6px; }
   .duel-box .duel-dim { color: var(--text-dim); }
-  .duel-hist { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
-  .duel-hist th { color: var(--text-dim); font-weight: 500; font-size: 12px; padding: 6px 8px; text-align: center; }
+  .duel-hist { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .duel-hist th:nth-child(1) { width: 84px; }
+  .duel-hist th:nth-child(2) { width: 25%; }
+  .duel-hist th { color: var(--text-dim); font-weight: 500; font-size: 12px; padding: 6px 8px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .duel-hist td { padding: 7px 8px; text-align: center; border-top: 1px solid var(--border); }
   .duel-hist th:first-child, .duel-hist td:first-child, .duel-hist th:nth-child(2), .duel-hist td:nth-child(2) { text-align: left; }
   .duel-hist td.duel-a-lead { background: var(--duel-win); }
@@ -616,6 +618,8 @@
     .duel-grid { grid-template-columns: minmax(0, 1fr); }
     .duel-btn { margin-left: 0; }
     .duel-hist { font-size: 12px; }
+    .duel-hist th:nth-child(1) { width: 62px; }
+    .duel-hist th:nth-child(2) { width: 22%; }
     .duel-hist th, .duel-hist td { padding: 6px 3px; }
   }
 
