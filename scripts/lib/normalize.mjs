@@ -22,6 +22,40 @@ function compactDuels(kills) {
   return Object.keys(out).length ? { kills: out } : null;
 }
 
+// Оружие убийц: { steamid64: { оружие: [убийства, из них в голову] } }; null, если
+// нет разбора демки. Нужно только вкладке «Оружие» — в рейтинги и агрегаты не идёт.
+// Читаем оба формата: старый (stats.rounds[].events[]) и новый
+// (stats.rounds.timeline[].kills[]). Фантомный ножевой раунд (признак тот же, что в
+// detectPhantomKnifeRound) и убийства своих не считаем.
+function compactWeapons(stats) {
+  const rounds = Array.isArray(stats?.rounds)
+    ? stats.rounds.map((r) =>
+        (r.events ?? []).map((e) => ({
+          killer: e.killerSteam, victim: e.victimSteam, killerTeam: e.killerTeam, victimTeam: e.victimTeam,
+          weapon: e.weapon, hs: !!e.hs,
+        }))
+      )
+    : Array.isArray(stats?.rounds?.timeline)
+      ? stats.rounds.timeline.map((r) =>
+          (r.kills ?? []).map((e) => ({
+            killer: e.killer?.steamid64, victim: e.victim?.steamid64, killerTeam: e.killer?.team, victimTeam: e.victim?.team,
+            weapon: e.weapon, hs: !!e.hs,
+          }))
+        )
+      : null;
+  if (!rounds) return null;
+  if (rounds[0]?.length && rounds[0].every((e) => e.weapon === "Knife")) rounds.shift();
+  const out = {};
+  for (const e of rounds.flat()) {
+    if (e.killer == null || !e.weapon) continue;
+    if (e.killerTeam != null && e.killerTeam === e.victimTeam) continue; // огонь по своим
+    const row = ((out[String(e.killer)] ??= {})[e.weapon] ??= [0, 0]);
+    row[0] += 1;
+    if (e.hs) row[1] += 1;
+  }
+  return Object.keys(out).length ? out : null;
+}
+
 export function normalizeLobby(raw) {
   const data = raw?.data;
   if (!data) return [];
@@ -154,6 +188,7 @@ function normalizeFullMap({ lobbyId, mapIndex, stats, playedAtFallback, roster }
     teams,
     players,
     duels: compactDuels(stats.duels?.kills), // старый формат разбора демки
+    weapons: compactWeapons(stats),
     statsTier: "full",
   };
 }
@@ -197,6 +232,7 @@ function normalizeBasicMap({ lobbyId, data, playedAtFallback }) {
     // новый формат разбора демки (maps[1].state === "ready"): cybershoke отдаёт его
     // и там, где старого блока stats нет, — такие карты у нас "basic" по счёту/K/D.
     duels: compactDuels(Object.values(data.match_more_stats?.maps ?? {})[0]?.stats?.duels?.matrix?.kills),
+    weapons: compactWeapons(Object.values(data.match_more_stats?.maps ?? {})[0]?.stats),
     statsTier: "basic",
   };
 }

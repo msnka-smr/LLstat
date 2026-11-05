@@ -19,6 +19,10 @@ export function applyAliases(maps, aliasMap) {
           },
         }
       : {}),
+    // оружие убийц тоже ссылается на steamid64
+    ...(map.weapons
+      ? { weapons: Object.fromEntries(Object.entries(map.weapons).map(([id, w]) => [canon(id), w])) }
+      : {}),
     players: map.players.map((p) => {
       const canonical = aliasMap[p.steamid64];
       // aliased: ник и аватар альт-аккаунта не должны затирать данные основного

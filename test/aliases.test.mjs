@@ -46,3 +46,13 @@ test("maps without duels are untouched by the alias remap", () => {
   const maps = [{ mapId: "1:1", players: [{ steamid64: "999", name: "alt" }], duels: null }];
   assert.equal(applyAliases(maps, { 999: "111" })[0].duels, null);
 });
+
+test("weapons keys follow the alias remap, maps without weapons are untouched", () => {
+  const maps = [
+    { mapId: "1:1", players: [{ steamid64: "999", name: "alt" }], weapons: { 999: { "AK-47": [4, 2] }, 5: { AWP: [1, 0] } } },
+    { mapId: "1:2", players: [{ steamid64: "999", name: "alt" }], weapons: null },
+  ];
+  const [a, b] = applyAliases(maps, { 999: "111" });
+  assert.deepEqual(a.weapons, { 111: { "AK-47": [4, 2] }, 5: { AWP: [1, 0] } });
+  assert.equal(b.weapons, null);
+});

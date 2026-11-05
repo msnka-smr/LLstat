@@ -47,3 +47,17 @@ test("ассистов нет ни в allTime, ни в строках сесси
   assert.equal(keys.has("a"), false);
   assert.equal(keys.has("assists"), false);
 });
+
+test("оружие есть только в sessions[].maps[]; ни в allTime, ни в строках сессий, ни в картах, ни в рейтинге, ни в рекордах, ни в итогах", () => {
+  const withWeapons = stats.sessions.flatMap((s) => s.maps).filter((m) => m.weapons);
+  assert.ok(withWeapons.length > 0, "у карт с разбором демки должно быть оружие");
+  const rest = {
+    allTime: stats.allTime,
+    sessionRows: stats.sessions.map((s) => s.players),
+    recaps: stats.sessions.map((s) => s.recap),
+    ratingHistory: stats.ratingHistory,
+    records: stats.records,
+    maps: stats.maps,
+  };
+  assert.equal(keysDeep(rest).has("weapons"), false);
+});

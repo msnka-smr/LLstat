@@ -43,6 +43,7 @@
     --maroon-bg: rgba(155, 45, 48, 0.18);
     --duel-win: rgba(224, 170, 40, 0.28);  /* ячейка матрицы: игрок из строки выигрывает дуэль */
     --duel-loss: rgba(110, 168, 255, 0.24); /* проигрывает */
+    --weapon-plate: #dfe3ea; /* светлая подложка под иконку оружия: иконки тёмные и тонут на тёмном фоне */
   }
 
   /* Светлая тема: тот же набор переменных. Цвета статусов — тёмные оттенки,
@@ -73,6 +74,7 @@
     --maroon-bg: rgba(143, 29, 34, 0.12);
     --duel-win: rgba(224, 170, 40, 0.35);
     --duel-loss: rgba(37, 99, 235, 0.18);
+    --weapon-plate: #e8ebf1;
   }
 
   * { box-sizing: border-box; }
@@ -161,9 +163,8 @@
     user-select: none;
     white-space: nowrap;
   }
-  /* шесть вкладок не помещаются в один ряд на телефоне — делаем два ряда по три
-     вкладки поровну на всю ширину блока (сетка из 6 колонок, каждая вкладка
-     занимает по 2) */
+  /* вкладки не помещаются в один ряд на телефоне — делаем ряды по три вкладки
+     поровну на всю ширину блока (сетка из 6 колонок, каждая вкладка занимает по 2) */
   @media (max-width: 520px) {
     .tabs {
       display: grid;
@@ -562,6 +563,48 @@
     cursor: pointer;
   }
   .wheel-spin-btn:disabled { opacity: 0.5; cursor: default; }
+
+  /* Вкладка «Оружие» (кнопки-чипы, выпадающие списки и подсказки берутся от «Дуэлей») */
+  .wp-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; margin-bottom: 12px; }
+  .wp-tile { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px; min-width: 0; }
+  .wp-tile-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; font-size: 13px; min-width: 0; }
+  .wp-tile-head span:last-child { min-width: 0; overflow-wrap: anywhere; line-height: 1.25; }
+  .wp-ico { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background: var(--accent-bg); border-radius: 8px; font-size: 20px; flex: none; }
+  .wp-img { width: 72px; height: 54px; object-fit: contain; flex: none; background: var(--weapon-plate); border-radius: 8px; }
+  .wp-kills { font-size: 28px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .wp-sub { color: var(--text-dim); font-size: 12px; margin-top: 4px; }
+  .wp-bar { height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; margin: 8px 0 6px; }
+  .wp-bar i { display: block; height: 100%; background: var(--accent); }
+  .wp-place { font-size: 12px; }
+  .wp-members { color: var(--text-faint); font-size: 11px; margin-top: 4px; }
+  .wp-hero { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; font-size: 13px; }
+  .wp-hero b { color: var(--yellow); }
+  .wp-scroll { overflow-x: auto; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }
+  .wp-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .wp-table th { color: var(--text-dim); font-weight: 500; font-size: 12px; padding: 8px; text-align: center; white-space: nowrap; }
+  .wp-table td { padding: 8px; text-align: center; border-top: 1px solid var(--border); }
+  .wp-table th:first-child, .wp-table td:first-child { text-align: left; }
+  .wp-leaders th:nth-child(2), .wp-leaders td:nth-child(2) { text-align: left; }
+  .wp-table td.best { background: var(--duel-win); font-weight: 700; }
+  .wp-table td.wp-barcell { text-align: left; width: 40%; }
+  .wp-table td.wp-barcell .wp-bar { margin: 0; height: 6px; }
+  .wp-table tr[data-player] { cursor: pointer; }
+  .wp-table tr[data-player]:hover td { background: var(--accent-bg); }
+  .wp-dd { position: relative; }
+  .wp-dd summary {
+    list-style: none; cursor: pointer; background: var(--bg-panel); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; font-size: 13px; user-select: none;
+  }
+  .wp-dd summary::-webkit-details-marker { display: none; }
+  .wp-dd-list {
+    position: absolute; z-index: 5; margin-top: 4px; min-width: 200px; max-height: 260px; overflow: auto;
+    background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px;
+  }
+  .wp-dd-list label { display: flex; align-items: center; gap: 6px; padding: 4px 2px; font-size: 13px; cursor: pointer; }
+  @media (max-width: 520px) {
+    .wp-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .wp-table th, .wp-table td { padding: 7px 5px; }
+  }
 
   /* Вкладка «Дуэли» */
   .duel-pick { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
@@ -1081,6 +1124,7 @@
       <div class="tab" data-tab="matchday">MatchDay</div>
       <div class="tab" data-tab="maps">Карты</div>
       <div class="tab" data-tab="duels">Дуэли</div>
+      <div class="tab" data-tab="weapons">Оружие</div>
       <div class="tab" data-tab="records">Рекорды</div>
     </div>
     <a class="rating-info-link" href="rating-info.html" target="_blank" rel="noopener">Информация о рейтинге →</a>
@@ -1096,10 +1140,12 @@
   <div id="draftSection"></div>
   <div id="matchdaySection"></div>
   <div id="duelSection"></div>
+  <div id="weaponSection"></div>
 
   <footer id="footer"></footer>
 
 <script src="duel.js"></script>
+<script src="weapons.js"></script>
 <script>
 (function () {
   "use strict";
@@ -1146,10 +1192,14 @@
   function ratingDeltaClass(v) { return v > 0 ? "rating-delta-up" : v < 0 ? "rating-delta-down" : "rating-delta-flat"; }
 
   var TAB_STORAGE_KEY = "llstat:selectedTab";
-  var VALID_TABS = ["allTime", "lastSession", "draft", "matchday", "maps", "duels", "records"];
+  var VALID_TABS = ["allTime", "lastSession", "draft", "matchday", "maps", "duels", "weapons", "records"];
   var DUEL_ME_KEY = "llstat:duelMe";
   // Ссылка вида #duel=<id>,<id>,<период> сразу открывает вкладку «Дуэли» с этой парой.
   var hashDuel = window.Duel.parseDuelHash(location.hash);
+  // Ссылка вида #weapons=<режим>/<период>/<игроки>/<оружие> открывает вкладку «Оружие» с этим видом.
+  var hashWeapons = window.Weapons.parseWeaponsHash(location.hash);
+  var WEAPON_DEFAULT_GROUPS = ["ak47", "m4", "awp", "deagle"];
+  var WEAPON_MAX_PLAYERS = 6;
   function loadSavedTab() {
     try { return localStorage.getItem(TAB_STORAGE_KEY); } catch (err) { return null; }
   }
@@ -1165,11 +1215,23 @@
 
   var state = {
     data: null,
-    tab: hashDuel ? "duels" : VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
+    tab: hashDuel ? "duels" : hashWeapons ? "weapons" : VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
     duel: {
       a: hashDuel ? hashDuel.a : loadDuelMe(),
       b: hashDuel ? hashDuel.b : null,
       period: hashDuel ? hashDuel.period : "all",
+    },
+    // «себя» берём из вкладки «Дуэли» (тот же ключ localStorage), но там не перезаписываем.
+    // players === null в режиме «Сравнение» — выбор ещё не трогали, берём «себя» и лучших убийц.
+    weapons: {
+      mode: hashWeapons ? hashWeapons.mode : "card",
+      period: hashWeapons ? hashWeapons.period : "all",
+      cardId: hashWeapons && hashWeapons.mode === "card" && hashWeapons.players[0] ? hashWeapons.players[0] : loadDuelMe(),
+      gid: hashWeapons && hashWeapons.groups[0] ? hashWeapons.groups[0] : "ak47",
+      players: hashWeapons && hashWeapons.mode === "compare" && hashWeapons.players.length ? hashWeapons.players : null,
+      groups: hashWeapons && hashWeapons.mode === "compare" && hashWeapons.groups.length ? hashWeapons.groups : WEAPON_DEFAULT_GROUPS.slice(),
+      metric: "kills",
+      open: null,
     },
     sortColumn: "rating",
     sortDirection: "desc",
@@ -1299,6 +1361,7 @@
     renderMatchdaySection();
     renderSessionMapsSection();
     renderDuelSection();
+    renderWeaponSection();
   }
 
   function renderMapChips() {
@@ -1487,7 +1550,7 @@
   }
 
   // Вкладки, на которых нет общей таблицы игроков (у них свой блок).
-  function noTableTab() { return state.tab === "draft" || state.tab === "matchday" || state.tab === "duels" || state.tab === "records"; }
+  function noTableTab() { return state.tab === "draft" || state.tab === "matchday" || state.tab === "duels" || state.tab === "weapons" || state.tab === "records"; }
 
   function getRows() {
     if (noTableTab()) return [];
@@ -3025,6 +3088,236 @@
     var share = el.querySelector("#duelShare");
     share.addEventListener("click", function () {
       var url = location.origin + location.pathname + window.Duel.duelHash(state.duel.a, state.duel.b, state.duel.period);
+      try { history.replaceState(null, "", url); } catch (err) {}
+      var done = function () {
+        share.textContent = "Ссылка скопирована ✓";
+        setTimeout(function () { share.textContent = "🔗 Поделиться"; }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { window.prompt("Скопируйте ссылку:", url); });
+      else window.prompt("Скопируйте ссылку:", url);
+    });
+  }
+
+  // ---- Вкладка «Оружие» ----
+  var WEAPON_MODE_LABELS = [
+    { id: "card", label: "Карточка игрока" },
+    { id: "leaders", label: "Рекордсмены" },
+    { id: "compare", label: "Сравнение" },
+  ];
+  var WEAPON_ICONS = { knife: "🔪", grenades: "💣", other: "❔" }; // остальным — «🔫»
+  // Картинки оружия: id группы → путь к файлу (одно оружие-представитель на группу, см. CLAUDE.md).
+  // Нет картинки у группы — вместо неё значок-эмодзи.
+  var WEAPON_IMAGES = {
+    ak47: "img/weapons/ak47.png", m4: "img/weapons/m4.png", awp: "img/weapons/awp.png", deagle: "img/weapons/deagle.png",
+    rifles: "img/weapons/rifles.png", scout: "img/weapons/scout.png", pistols: "img/weapons/pistols.png", smg: "img/weapons/smg.png",
+    shotguns: "img/weapons/shotguns.png", lmg: "img/weapons/lmg.png", knife: "img/weapons/knife.png", grenades: "img/weapons/grenades.png",
+  };
+  var MEDALS = ["🥇", "🥈", "🥉"];
+
+  function weaponGroup(gid) {
+    return window.Weapons.GROUPS.filter(function (g) { return g.id === gid; })[0];
+  }
+  function weaponIconHtml(gid) {
+    if (WEAPON_IMAGES[gid]) return '<img class="wp-img" src="' + escapeHtml(WEAPON_IMAGES[gid]) + '" alt="" loading="lazy">';
+    return '<span class="wp-ico" aria-hidden="true">' + (WEAPON_ICONS[gid] || "🔫") + "</span>";
+  }
+  function weaponKillsText(n) { return n + " " + pluralRu(n, "убийство", "убийства", "убийств"); }
+  function weaponPlaceText(place, of) { return (place <= 3 ? MEDALS[place - 1] + " " : "") + "#" + place + " из " + of; }
+  function weaponHsText(g, hsPc) { return g.noHs || hsPc == null ? "—" : hsPc + "%"; }
+
+  function weaponCardHtml(stats, byId) {
+    var id = state.weapons.cardId;
+    if (!id) return '<div class="duel-hint">Выберите игрока, чтобы увидеть его арсенал.</div>';
+    var card = window.Weapons.playerCard(stats, id);
+    var name = escapeHtml(byId[id].name);
+    if (!card) return '<div class="duel-hint">' + name + " в этом периоде ни разу не убивал на картах с разбором демки.</div>";
+    var fav = weaponGroup(card.favorite);
+    var hero = '<div class="wp-hero"><b>' + name + "</b>: " + weaponKillsText(card.kills) + ", " +
+      Math.round((card.hs / card.kills) * 100) + "% в голову. Любимое оружие — <b>" + fav.label + "</b>, " +
+      card.rows[0].share + "% всех убийств.</div>";
+    var tiles = card.rows.map(function (r) {
+      var g = weaponGroup(r.gid);
+      var members = stats.players[id].groups[r.gid].weapons;
+      var names = Object.keys(members);
+      var membersHtml = names.length > 1
+        ? '<div class="wp-members">' + names.sort(function (x, y) { return members[y][0] - members[x][0]; })
+            .map(function (n) { return escapeHtml(n) + " " + members[n][0]; }).join(" · ") + "</div>"
+        : "";
+      return '<div class="wp-tile"><div class="wp-tile-head">' + weaponIconHtml(r.gid) + "<span>" + escapeHtml(g.label) + "</span></div>" +
+        '<div class="wp-kills">' + r.kills + "</div>" +
+        '<div class="wp-sub">в голову: ' + weaponHsText(g, r.hsPc) + "</div>" +
+        '<div class="wp-bar"><i style="width:' + r.share + '%"></i></div>' +
+        '<div class="wp-place">' + weaponPlaceText(r.place, r.of) + '</div><div class="wp-sub">' + r.share + "% его убийств</div>" +
+        membersHtml + "</div>";
+    }).join("");
+    return hero + '<div class="wp-tiles">' + tiles + "</div>";
+  }
+
+  function weaponLeadersHtml(stats, byId) {
+    var groups = window.Weapons.GROUPS.filter(function (g) { return window.Weapons.leaders(stats, g.id).length; });
+    if (!groups.length) return '<div class="duel-hint">В этом периоде нет данных по оружию.</div>';
+    if (!groups.some(function (g) { return g.id === state.weapons.gid; })) state.weapons.gid = groups[0].id;
+    var g = weaponGroup(state.weapons.gid);
+    var rows = window.Weapons.leaders(stats, g.id).filter(function (r) { return byId[r.id]; });
+    var chips = '<div class="duel-periods">' + groups.map(function (x) {
+      return '<button type="button" class="duel-chip' + (x.id === g.id ? " active" : "") + '" data-gid="' + x.id + '">' + escapeHtml(x.label) + "</button>";
+    }).join("") + "</div>";
+    if (!rows.length) return chips + '<div class="duel-hint">Никто из списка игроков не убивал этим оружием.</div>';
+    var tops = rows.filter(function (r) { return r.place === 1; });
+    var hero = '<div class="wp-hero">👑 ' + (tops.length > 1
+      ? "Первое место делят: <b>" + tops.map(function (r) { return escapeHtml(byId[r.id].name); }).join(", ") + "</b>, по " + weaponKillsText(tops[0].kills)
+      : "Лучший на «" + escapeHtml(g.label) + "»: <b>" + escapeHtml(byId[tops[0].id].name) + "</b>, " + weaponKillsText(tops[0].kills)) + ".</div>";
+    var body = rows.map(function (r) {
+      return '<tr data-player="' + escapeHtml(r.id) + '" title="Открыть карточку игрока"><td>' + (r.place <= 3 ? MEDALS[r.place - 1] : r.place) + "</td>" +
+        "<td>" + escapeHtml(byId[r.id].name) + "</td>" +
+        '<td class="wp-barcell"><div class="wp-bar"><i style="width:' + Math.round((r.kills / rows[0].kills) * 100) + '%"></i></div></td>' +
+        "<td><b>" + r.kills + "</b></td><td>" + weaponHsText(g, r.hsPc) + "</td></tr>";
+    }).join("");
+    return chips + hero + '<div class="wp-scroll"><table class="wp-table wp-leaders"><tr><th>#</th><th>Игрок</th><th></th><th>Убийств</th><th>В голову</th></tr>' +
+      body + "</table></div>";
+  }
+
+  function weaponCompareHtml(stats, byId, players) {
+    var w = state.weapons;
+    var ids = w.players ? w.players.filter(function (id) { return byId[id]; }) : [];
+    if (!w.players) {
+      if (w.cardId && byId[w.cardId]) ids.push(w.cardId);
+      Object.keys(stats.players)
+        .filter(function (id) { return byId[id] && ids.indexOf(id) === -1; })
+        .sort(function (x, y) { return stats.players[y].kills - stats.players[x].kills; })
+        .forEach(function (id) { if (ids.length < 3) ids.push(id); });
+    }
+    ids = ids.slice(0, WEAPON_MAX_PLAYERS);
+    var groups = window.Weapons.GROUPS.filter(function (g) { return g.id !== "other"; });
+    var gids = w.groups.filter(function (gid) { return !!weaponGroup(gid); });
+
+    function dd(id, label, items) {
+      return '<details class="wp-dd" data-dd="' + id + '"' + (w.open === id ? " open" : "") + "><summary>" + label + " ▾</summary>" +
+        '<div class="wp-dd-list">' + items + "</div></details>";
+    }
+    var playerItems = players.map(function (p) {
+      var on = ids.indexOf(p.steamid64) !== -1;
+      return '<label><input type="checkbox" data-wpp="' + escapeHtml(p.steamid64) + '"' + (on ? " checked" : "") +
+        (!on && ids.length >= WEAPON_MAX_PLAYERS ? " disabled" : "") + ">" + escapeHtml(p.name) + "</label>";
+    }).join("");
+    var groupItems = groups.map(function (g) {
+      return '<label><input type="checkbox" data-wpg="' + g.id + '"' + (gids.indexOf(g.id) !== -1 ? " checked" : "") + ">" + escapeHtml(g.label) + "</label>";
+    }).join("");
+    var controls = '<div class="duel-pick">' +
+        dd("players", "Игроки: " + ids.length + " (до " + WEAPON_MAX_PLAYERS + ")", playerItems) +
+        dd("groups", "Оружие: " + gids.length, groupItems) + "</div>" +
+      '<div class="duel-periods">' + [{ id: "kills", label: "Убийства" }, { id: "hsPc", label: "% в голову" }].map(function (m) {
+        return '<button type="button" class="duel-chip' + (m.id === w.metric ? " active" : "") + '" data-metric="' + m.id + '">' + m.label + "</button>";
+      }).join("") + "</div>";
+    if (!ids.length || !gids.length) return controls + '<div class="duel-hint">Выберите хотя бы одного игрока и одно оружие.</div>';
+
+    var cmp = window.Weapons.compare(stats, ids, gids, w.metric);
+    var head = "<tr><th>Оружие</th>" + ids.map(function (id) { return "<th>" + escapeHtml(byId[id].name) + "</th>"; }).join("") + "</tr>";
+    var body = cmp.rows.map(function (row) {
+      var g = weaponGroup(row.gid);
+      return '<tr><td style="white-space:nowrap">' + escapeHtml(g.label) + "</td>" + row.cells.map(function (c) {
+        var text;
+        if (cmp.metric === "kills") text = c.kills ? String(c.kills) : "—";
+        else text = g.noHs || c.kills < window.Weapons.MIN_KILLS_FOR_HS ? "—" : c.hsPc + "%";
+        return '<td class="' + (c.best ? "best" : "") + '">' + text + "</td>";
+      }).join("") + "</tr>";
+    }).join("");
+    var note = cmp.metric === "hsPc"
+      ? '<div class="duel-note">% в голову считается от ' + window.Weapons.MIN_KILLS_FOR_HS + " убийств на этом оружии, иначе «—». У ножа и гранат попаданий в голову нет.</div>"
+      : "";
+    return controls + '<div class="wp-scroll"><table class="wp-table">' + head + body + "</table></div>" + note;
+  }
+
+  // Открытый выпадающий список закрывается кликом в любом другом месте страницы.
+  document.addEventListener("click", function (e) {
+    var open = document.querySelector("#weaponSection details[open]");
+    if (open && !open.contains(e.target)) {
+      state.weapons.open = null;
+      open.open = false;
+    }
+  });
+
+  function renderWeaponSection() {
+    var el = document.getElementById("weaponSection");
+    if (state.tab !== "weapons") { el.style.display = "none"; return; }
+    el.style.display = "";
+    var w = state.weapons;
+    var stats = window.Weapons.computeStats(state.data.sessions, { period: w.period });
+    var players = state.data.allTime.players.slice().sort(function (x, y) {
+      return String(x.name).localeCompare(String(y.name), "ru");
+    });
+    var byId = {};
+    players.forEach(function (p) { byId[p.steamid64] = p; });
+    if (!byId[w.cardId]) w.cardId = null;
+
+    var html = '<div class="duel-pick"><div class="duel-periods" style="margin:0">' + WEAPON_MODE_LABELS.map(function (m) {
+        return '<button type="button" class="duel-chip' + (m.id === w.mode ? " active" : "") + '" data-mode="' + m.id + '">' + m.label + "</button>";
+      }).join("") + '</div><button type="button" class="duel-btn" id="weaponShare">🔗 Поделиться</button></div>' +
+      '<div class="duel-periods">' + DUEL_PERIOD_LABELS.map(function (p) {
+        return '<button type="button" class="duel-chip' + (p.id === w.period ? " active" : "") + '" data-period="' + p.id + '">' + p.label + "</button>";
+      }).join("") + "</div>";
+
+    if (w.mode === "card") {
+      html += '<div class="duel-pick"><select id="weaponCard" aria-label="Игрок"><option value="">Выберите себя</option>' +
+        players.map(function (p) {
+          return '<option value="' + escapeHtml(p.steamid64) + '"' + (p.steamid64 === w.cardId ? " selected" : "") + ">" + escapeHtml(p.name) + "</option>";
+        }).join("") + "</select></div>" + weaponCardHtml(stats, byId);
+    } else if (w.mode === "leaders") {
+      html += weaponLeadersHtml(stats, byId);
+    } else {
+      html += weaponCompareHtml(stats, byId, players);
+    }
+    html += '<div class="duel-note">Учтено карт: ' + stats.mapsCounted + " из " + stats.mapsTotal + " за период — на остальных нет разбора демки. " +
+      "Убийства в ножевом раунде выбора стороны и по своим не считаются. На рейтинг эта вкладка не влияет.</div>";
+    el.innerHTML = html;
+
+    el.querySelectorAll("[data-mode]").forEach(function (btn) {
+      btn.addEventListener("click", function () { w.mode = btn.dataset.mode; renderWeaponSection(); });
+    });
+    el.querySelectorAll("[data-period]").forEach(function (btn) {
+      btn.addEventListener("click", function () { w.period = btn.dataset.period; renderWeaponSection(); });
+    });
+    el.querySelectorAll("[data-gid]").forEach(function (btn) {
+      btn.addEventListener("click", function () { w.gid = btn.dataset.gid; renderWeaponSection(); });
+    });
+    el.querySelectorAll("[data-metric]").forEach(function (btn) {
+      btn.addEventListener("click", function () { w.metric = btn.dataset.metric; renderWeaponSection(); });
+    });
+    var card = el.querySelector("#weaponCard");
+    if (card) card.addEventListener("change", function (e) { w.cardId = e.target.value || null; renderWeaponSection(); });
+    el.querySelectorAll("tr[data-player]").forEach(function (row) {
+      row.addEventListener("click", function () { w.cardId = row.dataset.player; w.mode = "card"; renderWeaponSection(); });
+    });
+    el.querySelectorAll("details[data-dd]").forEach(function (d) {
+      d.addEventListener("toggle", function () {
+        if (d.open) w.open = d.dataset.dd;
+        else if (w.open === d.dataset.dd) w.open = null;
+      });
+    });
+    el.querySelectorAll("input[data-wpp]").forEach(function (box) {
+      box.addEventListener("change", function () {
+        // первый ручной выбор фиксирует то, что сейчас отмечено по умолчанию
+        var cur = Array.prototype.map.call(el.querySelectorAll("input[data-wpp]:checked"), function (b) { return b.dataset.wpp; });
+        w.players = cur;
+        renderWeaponSection();
+      });
+    });
+    el.querySelectorAll("input[data-wpg]").forEach(function (box) {
+      box.addEventListener("change", function () {
+        w.groups = Array.prototype.map.call(el.querySelectorAll("input[data-wpg]:checked"), function (b) { return b.dataset.wpg; });
+        renderWeaponSection();
+      });
+    });
+
+    var share = el.querySelector("#weaponShare");
+    share.addEventListener("click", function () {
+      var view = {
+        mode: w.mode, period: w.period,
+        players: w.mode === "card" ? (w.cardId ? [w.cardId] : []) : w.mode === "compare"
+          ? Array.prototype.map.call(el.querySelectorAll("input[data-wpp]:checked"), function (b) { return b.dataset.wpp; }) : [],
+        groups: w.mode === "leaders" ? [w.gid] : w.mode === "compare" ? w.groups : [],
+      };
+      var url = location.origin + location.pathname + window.Weapons.weaponsHash(view);
       try { history.replaceState(null, "", url); } catch (err) {}
       var done = function () {
         share.textContent = "Ссылка скопирована ✓";

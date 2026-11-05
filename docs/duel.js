@@ -96,5 +96,8 @@
     return { a: m[1], b: m[2], period: PERIODS.indexOf(m[3]) !== -1 ? m[3] : "all" };
   }
 
-  root.Duel = { computeDuel: computeDuel, duelHash: duelHash, parseDuelHash: parseDuelHash, PERIODS: PERIODS };
+  root.Duel = {
+    computeDuel: computeDuel, duelHash: duelHash, parseDuelHash: parseDuelHash,
+    PERIODS: PERIODS, pickSessions: pickSessions, // pickSessions нужен и вкладке «Оружие» (weapons.js)
+  };
 })(typeof window !== "undefined" ? window : globalThis);

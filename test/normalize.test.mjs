@@ -219,3 +219,53 @@ test("duels are read from the new demo-parse format (lobby-only maps with a read
 test("no demo analysis means duels is null", () => {
   assert.equal(normalizeLobby(buildRawLobby({ dropSteamId: null }))[0].duels, null);
 });
+
+// Оружие («кто из чего убивал») для вкладки «Оружие»: { steamid64: { оружие: [убийства, из них в голову] } }.
+// Читаем оба формата разбора демки; ножевой раунд-фантом и убийства своих не считаем.
+test("weapons are counted per killer from the old demo-parse format; phantom knife round and team kills are skipped", () => {
+  const raw = buildLobbyWithPhantomKnifeRound();
+  const rounds = raw.data.match_more_stats.maps[1].stats.rounds;
+  rounds[1] = { winner: "team1", events: [
+    { weapon: "AK-47", killerSteam: "1", victimSteam: "2", killerTeam: 1, victimTeam: 2, hs: true },
+    { weapon: "AK-47", killerSteam: "1", victimSteam: "3", killerTeam: 1, victimTeam: 1, hs: false }, // свой
+    { weapon: "USP-S", killerSteam: "2", victimSteam: "1", killerTeam: 2, victimTeam: 1, hs: false },
+  ] };
+  rounds.length = 2;
+  const [map] = normalizeLobby(raw);
+  assert.deepEqual(map.weapons, { 1: { "AK-47": [1, 1] }, 2: { "USP-S": [1, 0] } });
+});
+
+test("weapons are read from the new demo-parse format (lobby-only maps)", () => {
+  const kill = (k, kt, v, vt, weapon, hs) => ({ killer: { steamid64: k, team: kt }, victim: { steamid64: v, team: vt }, weapon, hs });
+  const raw = {
+    data: {
+      id_lobby: 557,
+      dates: { unixtime_match_end: 1700000000 },
+      match_settings: { map_name: "de_mirage" },
+      match_stats: { base: { team_2: { score: 13 }, team_3: { score: 5 }, team_winner: 2 } },
+      players: { 1: { steamid64: "1", name: "a", id_slot: 2, match_stats: { live: { kills: 2, deaths: 0 } } } },
+      match_more_stats: { maps: { 1: { state: "ready", stats: { rounds: { timeline: [
+        { kills: [kill("1", "team_2", "2", "team_3", "Knife", false)] }, // ножевой раунд
+        { kills: [kill("1", "team_2", "2", "team_3", "AWP", true), kill("1", "team_2", "3", "team_3", "AWP", false)] },
+      ] } } } } },
+    },
+  };
+  const [map] = normalizeLobby(raw);
+  assert.equal(map.statsTier, "basic");
+  assert.deepEqual(map.weapons, { 1: { AWP: [2, 1] } });
+});
+
+test("a legit round 1 with a knife kill among other weapons is kept", () => {
+  const raw = buildLobbyWithPhantomKnifeRound();
+  raw.data.match_more_stats.maps[1].stats.rounds = [
+    { winner: "team1", events: [
+      { weapon: "Knife", killerSteam: "1", victimSteam: "2", killerTeam: 1, victimTeam: 2 },
+      { weapon: "Glock-18", killerSteam: "1", victimSteam: "2", killerTeam: 1, victimTeam: 2 },
+    ] },
+  ];
+  assert.deepEqual(normalizeLobby(raw)[0].weapons, { 1: { Knife: [1, 0], "Glock-18": [1, 0] } });
+});
+
+test("no demo analysis means weapons is null", () => {
+  assert.equal(normalizeLobby(buildRawLobby({ dropSteamId: null }))[0].weapons, null);
+});

@@ -102,6 +102,7 @@ test("session output keeps its time range and the full map entries", () => {
     teams: [{ score: 13 }, { score: 7 }], url: "https://cybershoke.net/match/7",
     players: [{ steamid64: "A", name: "A", team: null, k: 20, d: 10, a: 0 }],
     duels: null,
+    weapons: null,
   });
 });
 
@@ -134,4 +135,11 @@ test("a map's duels matrix goes to the session map entry and nowhere else", () =
   const out = buildSessionOutput(sessionOf("S", [mapOf(1, [strong, weak], { duels })]), makeRow);
   assert.deepEqual(out.maps[0].duels, duels);
   for (const row of out.players) assert.equal("duels" in row, false);
+});
+
+test("a map's weapons go to the session map entry and nowhere else", () => {
+  const weapons = { A: { "AK-47": [4, 2] } };
+  const out = buildSessionOutput(sessionOf("S", [mapOf(1, [strong, weak], { weapons })]), makeRow);
+  assert.deepEqual(out.maps[0].weapons, weapons);
+  for (const row of out.players) assert.equal("weapons" in row, false);
 });
