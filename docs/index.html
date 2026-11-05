@@ -44,6 +44,7 @@
     --duel-win: rgba(224, 170, 40, 0.28);  /* ячейка матрицы: игрок из строки выигрывает дуэль */
     --duel-loss: rgba(110, 168, 255, 0.24); /* проигрывает */
     --weapon-plate: #dfe3ea; /* светлая подложка под иконку оружия: иконки тёмные и тонут на тёмном фоне */
+    --medal-1: #e6bb3f; --medal-2: #b9c1cd; --medal-3: #d28b57; /* места 1–3 на вкладке «Оружие» */
     --team-a: #3ecf9d; --team-a-bg: rgba(62, 207, 157, 0.08); --team-a-hover: rgba(62, 207, 157, 0.15); /* команды вечера в таблице «Сессии» */
     --team-b: #b48cff; --team-b-bg: rgba(180, 140, 255, 0.09); --team-b-hover: rgba(180, 140, 255, 0.16);
   }
@@ -77,6 +78,7 @@
     --duel-win: rgba(224, 170, 40, 0.35);
     --duel-loss: rgba(37, 99, 235, 0.18);
     --weapon-plate: #e8ebf1;
+    --medal-1: #d9a21f; --medal-2: #a3acb9; --medal-3: #c4773f;
     --team-a: #0f8a68; --team-a-bg: rgba(15, 138, 104, 0.08); --team-a-hover: rgba(15, 138, 104, 0.15);
     --team-b: #7c4dcc; --team-b-bg: rgba(124, 77, 204, 0.08); --team-b-hover: rgba(124, 77, 204, 0.15);
   }
@@ -584,7 +586,16 @@
   .wp-tile { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px; min-width: 0; }
   .wp-tile-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; font-size: 13px; min-width: 0; }
   .wp-tile-head span:last-child { min-width: 0; overflow-wrap: anywhere; line-height: 1.25; }
-  .wp-ico { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background: var(--accent-bg); border-radius: 8px; font-size: 20px; flex: none; }
+  .wp-ico { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background: var(--accent-bg); color: var(--accent); border-radius: 8px; flex: none; }
+  /* места 1–3: кружок с номером вместо эмодзи-медалей; корона — у лучшего в «Рекордсменах» */
+  .wp-medal {
+    display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%;
+    font-size: 11px; font-weight: 800; line-height: 1; color: #1b1e26; vertical-align: middle; font-variant-numeric: tabular-nums;
+  }
+  .wp-medal.m1 { background: var(--medal-1); }
+  .wp-medal.m2 { background: var(--medal-2); }
+  .wp-medal.m3 { background: var(--medal-3); }
+  .wp-crown { width: 18px; height: 18px; vertical-align: -3px; margin-right: 4px; color: var(--medal-1); }
   .wp-img { width: 72px; height: 54px; object-fit: contain; flex: none; background: var(--weapon-plate); border-radius: 8px; }
   .wp-kills { font-size: 28px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
   .wp-sub { color: var(--text-dim); font-size: 12px; margin-top: 4px; }
@@ -3127,25 +3138,34 @@
     { id: "leaders", label: "Рекордсмены" },
     { id: "compare", label: "Сравнение" },
   ];
-  var WEAPON_ICONS = { knife: "🔪", grenades: "💣", other: "❔" }; // остальным — «🔫»
   // Картинки оружия: id группы → путь к файлу (одно оружие-представитель на группу, см. CLAUDE.md).
-  // Нет картинки у группы — вместо неё значок-эмодзи.
+  // Нет картинки у группы («Прочее») — вместо неё значок-прицел.
   var WEAPON_IMAGES = {
     ak47: "img/weapons/ak47.png", m4: "img/weapons/m4.png", awp: "img/weapons/awp.png", deagle: "img/weapons/deagle.png",
     rifles: "img/weapons/rifles.png", scout: "img/weapons/scout.png", pistols: "img/weapons/pistols.png", smg: "img/weapons/smg.png",
     shotguns: "img/weapons/shotguns.png", lmg: "img/weapons/lmg.png", knife: "img/weapons/knife.png", grenades: "img/weapons/grenades.png",
   };
-  var MEDALS = ["🥇", "🥈", "🥉"];
+  var WEAPON_CROWN_SVG = '<svg class="wp-crown" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+    '<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8z"/></svg>';
+  var WEAPON_CROSSHAIR_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="6.5"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></svg>';
+
+  // Места 1–3 — цветной кружок с номером, остальные — просто число.
+  function weaponMedalHtml(place) {
+    return '<span class="wp-medal m' + place + '" title="' + place + ' место">' + place + "</span>";
+  }
 
   function weaponGroup(gid) {
     return window.Weapons.GROUPS.filter(function (g) { return g.id === gid; })[0];
   }
   function weaponIconHtml(gid) {
     if (WEAPON_IMAGES[gid]) return '<img class="wp-img" src="' + escapeHtml(WEAPON_IMAGES[gid]) + '" alt="" loading="lazy">';
-    return '<span class="wp-ico" aria-hidden="true">' + (WEAPON_ICONS[gid] || "🔫") + "</span>";
+    return '<span class="wp-ico" aria-hidden="true">' + WEAPON_CROSSHAIR_SVG + "</span>";
   }
   function weaponKillsText(n) { return n + " " + pluralRu(n, "убийство", "убийства", "убийств"); }
-  function weaponPlaceText(place, of) { return (place <= 3 ? MEDALS[place - 1] + " " : "") + "#" + place + " из " + of; }
+  function weaponPlaceHtml(place, of) {
+    return (place <= 3 ? weaponMedalHtml(place) + " " : "#" + place + " ") + "из " + of;
+  }
   function weaponHsText(g, hsPc) { return g.noHs || hsPc == null ? "—" : hsPc + "%"; }
 
   function weaponCardHtml(stats, byId) {
@@ -3180,7 +3200,7 @@
         '<div class="wp-kills">' + r.kills + "</div>" +
         '<div class="wp-sub">в голову: ' + weaponHsText(g, r.hsPc) + "</div>" +
         '<div class="wp-bar"><i style="width:' + r.share + '%"></i></div>' +
-        '<div class="wp-place">' + weaponPlaceText(r.place, r.of) + '</div><div class="wp-sub">' + r.share + "% его убийств</div>" +
+        '<div class="wp-place">' + weaponPlaceHtml(r.place, r.of) + '</div><div class="wp-sub">' + r.share + "% его убийств</div>" +
         membersHtml + "</div>";
     }).join("");
     return hero + '<div class="wp-tiles">' + tiles + "</div>";
@@ -3197,11 +3217,11 @@
     }).join("") + "</div>";
     if (!rows.length) return chips + '<div class="duel-hint">Никто из списка игроков не убивал этим оружием.</div>';
     var tops = rows.filter(function (r) { return r.place === 1; });
-    var hero = '<div class="wp-hero">👑 ' + (tops.length > 1
+    var hero = '<div class="wp-hero">' + WEAPON_CROWN_SVG + (tops.length > 1
       ? "Первое место делят: <b>" + tops.map(function (r) { return escapeHtml(byId[r.id].name); }).join(", ") + "</b>, по " + weaponKillsText(tops[0].kills)
       : "Лучший на «" + escapeHtml(g.label) + "»: <b>" + escapeHtml(byId[tops[0].id].name) + "</b>, " + weaponKillsText(tops[0].kills)) + ".</div>";
     var body = rows.map(function (r) {
-      return '<tr data-player="' + escapeHtml(r.id) + '" title="Открыть карточку игрока"><td>' + (r.place <= 3 ? MEDALS[r.place - 1] : r.place) + "</td>" +
+      return '<tr data-player="' + escapeHtml(r.id) + '" title="Открыть карточку игрока"><td>' + (r.place <= 3 ? weaponMedalHtml(r.place) : r.place) + "</td>" +
         "<td>" + escapeHtml(byId[r.id].name) + "</td>" +
         '<td class="wp-barcell"><div class="wp-bar"><i style="width:' + Math.round((r.kills / rows[0].kills) * 100) + '%"></i></div></td>' +
         "<td><b>" + r.kills + "</b></td><td>" + weaponHsText(g, r.hsPc) + "</td></tr>";

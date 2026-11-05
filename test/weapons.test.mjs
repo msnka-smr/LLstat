@@ -135,3 +135,12 @@ test("on real data a player's demo kills plus lobby kills on no-demo maps stay c
   const accounted = st.players[msn.steamid64].kills + st.cover[msn.steamid64].noDemoKills;
   assert.ok(Math.abs(lobby - accounted) <= 10, `лобби ${lobby}, по демкам + без демки ${accounted}`);
 });
+
+test("the weapons tab code has no emoji (medals, crown and icons are drawn with CSS/SVG)", () => {
+  const html = readFileSync("docs/index.html", "utf8");
+  const from = html.indexOf("// ---- Вкладка «Оружие» ----");
+  const to = html.indexOf("function formatDateTime");
+  assert.ok(from !== -1 && to > from, "не нашёл границы кода вкладки «Оружие»");
+  assert.deepEqual(html.slice(from, to).match(/\p{Extended_Pictographic}/gu) ?? [], []);
+  assert.doesNotMatch(readFileSync("docs/weapons.js", "utf8"), /\p{Extended_Pictographic}/u);
+});
