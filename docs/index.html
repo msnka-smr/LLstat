@@ -3187,7 +3187,7 @@
       : "";
     var hero = '<div class="wp-hero"><b>' + name + "</b>: " + weaponKillsText(card.kills) + " по демкам, " +
       Math.round((card.hs / card.kills) * 100) + "% в голову. Любимое оружие — <b>" + fav.label + "</b>, " +
-      card.rows[0].share + "% всех убийств." + coverNote + "</div>";
+      card.rows[0].share + "% убийств игрока." + coverNote + "</div>";
     var tiles = card.rows.map(function (r) {
       var g = weaponGroup(r.gid);
       var members = stats.players[id].groups[r.gid].weapons;
@@ -3200,7 +3200,7 @@
         '<div class="wp-kills">' + r.kills + "</div>" +
         '<div class="wp-sub">в голову: ' + weaponHsText(g, r.hsPc) + "</div>" +
         '<div class="wp-bar"><i style="width:' + r.share + '%"></i></div>' +
-        '<div class="wp-place">' + weaponPlaceHtml(r.place, r.of) + '</div><div class="wp-sub">' + r.share + "% его убийств</div>" +
+        '<div class="wp-place">' + weaponPlaceHtml(r.place, r.of) + '</div><div class="wp-sub">' + r.share + "% от всех убийств игрока</div>" +
         membersHtml + "</div>";
     }).join("");
     return hero + '<div class="wp-tiles">' + tiles + "</div>";
