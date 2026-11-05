@@ -97,16 +97,6 @@ test("compare marks the best cell in each row; zero is never best; HS% needs 5+ 
   assert.deepEqual(byHs.rows[0].cells.map((c) => c.best), [false, false], "у B всего 4 убийства — не хватает для HS%");
 });
 
-test("weaponsHash round-trips and parseWeaponsHash rejects junk", () => {
-  const h = W.weaponsHash({ mode: "compare", period: "month", players: ["1", "2"], groups: ["ak47", "awp"] });
-  assert.equal(h, "#weapons=compare/month/1+2/ak47+awp");
-  assert.deepEqual(plain(W.parseWeaponsHash(h)), { mode: "compare", period: "month", players: ["1", "2"], groups: ["ak47", "awp"] });
-  assert.deepEqual(plain(W.parseWeaponsHash("#weapons=card/all/7/")), { mode: "card", period: "all", players: ["7"], groups: [] });
-  assert.equal(W.parseWeaponsHash("#weapons=bogus/all/1/"), null);
-  assert.equal(W.parseWeaponsHash("#duel=1,2,all"), null);
-  assert.equal(W.parseWeaponsHash(""), null);
-});
-
 test("every weapon group except «other» has an icon file that exists in docs/img/weapons", () => {
   const html = readFileSync("docs/index.html", "utf8");
   const block = /var WEAPON_IMAGES = \{([^}]*)\}/.exec(html)[1];
@@ -116,4 +106,32 @@ test("every weapon group except «other» has an icon file that exists in docs/i
     assert.ok(paths[g.id], `нет картинки для группы ${g.id}`);
     assert.ok(existsSync(`docs/${paths[g.id]}`), `нет файла ${paths[g.id]}`);
   }
+});
+
+// Убийства «за всё время» берутся из лобби, а оружие есть только у карт с демкой. cover считает,
+// сколько карт и убийств игрока осталось без демки, чтобы страница могла объяснить разницу.
+test("computeStats cover counts the player's maps and lobby kills on maps without a demo", () => {
+  const withK = (m, kills) => ({ ...m, players: Object.entries(kills).map(([steamid64, k]) => ({ steamid64, k })) });
+  const covered = [
+    { id: 2, firstPlayedAt: NOW, lastPlayedAt: NOW + 100, maps: [
+      withK({ mapId: "m3", map: "de_nuke", weapons: null }, { A: 12, B: 5 }),
+      withK({ mapId: "m2", map: "de_mirage", weapons: { A: { "AK-47": [9, 3] } } }, { A: 10 }),
+    ] },
+    { id: 1, firstPlayedAt: NOW - 40 * DAY, lastPlayedAt: NOW - 40 * DAY + 100, maps: [
+      withK({ mapId: "m1", map: "de_dust2", weapons: null }, { A: 7 }),
+    ] },
+  ];
+  assert.deepEqual(plain(W.computeStats(covered, { period: "all" }).cover.A), { maps: 3, noDemoMaps: 2, noDemoKills: 19 });
+  assert.deepEqual(plain(W.computeStats(covered, { period: "month" }).cover.A), { maps: 2, noDemoMaps: 1, noDemoKills: 12 }, "период учитывается");
+  assert.deepEqual(plain(W.computeStats(covered, { period: "all" }).cover.B), { maps: 1, noDemoMaps: 1, noDemoKills: 5 });
+  assert.equal(W.computeStats(covered, { period: "all" }).cover.Z, undefined);
+});
+
+test("on real data a player's demo kills plus lobby kills on no-demo maps stay close to the lobby total", () => {
+  const stats = JSON.parse(readFileSync("docs/data/stats.json", "utf8"));
+  const st = W.computeStats(stats.sessions, { period: "all" });
+  const msn = stats.allTime.players.find((p) => p.name === "msn");
+  const lobby = msn.k;
+  const accounted = st.players[msn.steamid64].kills + st.cover[msn.steamid64].noDemoKills;
+  assert.ok(Math.abs(lobby - accounted) <= 10, `лобби ${lobby}, по демкам + без демки ${accounted}`);
 });

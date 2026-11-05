@@ -1212,8 +1212,6 @@
   var DUEL_ME_KEY = "llstat:duelMe";
   // Ссылка вида #duel=<id>,<id>,<период> сразу открывает вкладку «Дуэли» с этой парой.
   var hashDuel = window.Duel.parseDuelHash(location.hash);
-  // Ссылка вида #weapons=<режим>/<период>/<игроки>/<оружие> открывает вкладку «Оружие» с этим видом.
-  var hashWeapons = window.Weapons.parseWeaponsHash(location.hash);
   var WEAPON_DEFAULT_GROUPS = ["ak47", "m4", "awp", "deagle"];
   var WEAPON_MAX_PLAYERS = 6;
   function loadSavedTab() {
@@ -1231,7 +1229,7 @@
 
   var state = {
     data: null,
-    tab: hashDuel ? "duels" : hashWeapons ? "weapons" : VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
+    tab: hashDuel ? "duels" : VALID_TABS.indexOf(loadSavedTab()) !== -1 ? loadSavedTab() : "allTime",
     duel: {
       a: hashDuel ? hashDuel.a : loadDuelMe(),
       b: hashDuel ? hashDuel.b : null,
@@ -1240,12 +1238,12 @@
     // «себя» берём из вкладки «Дуэли» (тот же ключ localStorage), но там не перезаписываем.
     // players === null в режиме «Сравнение» — выбор ещё не трогали, берём «себя» и лучших убийц.
     weapons: {
-      mode: hashWeapons ? hashWeapons.mode : "card",
-      period: hashWeapons ? hashWeapons.period : "all",
-      cardId: hashWeapons && hashWeapons.mode === "card" && hashWeapons.players[0] ? hashWeapons.players[0] : loadDuelMe(),
-      gid: hashWeapons && hashWeapons.groups[0] ? hashWeapons.groups[0] : "ak47",
-      players: hashWeapons && hashWeapons.mode === "compare" && hashWeapons.players.length ? hashWeapons.players : null,
-      groups: hashWeapons && hashWeapons.mode === "compare" && hashWeapons.groups.length ? hashWeapons.groups : WEAPON_DEFAULT_GROUPS.slice(),
+      mode: "card",
+      period: "all",
+      cardId: loadDuelMe(),
+      gid: "ak47",
+      players: null,
+      groups: WEAPON_DEFAULT_GROUPS.slice(),
       metric: "kills",
       open: null,
     },
@@ -3157,9 +3155,19 @@
     var name = escapeHtml(byId[id].name);
     if (!card) return '<div class="duel-hint">' + name + " в этом периоде ни разу не убивал на картах с разбором демки.</div>";
     var fav = weaponGroup(card.favorite);
-    var hero = '<div class="wp-hero"><b>' + name + "</b>: " + weaponKillsText(card.kills) + ", " +
+    // Общий счёт убийств в лобби включает карты без демки, а оружие мы знаем только по демкам,
+    // поэтому цифры здесь меньше, чем на «За всё время»: объясняем это прямо в карточке.
+    var cover = stats.cover[id];
+    var coverNote = cover && cover.noDemoMaps
+      ? '<div class="wp-sub" style="margin-top:6px">Учтены карты, где сохранилась демка: ' + (cover.maps - cover.noDemoMaps) + " из " + cover.maps +
+        " карт игрока. Ещё " + weaponKillsText(cover.noDemoKills) + " " + name + " сделал на " +
+        cover.noDemoMaps + " " + pluralRu(cover.noDemoMaps, "карте", "картах", "картах") + " без демки (CYBERSHOKE её не сохранил): " +
+        "оружие там неизвестно, но в общий счёт убийств они входят. Небольшое расхождение на остальных картах (обычно пара убийств) — " +
+        "из-за разбора демки.</div>"
+      : "";
+    var hero = '<div class="wp-hero"><b>' + name + "</b>: " + weaponKillsText(card.kills) + " по демкам, " +
       Math.round((card.hs / card.kills) * 100) + "% в голову. Любимое оружие — <b>" + fav.label + "</b>, " +
-      card.rows[0].share + "% всех убийств.</div>";
+      card.rows[0].share + "% всех убийств." + coverNote + "</div>";
     var tiles = card.rows.map(function (r) {
       var g = weaponGroup(r.gid);
       var members = stats.players[id].groups[r.gid].weapons;
@@ -3277,7 +3285,7 @@
 
     var html = '<div class="duel-pick"><div class="duel-periods" style="margin:0">' + WEAPON_MODE_LABELS.map(function (m) {
         return '<button type="button" class="duel-chip' + (m.id === w.mode ? " active" : "") + '" data-mode="' + m.id + '">' + m.label + "</button>";
-      }).join("") + '</div><button type="button" class="duel-btn" id="weaponShare">🔗 Поделиться</button></div>' +
+      }).join("") + "</div></div>" +
       '<div class="duel-periods">' + DUEL_PERIOD_LABELS.map(function (p) {
         return '<button type="button" class="duel-chip' + (p.id === w.period ? " active" : "") + '" data-period="' + p.id + '">' + p.label + "</button>";
       }).join("") + "</div>";
@@ -3332,24 +3340,6 @@
         w.groups = Array.prototype.map.call(el.querySelectorAll("input[data-wpg]:checked"), function (b) { return b.dataset.wpg; });
         renderWeaponSection();
       });
-    });
-
-    var share = el.querySelector("#weaponShare");
-    share.addEventListener("click", function () {
-      var view = {
-        mode: w.mode, period: w.period,
-        players: w.mode === "card" ? (w.cardId ? [w.cardId] : []) : w.mode === "compare"
-          ? Array.prototype.map.call(el.querySelectorAll("input[data-wpp]:checked"), function (b) { return b.dataset.wpp; }) : [],
-        groups: w.mode === "leaders" ? [w.gid] : w.mode === "compare" ? w.groups : [],
-      };
-      var url = location.origin + location.pathname + window.Weapons.weaponsHash(view);
-      try { history.replaceState(null, "", url); } catch (err) {}
-      var done = function () {
-        share.textContent = "Ссылка скопирована ✓";
-        setTimeout(function () { share.textContent = "🔗 Поделиться"; }, 1800);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { window.prompt("Скопируйте ссылку:", url); });
-      else window.prompt("Скопируйте ссылку:", url);
     });
   }
 

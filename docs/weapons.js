@@ -3,7 +3,6 @@
 // рейтинги ничего не пишет. Чистые функции без DOM — проверяются test/weapons.test.mjs.
 // Выбор периода берёт у window.Duel (duel.js грузится раньше).
 (function (root) {
-  var MODES = ["card", "leaders", "compare"];
   var MIN_KILLS_FOR_HS = 5; // без порога 1 убийство из 1 в голову давало бы «лучшие 100%»
 
   // Порядок групп — порядок в списках на странице. noHs: у ножа и гранат «в голову» не бывает.
@@ -39,12 +38,19 @@
 
   // Суммы по периоду: players[id] = { kills, hs, groups: { gid: { kills, hs, weapons } } }.
   // mapsTotal — все карты периода, mapsCounted — те из них, где есть разбор демки.
+  // cover[id] — карты игрока (maps) и сколько из них без демки (noDemoMaps) и убийств по лобби
+  // на них (noDemoKills): «за всё время» считает убийства по лобби, а оружие знаем только по демкам.
   function computeStats(sessions, opts) {
     var period = opts && opts.period;
-    var res = { period: period || "all", mapsTotal: 0, mapsCounted: 0, players: {} };
+    var res = { period: period || "all", mapsTotal: 0, mapsCounted: 0, players: {}, cover: {} };
     root.Duel.pickSessions(sessions, period || "all").forEach(function (s) {
       s.maps.forEach(function (m) {
         res.mapsTotal++;
+        (m.players || []).forEach(function (p) {
+          var c = res.cover[p.steamid64] || (res.cover[p.steamid64] = { maps: 0, noDemoMaps: 0, noDemoKills: 0 });
+          c.maps++;
+          if (!m.weapons) { c.noDemoMaps++; c.noDemoKills += p.k || 0; }
+        });
         if (!m.weapons) return;
         res.mapsCounted++;
         Object.keys(m.weapons).forEach(function (id) {
@@ -121,26 +127,8 @@
     };
   }
 
-  // Ссылка на вид: #weapons=<режим>/<период>/<игроки через +>/<группы через +>
-  function weaponsHash(v) {
-    return "#weapons=" + v.mode + "/" + v.period + "/" + v.players.join("+") + "/" + v.groups.join("+");
-  }
-
-  function parseWeaponsHash(hash) {
-    var m = /^#weapons=([a-z]+)\/([a-z0-9]+)\/([^/]*)\/([^/]*)$/.exec(hash || "");
-    if (!m || MODES.indexOf(m[1]) === -1) return null;
-    var split = function (s) { return s ? s.split("+").filter(Boolean) : []; };
-    return {
-      mode: m[1],
-      period: root.Duel.PERIODS.indexOf(m[2]) !== -1 ? m[2] : "all",
-      players: split(m[3]),
-      groups: split(m[4]).filter(function (g) { return !!GROUP_BY_ID[g]; }),
-    };
-  }
-
   root.Weapons = {
-    GROUPS: GROUPS, MODES: MODES, MIN_KILLS_FOR_HS: MIN_KILLS_FOR_HS,
-    groupOf: groupOf, computeStats: computeStats, leaders: leaders, playerCard: playerCard,
-    compare: compare, weaponsHash: weaponsHash, parseWeaponsHash: parseWeaponsHash,
+    GROUPS: GROUPS, MIN_KILLS_FOR_HS: MIN_KILLS_FOR_HS,
+    groupOf: groupOf, computeStats: computeStats, leaders: leaders, playerCard: playerCard, compare: compare,
   };
 })(typeof window !== "undefined" ? window : globalThis);
