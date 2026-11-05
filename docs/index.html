@@ -44,6 +44,8 @@
     --duel-win: rgba(224, 170, 40, 0.28);  /* ячейка матрицы: игрок из строки выигрывает дуэль */
     --duel-loss: rgba(110, 168, 255, 0.24); /* проигрывает */
     --weapon-plate: #dfe3ea; /* светлая подложка под иконку оружия: иконки тёмные и тонут на тёмном фоне */
+    --team-a: #3ecf9d; --team-a-bg: rgba(62, 207, 157, 0.08); --team-a-hover: rgba(62, 207, 157, 0.15); /* команды вечера в таблице «Сессии» */
+    --team-b: #b48cff; --team-b-bg: rgba(180, 140, 255, 0.09); --team-b-hover: rgba(180, 140, 255, 0.16);
   }
 
   /* Светлая тема: тот же набор переменных. Цвета статусов — тёмные оттенки,
@@ -75,6 +77,8 @@
     --duel-win: rgba(224, 170, 40, 0.35);
     --duel-loss: rgba(37, 99, 235, 0.18);
     --weapon-plate: #e8ebf1;
+    --team-a: #0f8a68; --team-a-bg: rgba(15, 138, 104, 0.08); --team-a-hover: rgba(15, 138, 104, 0.15);
+    --team-b: #7c4dcc; --team-b-bg: rgba(124, 77, 204, 0.08); --team-b-hover: rgba(124, 77, 204, 0.15);
   }
 
   * { box-sizing: border-box; }
@@ -267,6 +271,17 @@
 
   tbody tr.player-row { cursor: pointer; }
   tbody tr.player-row:hover { background: var(--bg-row-hover); }
+  /* команды вечера на «Сессиях»: полоска слева и лёгкий оттенок строки */
+  tbody tr.player-row.team-0 { background: var(--team-a-bg); }
+  tbody tr.player-row.team-0:hover { background: var(--team-a-hover); }
+  tbody tr.player-row.team-0 td:first-child { box-shadow: inset 3px 0 0 var(--team-a); }
+  tbody tr.player-row.team-1 { background: var(--team-b-bg); }
+  tbody tr.player-row.team-1:hover { background: var(--team-b-hover); }
+  tbody tr.player-row.team-1 td:first-child { box-shadow: inset 3px 0 0 var(--team-b); }
+  .team-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0 0 8px; font-size: 12px; color: var(--text-dim); }
+  .team-legend .team-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+  .team-legend .team-dot.team-0 { background: var(--team-a); }
+  .team-legend .team-dot.team-1 { background: var(--team-b); }
 
   .map-chips {
     display: flex;
@@ -1146,6 +1161,7 @@
 
 <script src="duel.js"></script>
 <script src="weapons.js"></script>
+<script src="session-teams.js"></script>
 <script>
 (function () {
   "use strict";
@@ -1629,6 +1645,8 @@
     });
     headHtml += "</tr>";
 
+    // команды вечера: только на «Сессиях» и только если состав команд не менялся
+    var teams = state.tab === "lastSession" && currentSession() ? window.SessionTeams.split(currentSession()) : null;
     var bodyHtml = "";
     var thresholdShown = false;
     var showQualification = state.tab === "allTime";
@@ -1639,11 +1657,16 @@
           '">менее ' + Math.round(state.data.qualification.qualifyShare * 100) +
           '% карт лидера (' + state.data.qualification.threshold + ')</td></tr>';
       }
-      bodyHtml += isMapsTab ? mapRowHtml(row) : playerRowHtml(row, showQualification);
+      bodyHtml += isMapsTab ? mapRowHtml(row) : playerRowHtml(row, showQualification, teams ? teams.teamOf[row.steamid64] : undefined);
       bodyHtml += detailRowHtml(row);
     });
 
-    document.getElementById("tableWrap").innerHTML =
+    var legendHtml = teams ? '<div class="team-legend">' + [0, 1].map(function (t) {
+      return '<span><span class="team-dot team-' + t + '"></span>Команда ' + (t + 1) + " · " + teams.sizes[t] + " " +
+        pluralRu(teams.sizes[t], "игрок", "игрока", "игроков") + "</span>";
+    }).join("") + "</div>" : "";
+
+    document.getElementById("tableWrap").innerHTML = legendHtml +
       "<table><thead>" + headHtml + "</thead><tbody>" + bodyHtml + "</tbody></table>";
 
     document.querySelectorAll("thead th[data-sort]").forEach(function (th) {
@@ -1690,9 +1713,10 @@
     return '<td><div class="player-cell">' + inner + "</div></td>";
   }
 
-  function playerRowHtml(row, showQualification) {
+  // teamIdx — номер команды вечера (0/1) или undefined, если подсветки нет.
+  function playerRowHtml(row, showQualification, teamIdx) {
     var isUnqualified = showQualification && !row.isQualified;
-    var cls = "player-row" + (isUnqualified ? " unqualified" : "");
+    var cls = "player-row" + (isUnqualified ? " unqualified" : "") + (teamIdx !== undefined ? " team-" + teamIdx : "");
     var mapsCell = !isUnqualified
       ? row.mapsPlayed
       : row.mapsPlayed + ' <small>/ ' + state.data.qualification.threshold + "</small>";
@@ -1713,7 +1737,8 @@
     }
     cells += "<td>" + ratingHtml + "</td>";
 
-    return '<tr class="' + cls + '" data-steamid="' + row.steamid64 + '">' + cells + "</tr>";
+    return '<tr class="' + cls + '" data-steamid="' + row.steamid64 + '"' +
+      (teamIdx !== undefined ? ' title="Команда ' + (teamIdx + 1) + '"' : "") + ">" + cells + "</tr>";
   }
 
   // Вкладка "Карты": на десктопе все метрики уже отдельными колонками, но на
