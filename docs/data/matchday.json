@@ -1,5 +1,17 @@
 {
   "sessionDate": "2026-11-11",
+  "maps": {
+    "order": [
+      "de_dust2",
+      "de_ancient",
+      "de_cache",
+      "de_mirage",
+      "de_nuke",
+      "de_inferno",
+      "de_anubis"
+    ],
+    "savedAt": "2026-11-08T21:50:45.485Z"
+  },
   "teams": {
     "teamA": [
       {
