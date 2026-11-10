@@ -2031,7 +2031,7 @@
       histState.selected.splice(idx, 1);
     } else {
       if (histState.selected.length >= HIST_MAX) {
-        hint.textContent = "Максимум " + HIST_MAX + " игроков — сначала снимите кого-нибудь.";
+        hint.textContent = "На графике можно сравнить не больше " + HIST_MAX + " игроков. Чтобы добавить другого, уберите кого-то из выбранных.";
         return;
       }
       var used = histState.selected.map(function (s) { return s.color; });
