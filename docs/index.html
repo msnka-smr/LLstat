@@ -1535,12 +1535,16 @@
     function avatar(p, cls) {
       return p.avatarUrl ? '<img class="' + cls + '" src="' + escapeHtml(p.avatarUrl) + '" alt="" loading="lazy">' : '<div class="' + cls + '"></div>';
     }
-    var cards = r.top.map(function (x, i) {
+    // Пьедестал как на «За всё время»: на компьютере порядок 2-1-3 (победитель по центру), на телефоне CSS строит 1-2-3.
+    var order = r.top.length >= 3 ? [1, 0, 2] : r.top.map(function (_, i) { return i; });
+    var cards = order.map(function (i) {
+      var x = r.top[i];
       var p = who(x.steamid64);
-      return '<div class="recap-card place-' + (i + 1) + '"><span class="recap-rk">#' + (i + 1) + "</span>" + avatar(p, "recap-av") +
-        '<div class="recap-text"><div class="recap-nm">' + escapeHtml(p.name) + '</div><div class="recap-k">K/D ' + fmt2(x.kd) + " · " +
-        x.wins + " из " + x.maps + " побед</div></div>" +
-        '<div class="recap-v">' + fmtRating(x.rating) + "</div></div>";
+      return '<div class="podium-card place-' + (i + 1) + '" data-place="' + (i + 1) + '"><span class="podium-place">#' + (i + 1) + "</span>" +
+        avatar(p, "podium-av") +
+        '<div class="podium-name">' + escapeHtml(p.name) + "</div>" +
+        '<div class="podium-rating">' + fmtRating(x.rating) + "</div>" +
+        '<div class="podium-meta"><span>K/D ' + fmt2(x.kd) + "</span><span>" + x.wins + " из " + x.maps + " побед</span></div></div>";
     }).join("");
     function trend(label, x) {
       if (!x) return "";
@@ -1549,7 +1553,7 @@
         '<span class="rating-delta ' + ratingDeltaClass(x.delta) + ' recap-delta">' + fmtRatingDelta(x.delta) + "</span></div>";
     }
     var trends = trend("Рост за вечер", r.rise) + trend("Просадка", r.drop);
-    el.innerHTML = '<div class="recap-cards">' + cards + "</div>" + (trends ? '<div class="recap-trends">' + trends + "</div>" : "");
+    el.innerHTML = '<div class="podium">' + cards + "</div>" + (trends ? '<div class="recap-trends">' + trends + "</div>" : "");
   }
 
   function renderSessionHeader() {
