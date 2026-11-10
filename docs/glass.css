@@ -369,3 +369,7 @@ input, textarea { font-family: inherit; }
 .btn-i { width: 17px; height: 17px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 /* число сыгранных карт на выбранной карте баннера: подложка полупрозрачная, поэтому светлый текст */
 .map-hero .map-chip.active .map-chip-count { color: rgba(255, 255, 255, 0.72); }
+
+/* значок хедшота (голова в балаклаве с прицелом) — чуть крупнее прежнего: больше мелких деталей */
+.wp-hs-i, .wp-hs-th .wp-hs-i { width: 20px; height: 20px; }
+@media (max-width: 520px) { .wp-hs-i { width: 18px; height: 18px; } }
