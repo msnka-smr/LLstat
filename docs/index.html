@@ -1488,7 +1488,7 @@
     var sortCol = getSortColumn();
     var options = currentColumns().map(function (c) {
       var selected = sortCol === c.id ? " selected" : "";
-      return '<option value="' + c.id + '"' + selected + ">" + escapeHtml(c.label) + "</option>";
+      return '<option value="' + c.id + '"' + selected + ">" + escapeHtml(columnLabel(c)) + "</option>";
     }).join("");
     var dirLabel = getSortDirection() === "desc" ? "↓" : "↑";
     el.innerHTML =
@@ -1704,10 +1704,15 @@
     });
   }
 
+  // На «Сессиях» рейтинг считается по картам одного вечера, поэтому и подпись другая.
+  function columnLabel(c) {
+    return c.id === "rating" && state.tab === "lastSession" ? "Рейтинг вечера" : c.label;
+  }
+
   function headerCell(c) {
     var sorted = getSortColumn() === c.id ? "sorted" : "";
     var cls = (c.collapseMobile ? "req-collapse " : "") + sorted;
-    return '<th class="' + cls + '" data-sort="' + c.id + '">' + escapeHtml(c.label) + "</th>";
+    return '<th class="' + cls + '" data-sort="' + c.id + '">' + escapeHtml(columnLabel(c)) + "</th>";
   }
 
   // Ссылка на профиль Steam — только на вкладке "За всё время"; на остальных
