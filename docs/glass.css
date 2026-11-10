@@ -307,3 +307,30 @@ tr.unqualified .spark-cell svg { opacity: 0.55; }
 :root { --option-bg: #141a33; }
 :root[data-theme="light"] { --option-bg: #ffffff; }
 select option, select optgroup { background-color: var(--option-bg); color: var(--text); }
+
+/* ---------- «Динамика рейтинга» ---------- */
+.hist-section { border-radius: var(--r-lg); padding: 24px 26px 20px; margin-top: 18px; }
+.hist-title { font-size: 16px; font-weight: 650; letter-spacing: -0.01em; margin-bottom: 14px; }
+.hist-chips { gap: 7px; margin-bottom: 12px; }
+.hist-chip { font-family: inherit; font-size: 12.5px; font-weight: 500; padding: 6px 12px 6px 9px; gap: 7px; transition: 0.18s; }
+.hist-chip:hover { border-color: var(--stroke-hi); }
+.hist-chip.on { background: var(--panel-hi); }
+.hist-chip-dot { width: 9px; height: 9px; opacity: 0.45; transition: 0.18s; }
+.hist-chip.on .hist-chip-dot { opacity: 1; box-shadow: 0 0 10px var(--c, currentColor); }
+.hist-hint { font-size: 12.5px; color: var(--text-dim); }
+.hist-chart svg circle { stroke: var(--bg) !important; }
+.hist-chart svg line[style*="display"] { stroke: var(--stroke-hi) !important; }
+.hist-tip {
+  background: var(--option-bg); border: 1px solid var(--stroke-hi); border-radius: 12px; padding: 10px 12px;
+  box-shadow: var(--shadow); min-width: 150px;
+}
+.hist-tip-head { font-weight: 600; margin-bottom: 6px; }
+.hist-tip-row { padding: 1.5px 0; }
+.hist-tip-key { width: 8px; height: 8px; border-radius: 50%; }
+.hist-tip-val { font-weight: 700; }
+.hist-table-wrap summary { width: max-content; transition: color 0.2s; }
+.hist-table-wrap summary:hover { color: var(--text); }
+.hist-table th { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--text-faint); }
+@media (max-width: 640px) {
+  .hist-section { padding: 18px 14px 14px; }
+}

@@ -1902,9 +1902,11 @@
   // ниже 3:1 по контрасту — это допустимо, потому что есть чипы-легенда,
   // подсказка и таблица значений). Цвет принадлежит игроку, пока он выбран;
   // при смене темы слот тот же, меняется только оттенок.
+  // Палитра обновлена под стиль Glass (2026-11): цвета ярче на тёмном фоне и насыщеннее на светлом.
+  // Различимость не держится только на цвете: есть чипы-легенда, подсказка и таблица значений.
   var HIST_PALETTES = {
-    dark: ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300"],
-    light: ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"],
+    dark: ["#7aa2ff", "#f4c95d", "#4ade80", "#ff6b7a", "#b28cff", "#2dd4bf"],
+    light: ["#3b64e8", "#c98a0b", "#16a34a", "#dc2f47", "#7b4fe0", "#0d9488"],
   };
   function histPalette() { return HIST_PALETTES[currentTheme()]; }
   function histRemapTheme(prev, next) {
@@ -2008,7 +2010,7 @@
       btn.type = "button";
       btn.className = "hist-chip" + (sel ? " on" : "");
       btn.setAttribute("aria-pressed", sel ? "true" : "false");
-      if (sel) btn.style.borderColor = sel.color;
+      if (sel) { btn.style.borderColor = sel.color; btn.style.setProperty("--c", sel.color); }
       var dot = document.createElement("span");
       dot.className = "hist-chip-dot";
       if (sel) dot.style.background = sel.color;
@@ -2111,7 +2113,7 @@
         d += (d ? " L" : "M") + xAt(i).toFixed(1) + " " + yAt(v).toFixed(1);
       });
       if (d.indexOf("L") !== -1) {
-        svg.appendChild(svgEl("path", { d: d }, "fill: none; stroke: " + s.color + "; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"));
+        svg.appendChild(svgEl("path", { d: d }, "fill: none; stroke: " + s.color + "; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 5px " + s.color + "66);"));
       }
       arr.forEach(function (v, i) {
         if (v === null || !(played[h.sessions[i].id] && played[h.sessions[i].id][s.id])) return;
