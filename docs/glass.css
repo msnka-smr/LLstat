@@ -363,3 +363,7 @@ input, textarea { font-family: inherit; }
 .draft-cmd { background: var(--bg-row); border-radius: 10px; }
 /* в тёмной теме акценты светлые — для кнопки с белым текстом берём более глубокие оттенки */
 :root:not([data-theme="light"]) .wheel-spin-btn { background: linear-gradient(135deg, #4f74e6, #8456e0); }
+
+/* ---------- Значки в кнопках (SVG вместо эмодзи) ---------- */
+.btn-ico { display: inline-flex; align-items: center; gap: 8px; }
+.btn-i { width: 17px; height: 17px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
