@@ -334,3 +334,32 @@ select option, select optgroup { background-color: var(--option-bg); color: var(
 @media (max-width: 640px) {
   .hist-section { padding: 18px 14px 14px; }
 }
+
+/* ---------- Кнопки и «Выбор составов» ---------- */
+.wheel-spin-btn {
+  font-family: inherit; color: #fff; border-radius: 14px; padding: 11px 22px; letter-spacing: -0.005em;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  box-shadow: 0 6px 20px var(--accent-bg), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.15s, filter 0.2s, box-shadow 0.2s;
+}
+.wheel-spin-btn:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
+.wheel-spin-btn:active:not(:disabled) { transform: none; }
+.wheel-spin-btn:disabled { opacity: 0.4; box-shadow: none; }
+.draft-clear-btn, .draft-guest-add, .duel-btn, .mobile-sort button {
+  font-family: inherit; border-radius: 12px; background: var(--bg-panel); border-color: var(--border); transition: 0.18s;
+}
+.draft-clear-btn:hover, .draft-guest-add:hover, .duel-btn:hover { border-color: var(--stroke-hi); color: var(--text); }
+.draft-section, .duel-box, .record-card { border-radius: var(--r-lg); }
+.draft-section {
+  padding: 20px; -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.draft-list { border-radius: var(--r-md); background: var(--bg-row); }
+.draft-row { border-radius: 10px; transition: background 0.15s; }
+.draft-row:hover { background: var(--bg-row-hover); }
+.draft-team { border-radius: var(--r-md); background: var(--bg-row); padding: 14px 16px; }
+input[type="checkbox"] { accent-color: var(--accent); }
+input, textarea { font-family: inherit; }
+.draft-cmd { background: var(--bg-row); border-radius: 10px; }
+/* в тёмной теме акценты светлые — для кнопки с белым текстом берём более глубокие оттенки */
+:root:not([data-theme="light"]) .wheel-spin-btn { background: linear-gradient(135deg, #4f74e6, #8456e0); }
