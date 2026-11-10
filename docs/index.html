@@ -1161,6 +1161,7 @@
   <div id="sessionHeader"></div>
   <div id="mapChips"></div>
   <div class="mobile-sort" id="mobileSort"></div>
+  <div id="podiumSection"></div>
   <div id="tableWrap"></div>
   <div id="historySection"></div>
   <div id="recordsSection"></div>
@@ -1380,6 +1381,7 @@
     renderSessionHeader();
     renderMapChips();
     renderMobileSort();
+    renderPodium();
     renderTable();
     renderHistorySection();
     renderRecordsSection();
@@ -1651,7 +1653,8 @@
     var isMapsTab = state.tab === "maps";
 
     var headHtml = "<tr>";
-    columns.forEach(function (c) {
+    columns.forEach(function (c, i) {
+      if (state.tab === "allTime" && i === columns.length - 1) headHtml += '<th class="req-collapse spark-th">Динамика</th>';
       headHtml += headerCell(c);
     });
     headHtml += "</tr>";
@@ -1664,7 +1667,7 @@
     rows.forEach(function (row) {
       if (showQualification && !row.isQualified && !thresholdShown) {
         thresholdShown = true;
-        bodyHtml += '<tr class="qual-divider"><td colspan="' + columns.length +
+        bodyHtml += '<tr class="qual-divider"><td colspan="' + (columns.length + (state.tab === "allTime" ? 1 : 0)) +
           '">менее ' + Math.round(state.data.qualification.qualifyShare * 100) +
           '% карт лидера (' + state.data.qualification.threshold + ')</td></tr>';
       }
@@ -1724,6 +1727,66 @@
     return '<td><div class="player-cell">' + inner + "</div></td>";
   }
 
+  // Мини-график рейтинга игрока по сессиям (из ratingHistory). Пустые значения (игрок ещё не играл) пропускаются.
+  var sparkSeq = 0;
+  function sparkSvg(id, o) {
+    var h = state.data && state.data.ratingHistory && state.data.ratingHistory.players && state.data.ratingHistory.players[id];
+    if (!h) return "";
+    var pts = [];
+    h.forEach(function (v, i) { if (v != null) pts.push([i, v]); });
+    if (pts.length < 2) return "";
+    var w = o.w, ht = o.h, pad = o.pad == null ? 3 : o.pad;
+    var vals = pts.map(function (p) { return p[1]; });
+    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+    if (max === min) { max += 1; min -= 1; }
+    var n = h.length;
+    var xy = pts.map(function (p) {
+      return [pad + (w - 2 * pad) * p[0] / (n - 1), pad + (ht - 2 * pad) * (1 - (p[1] - min) / (max - min))];
+    });
+    var d = xy.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+    var area = "";
+    if (o.fill) {
+      var gid = "spk" + (++sparkSeq);
+      area = '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity=".35"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>' +
+        '<path d="' + d + " L" + xy[xy.length - 1][0].toFixed(1) + " " + ht + " L" + xy[0][0].toFixed(1) + " " + ht + ' Z" fill="url(#' + gid + ')"/>';
+    }
+    var last = xy[xy.length - 1];
+    return '<svg viewBox="0 0 ' + w + " " + ht + '" width="' + w + '" height="' + ht + '" preserveAspectRatio="none" aria-hidden="true" focusable="false">' + area +
+      '<path d="' + d + '" fill="none" stroke="currentColor" stroke-width="' + (o.stroke || 1.6) + '" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>' +
+      '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="' + (o.dot || 2.4) + '" fill="currentColor"/></svg>';
+  }
+
+  // Пьедестал топ-3 по рейтингу «за всё время» (только среди прошедших квалификацию).
+  // Порядок в разметке 2-1-3 (победитель по центру), на телефоне CSS строит 1-2-3.
+  function renderPodium() {
+    var el = document.getElementById("podiumSection");
+    var players = state.data && state.data.allTime && state.data.allTime.players;
+    if (state.tab !== "allTime" || !players) { el.innerHTML = ""; return; }
+    var top = players.filter(function (p) { return p.isQualified && p.rating != null; })
+      .sort(function (a, b) { return b.rating - a.rating; }).slice(0, 3);
+    if (top.length < 3) { el.innerHTML = ""; return; }
+    el.innerHTML = '<div class="podium">' + [1, 0, 2].map(function (i) {
+      var p = top[i];
+      var delta = p.ratingDelta != null
+        ? '<span class="rating-delta ' + ratingDeltaClass(p.ratingDelta) + '">' + fmtRatingDelta(p.ratingDelta) + "</span>" : "";
+      return '<div class="podium-card place-' + (i + 1) + '" data-steamid="' + p.steamid64 + '" data-place="' + (i + 1) + '">' +
+        '<span class="podium-place">#' + (i + 1) + "</span>" +
+        (p.avatarUrl ? '<img class="podium-av" src="' + escapeHtml(p.avatarUrl) + '" alt="" loading="lazy">' : '<div class="podium-av"></div>') +
+        '<div class="podium-name">' + escapeHtml(p.name) + "</div>" +
+        '<div class="podium-rating">' + fmtRating(p.rating) + "</div>" +
+        '<div class="podium-meta">' + delta + "<span>K/D " + fmt2(p.kd) + "</span></div>" +
+        '<div class="podium-spark">' + sparkSvg(p.steamid64, { w: 200, h: 34, fill: true, stroke: 1.8, dot: 3 }) + "</div></div>";
+    }).join("") + "</div>";
+    el.querySelectorAll(".podium-card").forEach(function (card) {
+      card.addEventListener("click", function () {
+        state.expanded = card.dataset.steamid;
+        render();
+        var tr = document.querySelector('tr.player-row[data-steamid="' + card.dataset.steamid + '"]');
+        if (tr) tr.scrollIntoView({ block: "center", behavior: "smooth" });
+      });
+    });
+  }
+
   // teamIdx — номер команды вечера (0/1) или undefined, если подсветки нет.
   function playerRowHtml(row, showQualification, teamIdx) {
     var isUnqualified = showQualification && !row.isQualified;
@@ -1740,6 +1803,7 @@
     cells += '<td class="req-collapse">' + row.k + "</td>";
     cells += '<td class="req-collapse">' + row.d + "</td>";
     cells += '<td class="req-collapse">' + fmt2(row.kd) + "</td>";
+    if (state.tab === "allTime") cells += '<td class="req-collapse spark-cell">' + sparkSvg(row.steamid64, { w: 96, h: 26 }) + "</td>";
     var ratingHtml = '<span class="rating-cell ' + ratingClass(row) + '">' + fmtRating(row.rating) + "</span>";
     if (state.tab === "allTime" && row.ratingDelta != null) {
       ratingHtml = '<span class="rating-with-delta">' +
@@ -1771,7 +1835,7 @@
 
   function detailRowHtml(row) {
     var expanded = state.expanded === row.steamid64;
-    var colspan = currentColumns().length;
+    var colspan = currentColumns().length + (state.tab === "allTime" ? 1 : 0);
     if (!expanded) {
       return '<tr class="detail-row" hidden><td colspan="' + colspan + '"></td></tr>';
     }
