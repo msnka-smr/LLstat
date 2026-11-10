@@ -10,6 +10,7 @@
     "add": "node scripts/update.mjs --add",
     "build": "node scripts/build.mjs",
     "update": "node scripts/update.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "preview": "node scripts/preview.mjs"
   }
 }
