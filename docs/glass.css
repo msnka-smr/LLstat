@@ -367,3 +367,5 @@ input, textarea { font-family: inherit; }
 /* ---------- Значки в кнопках (SVG вместо эмодзи) ---------- */
 .btn-ico { display: inline-flex; align-items: center; gap: 8px; }
 .btn-i { width: 17px; height: 17px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* число сыгранных карт на выбранной карте баннера: подложка полупрозрачная, поэтому светлый текст */
+.map-hero .map-chip.active .map-chip-count { color: rgba(255, 255, 255, 0.72); }
