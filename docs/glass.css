@@ -1,0 +1,178 @@
+/* Редизайн «Glass» (ветка redesign-glass). Подключается ПОСЛЕ основных стилей в index.html;
+   откат = убрать <link rel="stylesheet" href="glass.css"> и блок .brand-mark. Всё держится на CSS-переменных. */
+
+/* ---------- Шрифт Inter (свой, без Google) ---------- */
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url(fonts/inter-cyrillic.woff2) format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url(fonts/inter-cyrillic-ext.woff2) format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url(fonts/inter-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url(fonts/inter-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+/* ---------- Палитра ---------- */
+:root {
+  --bg: #0b1020;
+  --bg-panel: rgba(255, 255, 255, 0.055);
+  --bg-row: rgba(255, 255, 255, 0.03);
+  --bg-row-alt: rgba(255, 255, 255, 0.05);
+  --bg-row-hover: rgba(255, 255, 255, 0.09);
+  --border: rgba(255, 255, 255, 0.10);
+  --text: #eef1fb;
+  --text-dim: #98a2c3;
+  --text-faint: #6f799c;
+  --accent: #7aa2ff;
+  --accent-bg: rgba(122, 162, 255, 0.16);
+  --on-accent: #0b1020;
+  --accent2: #b28cff;
+  --panel-hi: rgba(255, 255, 255, 0.10);
+  --stroke-hi: rgba(255, 255, 255, 0.22);
+  --gold: #f4c95d;
+  --glow1: rgba(86, 130, 255, 0.35); --glow2: rgba(150, 90, 255, 0.28); --glow3: rgba(40, 200, 220, 0.18);
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  --glass-blur: blur(18px) saturate(140%);
+  --r-lg: 20px; --r-md: 14px; --r-sm: 10px;
+}
+:root[data-theme="light"] {
+  --bg: #eef1fa;
+  --bg-panel: rgba(255, 255, 255, 0.66);
+  --bg-row: rgba(255, 255, 255, 0.5);
+  --bg-row-alt: rgba(255, 255, 255, 0.7);
+  --bg-row-hover: rgba(59, 100, 232, 0.08);
+  --border: rgba(20, 30, 70, 0.10);
+  --text: #141a33;
+  --text-dim: #566086;
+  --text-faint: #6b7499;
+  --accent: #3b64e8;
+  --accent-bg: rgba(59, 100, 232, 0.12);
+  --on-accent: #ffffff;
+  --accent2: #7b4fe0;
+  --panel-hi: rgba(255, 255, 255, 0.92);
+  --stroke-hi: rgba(20, 30, 70, 0.2);
+  --gold: #c98a0b;
+  --glow1: rgba(86, 130, 255, 0.30); --glow2: rgba(178, 120, 255, 0.22); --glow3: rgba(60, 200, 220, 0.18);
+  --shadow: 0 10px 30px rgba(40, 60, 120, 0.12);
+}
+
+/* ---------- Основа и фон-сияние ---------- */
+html { background: var(--bg); }
+body {
+  background: transparent;
+  font-family: "Inter", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-feature-settings: "tnum" 1, "cv11" 1;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  padding-top: 24px;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(560px 560px at 0% -6%, var(--glow1), transparent 70%),
+    radial-gradient(520px 520px at 100% 6%, var(--glow2), transparent 70%),
+    radial-gradient(460px 460px at 32% 108%, var(--glow3), transparent 70%);
+}
+
+/* ---------- Шапка ---------- */
+.title-row { gap: 14px; margin-bottom: 6px; }
+.title-row > img { display: none; }
+.brand-mark {
+  width: 44px; height: 44px; border-radius: 14px; flex: none; display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  box-shadow: 0 6px 20px var(--accent-bg);
+}
+.brand-mark svg { width: 22px; height: 22px; }
+h1 { font-size: 21px; font-weight: 700; letter-spacing: -0.02em; }
+.subtitle { font-size: 12.5px; margin: 0 0 22px 58px; }
+.theme-toggle { width: 40px; height: 40px; border-radius: 12px; background: var(--bg-panel); border-color: var(--border); transition: 0.2s; }
+.theme-toggle:hover { color: var(--text); border-color: var(--stroke-hi); }
+
+/* ---------- Вкладки ---------- */
+.toolbar { margin-bottom: 22px; gap: 12px 16px; }
+.tabs {
+  gap: 4px; padding: 5px; border-radius: 18px; background: var(--bg-panel); border: 1px solid var(--border);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow-x: auto; scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab { padding: 9px 15px; border-radius: 14px; font-size: 13.5px; font-weight: 500; transition: color 0.2s, background 0.2s; }
+.tab:hover { color: var(--text); }
+.tab.active {
+  background: var(--panel-hi); color: var(--text); font-weight: 600;
+  box-shadow: inset 0 0 0 1px var(--stroke-hi), 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+@media (max-width: 520px) {
+  .tabs { overflow: visible; }
+  .tab { padding: 9px 4px; }
+}
+.rating-info-link { font-size: 13px; }
+
+/* ---------- Стеклянные панели ---------- */
+.session-header, .duel-box, .record-card, .banner, .hist-section, .detail-grid {
+  border-radius: var(--r-md);
+}
+.session-header, .duel-box, .record-card, .hist-section {
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.session-picker select, select {
+  font-family: inherit; border-radius: 12px; background-color: var(--bg-panel); border-color: var(--border);
+}
+
+/* ---------- Таблицы ---------- */
+table {
+  background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--r-lg);
+  border-collapse: separate; border-spacing: 0; overflow: hidden;
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+thead th { padding: 12px 12px 10px; font-size: 11px; letter-spacing: 0.08em; font-weight: 600; border-bottom-color: var(--border); }
+tbody td { padding: 10px 12px; border-bottom-color: var(--border); font-size: 14px; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr.player-row { transition: background 0.2s; }
+tbody tr.player-row:hover { background: var(--bg-row-hover); }
+.player-cell { gap: 12px; }
+.avatar { width: 34px; height: 34px; }
+.player-name { font-weight: 600; font-size: 14.5px; }
+.qual-divider td { background: transparent; padding: 14px 12px 6px; font-size: 12px; border-bottom: 0; }
+tr.detail-row td { background: var(--bg-row); }
+
+/* ---------- Рейтинг и динамика ---------- */
+.rating-cell { padding: 5px 11px; border-radius: var(--r-sm); font-weight: 700; font-size: 15px; letter-spacing: -0.01em; min-width: 62px; justify-content: center; }
+.rating-with-delta { gap: 10px; }
+.rating-delta { width: auto; height: auto; font-size: 12px; font-weight: 600; letter-spacing: 0; background: none; clip-path: none; padding: 0; border-radius: 0; }
+.rating-delta-up { color: var(--green); background: none; padding: 0; }
+.rating-delta-down { color: var(--red); background: none; padding: 0; }
+.rating-delta-flat { color: var(--text-faint); background: none; }
+.rating-delta-up::before, .rating-delta-down::before { font-size: 8px; margin-right: 3px; vertical-align: 1px; }
+.rating-delta-up::before { content: "▲"; }
+.rating-delta-down::before { content: "▼"; }
+
+/* ---------- Чипы и кнопки ---------- */
+.map-chip, .duel-chip, .hist-chip { transition: 0.18s; }
+.map-chip { border-radius: 999px; padding: 7px 14px; font-weight: 500; background: transparent; }
+.map-chip:hover { border-color: var(--stroke-hi); }
+.map-chip.active {
+  background: var(--panel-hi); color: var(--text); border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+.map-chip.active .map-chip-count { color: var(--text-dim); opacity: 1; }
+.duel-chip.active { background: var(--panel-hi); color: var(--text); border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); box-shadow: 0 0 0 3px var(--accent-bg); }
+.map-hero { border-radius: var(--r-lg); border: 1px solid var(--border); }
+.map-hero .map-chip.active { background: rgba(255, 255, 255, 0.2); color: #fff; border-color: rgba(255, 255, 255, 0.5); box-shadow: none; }
+
+footer { margin-top: 22px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ---------- Телефон: компактнее, чтобы таблица не шире экрана ---------- */
+@media (max-width: 640px) {
+  thead th { padding: 12px 8px 10px; }
+  tbody td { padding: 10px 8px; }
+  .player-cell { gap: 10px; }
+  .avatar { width: 32px; height: 32px; }
+  .rating-with-delta { gap: 6px; }
+  .rating-cell { min-width: 54px; padding: 5px 9px; }
+  .subtitle { margin-left: 0; }
+}
