@@ -1159,6 +1159,7 @@
   </div>
 
   <div id="sessionHeader"></div>
+  <div id="recapSection"></div>
   <div id="mapChips"></div>
   <div class="mobile-sort" id="mobileSort"></div>
   <div id="podiumSection"></div>
@@ -1379,6 +1380,7 @@
     renderSubtitle();
     renderBanner();
     renderSessionHeader();
+    renderSessionRecap();
     renderMapChips();
     renderMobileSort();
     renderPodium();
@@ -1517,6 +1519,37 @@
     el.innerHTML =
       '<div class="banner">Порог квалификации вырос до ' + drop.threshold + " " + pluralRu(drop.threshold, "карты", "карт", "карт") + ' — вне рейтинга: ' +
       drop.droppedNames.map(escapeHtml).join(", ") + "</div>";
+  }
+
+  // Итоги вечера на «Сессиях»: топ-3 по рейтингу вечера и самые большие рост/просадка рейтинга.
+  // Берётся готовый s.recap из stats.json (считается в scripts/lib/recap.mjs), ничего не пересчитываем.
+  function renderSessionRecap() {
+    var el = document.getElementById("recapSection");
+    var s = currentSession();
+    var r = s && s.recap;
+    if (state.tab !== "lastSession" || !r || !r.top || !r.top.length) { el.innerHTML = ""; return; }
+    var byId = {};
+    (state.data.allTime && state.data.allTime.players || []).forEach(function (p) { byId[p.steamid64] = p; });
+    (s.players || []).forEach(function (p) { byId[p.steamid64] = p; });
+    function who(id) { return byId[id] || { name: "?", avatarUrl: "" }; }
+    function avatar(p, cls) {
+      return p.avatarUrl ? '<img class="' + cls + '" src="' + escapeHtml(p.avatarUrl) + '" alt="" loading="lazy">' : '<div class="' + cls + '"></div>';
+    }
+    var cards = r.top.map(function (x, i) {
+      var p = who(x.steamid64);
+      return '<div class="recap-card place-' + (i + 1) + '"><span class="recap-rk">#' + (i + 1) + "</span>" + avatar(p, "recap-av") +
+        '<div class="recap-text"><div class="recap-nm">' + escapeHtml(p.name) + '</div><div class="recap-k">K/D ' + fmt2(x.kd) + " · " +
+        x.wins + " из " + x.maps + " побед</div></div>" +
+        '<div class="recap-v">' + fmtRating(x.rating) + "</div></div>";
+    }).join("");
+    function trend(label, x) {
+      if (!x) return "";
+      var p = who(x.steamid64);
+      return '<div class="recap-trend-item">' + avatar(p, "recap-tav") + "<span>" + label + ": <b>" + escapeHtml(p.name) + "</b></span>" +
+        '<span class="rating-delta ' + ratingDeltaClass(x.delta) + ' recap-delta">' + fmtRatingDelta(x.delta) + "</span></div>";
+    }
+    var trends = trend("Рост за вечер", r.rise) + trend("Просадка", r.drop);
+    el.innerHTML = '<div class="recap-cards">' + cards + "</div>" + (trends ? '<div class="recap-trends">' + trends + "</div>" : "");
   }
 
   function renderSessionHeader() {
