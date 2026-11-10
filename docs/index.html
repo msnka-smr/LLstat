@@ -3216,6 +3216,12 @@
   var WEAPON_CROSSHAIR_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
     'stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="6.5"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></svg>';
 
+  // Значок «в голову»: голова в профиль с мишенью. Цвет — currentColor, «прорезь» — через --hs-hole.
+  var WEAPON_HS_SVG = '<svg class="wp-hs-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+    '<path fill="currentColor" d="M4.5 11a6.9 6.9 0 0 1 13.7-1.2l1.9 3.4c.2.4 0 .8-.5.9l-1.5.3v2.2c0 .9-.6 1.5-1.4 1.7V21H8.2v-3.6C6 16.4 4.5 14 4.5 11z"/>' +
+    '<circle cx="11.3" cy="10.2" r="2.9" fill="none" stroke="var(--hs-hole)" stroke-width="1.4"/>' +
+    '<path d="M11.3 5.9v2M11.3 12.5v2M7 10.2h2M13.6 10.2h2" stroke="var(--hs-hole)" stroke-width="1.4" stroke-linecap="round"/></svg>';
+
   // Места 1–3 — цветной кружок с номером, остальные — просто число.
   function weaponMedalHtml(place) {
     return '<span class="wp-medal m' + place + '" title="' + place + ' место">' + place + "</span>";
@@ -3263,8 +3269,8 @@
             .map(function (n) { return escapeHtml(n) + " " + members[n][0]; }).join(" · ") + "</div>"
         : "";
       return '<div class="wp-tile"><div class="wp-tile-head">' + weaponIconHtml(r.gid) + "<span>" + escapeHtml(g.label) + "</span></div>" +
-        '<div class="wp-kills">' + r.kills + "</div>" +
-        '<div class="wp-sub">в голову: ' + weaponHsText(g, r.hsPc) + "</div>" +
+        '<div class="wp-krow"><div class="wp-kills">' + r.kills + "</div>" +
+        (g.noHs || r.hsPc == null ? "" : '<div class="wp-hs" title="Процент убийств в голову">' + WEAPON_HS_SVG + r.hsPc + "%</div>") + "</div>" +
         '<div class="wp-bar"><i style="width:' + r.share + '%"></i></div>' +
         '<div class="wp-place">' + weaponPlaceHtml(r.place, r.of) + '</div><div class="wp-sub">' + r.share + "% от всех убийств игрока</div>" +
         membersHtml + "</div>";
@@ -3292,7 +3298,7 @@
         '<td class="wp-barcell"><div class="wp-bar"><i style="width:' + Math.round((r.kills / rows[0].kills) * 100) + '%"></i></div></td>' +
         "<td><b>" + r.kills + "</b></td><td>" + weaponHsText(g, r.hsPc) + "</td></tr>";
     }).join("");
-    return chips + hero + '<div class="wp-scroll"><table class="wp-table wp-leaders"><tr><th>#</th><th>Игрок</th><th></th><th>Убийств</th><th>В голову</th></tr>' +
+    return chips + hero + '<div class="wp-scroll"><table class="wp-table wp-leaders"><tr><th>#</th><th>Игрок</th><th></th><th>Убийств</th><th class="wp-hs-th" title="Процент убийств в голову">' + WEAPON_HS_SVG + '</th></tr>' +
       body + "</table></div>";
   }
 

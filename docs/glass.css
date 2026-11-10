@@ -224,3 +224,49 @@ tr.unqualified .spark-cell svg { opacity: 0.55; }
   .podium-place { position: static; grid-column: 3; grid-row: 3; text-align: right; }
   .podium-card[data-place="1"] { order: 1; } .podium-card[data-place="2"] { order: 2; } .podium-card[data-place="3"] { order: 3; }
 }
+
+/* ---------- Вкладка «Оружие» ---------- */
+.wp-tiles { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.wp-tile {
+  border-radius: var(--r-lg); padding: 14px 16px; background: var(--bg-panel);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: transform 0.25s, border-color 0.25s;
+}
+.wp-tile:hover { transform: translateY(-2px); border-color: var(--stroke-hi); }
+.wp-tile-head { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 6px; color: var(--text-dim); }
+.wp-img { width: auto; max-width: 78%; height: 58px; background: none; border-radius: 0; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35)); }
+.wp-ico { width: 44px; height: 44px; border-radius: 12px; }
+.wp-krow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.wp-kills { font-size: 34px; letter-spacing: -0.03em; }
+.wp-hs {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 700; padding: 5px 9px 5px 7px; border-radius: 999px;
+  color: var(--text); background: color-mix(in srgb, var(--accent2) 16%, transparent); border: 1px solid color-mix(in srgb, var(--accent2) 35%, transparent);
+  --hs-hole: color-mix(in srgb, var(--accent2) 16%, var(--bg));
+}
+.wp-hs-i { width: 18px; height: 18px; flex: none; color: var(--accent2); }
+.wp-hs-th { color: var(--accent2) !important; --hs-hole: var(--bg); }
+.wp-hs-th .wp-hs-i { display: inline-block; vertical-align: middle; width: 18px; height: 18px; }
+.wp-bar { height: 5px; border-radius: 3px; background: var(--border); margin: 8px 0 9px; }
+.wp-bar i { border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.wp-hero { border-radius: var(--r-md); padding: 16px 20px; font-size: 14px; line-height: 1.55; background: var(--bg-panel);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); box-shadow: var(--shadow); }
+.wp-hero b { color: var(--gold); font-weight: 650; }
+.wp-scroll { border-radius: var(--r-lg); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); box-shadow: var(--shadow); }
+.wp-table th { text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; font-weight: 600; color: var(--text-faint); padding: 12px 10px 10px; }
+.wp-table td { padding: 10px; }
+.wp-table tr[data-player]:hover td { background: var(--bg-row-hover); }
+.wp-table td.wp-barcell .wp-bar { height: 6px; margin: 0; }
+.wp-crown { color: var(--gold); }
+.wp-medal { box-shadow: none; }
+.wp-medal.m1 { background: linear-gradient(135deg, #ffe08a, #e0a82e); }
+.wp-medal.m2 { background: linear-gradient(135deg, #f1f3f8, #aab2c6); }
+.wp-medal.m3 { background: linear-gradient(135deg, #f5c093, #c27a3d); }
+@media (max-width: 520px) {
+  .wp-tiles { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wp-tile { padding: 12px; }
+  .wp-img { height: 46px; }
+  .wp-kills { font-size: 28px; }
+  .wp-hs { padding: 4px 7px 4px 5px; font-size: 11.5px; }
+  .wp-hs-i { width: 16px; height: 16px; }
+}
