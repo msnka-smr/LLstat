@@ -460,5 +460,47 @@
     "playedAt": 1793824162,
     "statsTier": "basic",
     "status": "finished"
+  },
+  {
+    "idLobby": 13725288,
+    "map": "de_dust2",
+    "playedAt": 1794413279,
+    "statsTier": "basic",
+    "status": "finished"
+  },
+  {
+    "idLobby": 13727582,
+    "map": "de_ancient",
+    "playedAt": 1794416093,
+    "statsTier": "basic",
+    "status": "finished"
+  },
+  {
+    "idLobby": 13729485,
+    "map": "de_cache",
+    "playedAt": 1794419663,
+    "statsTier": "basic",
+    "status": "finished"
+  },
+  {
+    "idLobby": 13732179,
+    "map": "de_mirage",
+    "playedAt": 1794423508,
+    "statsTier": "basic",
+    "status": "finished"
+  },
+  {
+    "idLobby": 13735028,
+    "map": "de_nuke",
+    "playedAt": 1794426100,
+    "statsTier": "basic",
+    "status": "finished"
+  },
+  {
+    "idLobby": 13736804,
+    "map": "de_inferno",
+    "playedAt": 1794428025,
+    "statsTier": "basic",
+    "status": "finished"
   }
 ]
