@@ -876,7 +876,8 @@
     flex-shrink: 0;
     accent-color: var(--accent);
   }
-  .draft-row .draft-name { flex: 1; font-size: 13px; }
+  .draft-row .draft-text { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; }
+  .draft-row .draft-name { flex: 1; min-width: 0; font-size: 13px; overflow-wrap: anywhere; }
   .draft-row .draft-meta {
     font-size: 12px;
     color: var(--text-faint);
@@ -1128,7 +1129,7 @@
   }
   .record-context a { color: var(--text-dim); }
 </style>
-<link rel="stylesheet" href="glass.css?v=2" /><!-- при правке glass.css увеличить v, иначе у посетителей 10 минут держится старая версия из кеша -->
+<link rel="stylesheet" href="glass.css?v=5" /><!-- при правке glass.css увеличить v, иначе у посетителей 10 минут держится старая версия из кеша -->
 </head>
 <body>
   <div class="title-row">
@@ -1717,7 +1718,7 @@
     }).join("") + "</div>" : "";
 
     document.getElementById("tableWrap").innerHTML = legendHtml +
-      "<table><thead>" + headHtml + "</thead><tbody>" + bodyHtml + "</tbody></table>";
+      '<table class="players-table"><thead>' + headHtml + "</thead><tbody>" + bodyHtml + "</tbody></table>";
 
     document.querySelectorAll("thead th[data-sort]").forEach(function (th) {
       th.addEventListener("click", function () {
@@ -1753,6 +1754,11 @@
 
   // Ссылка на профиль Steam — только на вкладке "За всё время"; на остальных
   // (сессия, карты) ник просто текст, без гиперссылки.
+  // Строка под ником: каждая группа ("K/D 1.45") неразрывная, чтобы подпись
+  // не отрывалась от цифры; если места мало, переносится целая группа.
+  function metaHtml(parts) {
+    return parts.map(function (t) { return '<span class="pm-g">' + t + "</span>"; }).join("");
+  }
   function playerCellHtml(row, metaText, linked) {
     var avatarHtml = row.avatarUrl
       ? '<img class="avatar" src="' + escapeHtml(row.avatarUrl) + '" alt="" loading="lazy">'
@@ -1836,7 +1842,7 @@
       ? row.mapsPlayed
       : row.mapsPlayed + ' <small>/ ' + state.data.qualification.threshold + "</small>";
 
-    var metaText = mapsCount(row.mapsPlayed) + " · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
+    var metaText = metaHtml([mapsCount(row.mapsPlayed), "K " + row.k + " - D " + row.d, "K/D " + fmt2(row.kd)]);
 
     var cells = "";
     cells += playerCellHtml(row, metaText, state.tab === "allTime");
@@ -1861,7 +1867,7 @@
   // мобильном часть (К-D, WR) прячется — кликабельна, как остальные вкладки,
   // чтобы на телефоне эти цифры тоже были доступны через detailRowHtml.
   function mapRowHtml(row) {
-    var metaText = fmtInt(row.totalRounds) + " раундов · K " + row.k + " - D " + row.d + " · K/D " + fmt2(row.kd);
+    var metaText = metaHtml([fmtInt(row.totalRounds) + " раундов", "K " + row.k + " - D " + row.d, "K/D " + fmt2(row.kd)]);
     var cells = playerCellHtml(row, metaText, false);
 
     MAP_COLUMNS.slice(1).forEach(function (c) {
@@ -2474,8 +2480,8 @@
       return '<label class="draft-row">' +
         '<input type="checkbox" data-steamid="' + escapeHtml(p.steamid64) + '">' +
         avatarHtml +
-        '<span class="draft-name">' + escapeHtml(p.name) + "</span>" +
-        '<span class="draft-meta">рейтинг ' + fmtRating(p.rating) + " · K/D " + fmt2(p.kd) + "</span>" +
+        '<span class="draft-text"><span class="draft-name">' + escapeHtml(p.name) + "</span>" +
+        '<span class="draft-meta"><span class="pm-g">рейтинг ' + fmtRating(p.rating) + '</span><span class="pm-g">K/D ' + fmt2(p.kd) + "</span></span></span>" +
         "</label>";
     }).join("");
 
