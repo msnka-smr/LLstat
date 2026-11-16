@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-11T20:15:17.851Z",
+  "generatedAt": "2026-11-16T08:29:32.869Z",
   "totalMapsCollected": 72,
   "qualification": {
     "threshold": 29,
@@ -30121,7 +30121,8 @@
           "place": 3
         }
       ],
-      "more": 0
+      "more": 0,
+      "extra": []
     },
     {
       "id": "best-kd-diff",
@@ -30160,7 +30161,8 @@
           "place": 3
         }
       ],
-      "more": 0
+      "more": 0,
+      "extra": []
     },
     {
       "id": "best-kd",
@@ -30199,7 +30201,8 @@
           "place": 3
         }
       ],
-      "more": 0
+      "more": 0,
+      "extra": []
     },
     {
       "id": "carry-in-loss",
@@ -30238,7 +30241,8 @@
           "place": 2
         }
       ],
-      "more": 0
+      "more": 0,
+      "extra": []
     },
     {
       "id": "win-streak",
@@ -30268,7 +30272,16 @@
           "place": 3
         }
       ],
-      "more": 1
+      "more": 1,
+      "extra": [
+        {
+          "steamid64": "76561198129162397",
+          "value": 9,
+          "from": 1791995383,
+          "to": 1792602311,
+          "place": 3
+        }
+      ]
     },
     {
       "id": "kd-streak",
@@ -30298,7 +30311,16 @@
           "place": 3
         }
       ],
-      "more": 1
+      "more": 1,
+      "extra": [
+        {
+          "steamid64": "76561198054359751",
+          "value": 13,
+          "from": 1787155757,
+          "to": 1792613745,
+          "place": 3
+        }
+      ]
     },
     {
       "id": "attendance-streak",
@@ -30335,7 +30357,8 @@
           "place": 1
         }
       ],
-      "more": 0
+      "more": 0,
+      "extra": []
     },
     {
       "id": "biggest-win",
@@ -30377,7 +30400,53 @@
           "place": 3
         }
       ],
-      "more": 4
+      "more": 4,
+      "extra": [
+        {
+          "map": "de_inferno",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1789578381,
+          "url": "https://cybershoke.net/match/11820488",
+          "place": 3
+        },
+        {
+          "map": "de_nuke",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1790794247,
+          "url": "https://cybershoke.net/match/12288624",
+          "place": 3
+        },
+        {
+          "map": "de_mirage",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1793205924,
+          "url": "https://cybershoke.net/match/13241654",
+          "place": 3
+        },
+        {
+          "map": "de_nuke",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1793213457,
+          "url": "https://cybershoke.net/match/13248013",
+          "place": 3
+        }
+      ]
     },
     {
       "id": "closest-match",
@@ -30419,7 +30488,31 @@
           "place": 2
         }
       ],
-      "more": 2
+      "more": 2,
+      "extra": [
+        {
+          "map": "de_nuke",
+          "score": [
+            16,
+            14
+          ],
+          "rounds": 30,
+          "playedAt": 1793810672,
+          "url": "https://cybershoke.net/match/13505525",
+          "place": 2
+        },
+        {
+          "map": "de_dust2",
+          "score": [
+            16,
+            14
+          ],
+          "rounds": 30,
+          "playedAt": 1793815156,
+          "url": "https://cybershoke.net/match/13507889",
+          "place": 2
+        }
+      ]
     },
     {
       "id": "longest-map",
@@ -30461,7 +30554,42 @@
           "place": 3
         }
       ],
-      "more": 3
+      "more": 3,
+      "extra": [
+        {
+          "map": "de_dust2",
+          "score": [
+            16,
+            14
+          ],
+          "rounds": 30,
+          "playedAt": 1792599124,
+          "url": "https://cybershoke.net/match/12974570",
+          "place": 3
+        },
+        {
+          "map": "de_nuke",
+          "score": [
+            16,
+            14
+          ],
+          "rounds": 30,
+          "playedAt": 1793810672,
+          "url": "https://cybershoke.net/match/13505525",
+          "place": 3
+        },
+        {
+          "map": "de_dust2",
+          "score": [
+            16,
+            14
+          ],
+          "rounds": 30,
+          "playedAt": 1793815156,
+          "url": "https://cybershoke.net/match/13507889",
+          "place": 3
+        }
+      ]
     },
     {
       "id": "shortest-map",
@@ -30503,7 +30631,53 @@
           "place": 3
         }
       ],
-      "more": 4
+      "more": 4,
+      "extra": [
+        {
+          "map": "de_inferno",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1789578381,
+          "url": "https://cybershoke.net/match/11820488",
+          "place": 3
+        },
+        {
+          "map": "de_nuke",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1790794247,
+          "url": "https://cybershoke.net/match/12288624",
+          "place": 3
+        },
+        {
+          "map": "de_mirage",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1793205924,
+          "url": "https://cybershoke.net/match/13241654",
+          "place": 3
+        },
+        {
+          "map": "de_nuke",
+          "score": [
+            13,
+            3
+          ],
+          "rounds": 16,
+          "playedAt": 1793213457,
+          "url": "https://cybershoke.net/match/13248013",
+          "place": 3
+        }
+      ]
     },
     {
       "id": "worst-kd-diff",
@@ -30542,7 +30716,8 @@
           "place": 3
         }
       ],
-      "more": 0
+      "more": 0,
+      "extra": []
     },
     {
       "id": "worst-kd",
@@ -30581,7 +30756,8 @@
           "place": 3
         }
       ],
-      "more": 0
+      "more": 0,
+      "extra": []
     },
     {
       "id": "most-deaths",
@@ -30620,7 +30796,29 @@
           "place": 3
         }
       ],
-      "more": 2
+      "more": 2,
+      "extra": [
+        {
+          "steamid64": "76561198039138241",
+          "value": 39,
+          "k": 49,
+          "d": 39,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 3
+        },
+        {
+          "steamid64": "76561198357423221",
+          "value": 39,
+          "k": 23,
+          "d": 39,
+          "map": "de_dust2",
+          "playedAt": 1784658564,
+          "url": "https://cybershoke.net/match/10127963",
+          "place": 3
+        }
+      ]
     },
     {
       "id": "loss-streak",
@@ -30650,7 +30848,16 @@
           "place": 3
         }
       ],
-      "more": 1
+      "more": 1,
+      "extra": [
+        {
+          "steamid64": "76561198681103731",
+          "value": 10,
+          "from": 1781034756,
+          "to": 1785958403,
+          "place": 3
+        }
+      ]
     }
   ],
   "maps": [

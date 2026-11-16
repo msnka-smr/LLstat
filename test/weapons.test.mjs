@@ -37,6 +37,7 @@ test("groupOf puts weapons into groups; M4A1 and M4A4 share one, unknown weapons
   assert.equal(W.groupOf("M4A4"), "m4");
   assert.equal(W.groupOf("MAG-7"), "shotguns");
   assert.equal(W.groupOf("Molotov"), "grenades");
+  assert.equal(W.groupOf("Zeus x27"), "zeus");
   assert.equal(W.groupOf("Weird Gun"), "other");
 });
 

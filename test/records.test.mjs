@@ -212,6 +212,19 @@ test("more counts players tied with the last shown place who did not fit", () =>
   assert.equal(r.more, 2);
 });
 
+test("extra holds the tied entries that did not fit, with place, in the same order", () => {
+  const maps = [mapOf({ day: 1, players: ["A", "B", "C", "D", "E"].map((id) => p(id, 20, 10, true)) })];
+  const r = rec(computeRecords(maps, sessionsOf(maps)), "most-kills");
+  assert.equal(r.extra.length, r.more);
+  assert.deepEqual(r.extra.map((e) => [e.steamid64, e.place, e.value]), [["D", 1, 20], ["E", 1, 20]]);
+});
+
+test("every record has an extra array matching more", () => {
+  const maps = [mapOf({ day: 1, players: ["A", "B", "C", "D", "E"].map((id) => p(id, 20, 10, true)) })];
+  assert.ok(computeRecords(maps, sessionsOf(maps)).every((r) => Array.isArray(r.extra) && r.extra.length === r.more));
+  assert.ok(computeRecords([], []).every((r) => r.extra.length === 0));
+});
+
 test("every record has a numeric more field", () => {
   assert.ok(computeRecords([], []).every((r) => r.more === 0));
 });

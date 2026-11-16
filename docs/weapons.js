@@ -18,6 +18,7 @@
     { id: "shotguns", label: "Дробовики", weapons: ["Nova", "XM1014", "MAG-7"] },
     { id: "lmg", label: "Негев", weapons: ["Negev"] },
     { id: "knife", label: "Нож", weapons: ["Knife"], noHs: true },
+    { id: "zeus", label: "Zeus", weapons: ["Zeus x27"], noHs: true },
     { id: "grenades", label: "Гранаты", weapons: ["HE Grenade", "Molotov", "Incendiary Grenade"], noHs: true },
     { id: "other", label: "Прочее", weapons: [] }, // оружие, которого нет в списке выше
   ];

@@ -2,7 +2,7 @@
 // Личные рекорды и серии — один игрок на одно место (его лучший результат),
 // матчевые — по картам. Равные значения делят место (1, 1, 1 или 1, 2, 2), а
 // игроки с таким же результатом, не поместившиеся в топ-3, считаются в `more`
-// ("и ещё N с таким же результатом"); исключение — «Железная посещаемость»: там
+// ("и ещё N с таким же результатом"; сами они лежат в `extra`, сайт раскрывает их по клику); исключение — «Железная посещаемость»: там
 // показаны все, кто делит 1-е место. Порядок среди равных детерминирован:
 // раньше достигший — выше, затем по mapId/steamid64.
 //
@@ -37,8 +37,8 @@ function pickTop(candidates, dir, { allLeaders = false } = {}) {
   const limit = allLeaders ? Math.max(TOP_N, sorted.filter((c) => c.place === 1).length) : TOP_N;
   const top = sorted.slice(0, limit);
   const lastRank = top.length ? top[top.length - 1].rank : null;
-  const more = sorted.slice(limit).filter((c) => c.rank === lastRank).length;
-  return { top, more };
+  const rest = sorted.slice(limit).filter((c) => c.rank === lastRank);
+  return { top, more: rest.length, rest };
 }
 function bestPerPlayer(candidates, dir, options) {
   const best = new Map();
@@ -64,13 +64,11 @@ function playerCandidates(maps, filter, rankOf) {
   return out;
 }
 function personalTop(maps, { filter = () => true, rankOf, dir, value = (c) => c.rank }) {
-  const { top, more } = bestPerPlayer(playerCandidates(maps, filter, rankOf), dir);
-  return {
-    top: top.map((c) => ({
-      steamid64: c.steamid64, value: value(c), k: c.k, d: c.d, map: c.map, playedAt: c.playedAt, url: c.url, place: c.place,
-    })),
-    more,
-  };
+  const { top, more, rest } = bestPerPlayer(playerCandidates(maps, filter, rankOf), dir);
+  const entry = (c) => ({
+    steamid64: c.steamid64, value: value(c), k: c.k, d: c.d, map: c.map, playedAt: c.playedAt, url: c.url, place: c.place,
+  });
+  return { top: top.map(entry), more, extra: rest.map(entry) };
 }
 
 // Самая длинная серия подряд карт игрока, где predicate истинен (>= MIN_STREAK).
@@ -93,11 +91,9 @@ function streakTop(runsByPlayer, options) {
   for (const [steamid64, run] of runsByPlayer) {
     if (run) candidates.push({ steamid64, rank: run.len, playedAt: run.to, tie: steamid64, run });
   }
-  const { top, more } = bestPerPlayer(candidates, "desc", options);
-  return {
-    top: top.map((c) => ({ steamid64: c.steamid64, value: c.run.len, from: c.run.from, to: c.run.to, place: c.place })),
-    more,
-  };
+  const { top, more, rest } = bestPerPlayer(candidates, "desc", options);
+  const entry = (c) => ({ steamid64: c.steamid64, value: c.run.len, from: c.run.from, to: c.run.to, place: c.place });
+  return { top: top.map(entry), more, extra: rest.map(entry) };
 }
 
 function matchTop(maps, { rankOf, dir }) {
@@ -113,8 +109,9 @@ function matchTop(maps, { rankOf, dir }) {
       entry: { map: m.map, score: [hi, lo], rounds: m.totalRounds ?? hi + lo, playedAt: m.playedAt, url: matchUrl(m.lobbyId) },
     });
   }
-  const { top, more } = pickTop(candidates, dir);
-  return { top: top.map((c) => ({ ...c.entry, place: c.place })), more };
+  const { top, more, rest } = pickTop(candidates, dir);
+  const entry = (c) => ({ ...c.entry, place: c.place });
+  return { top: top.map(entry), more, extra: rest.map(entry) };
 }
 
 // Ничья (равный счёт) — не победа и не поражение: won у всех игроков карты = null.
@@ -155,7 +152,7 @@ export function computeRecords(allMaps, sessions) {
 
   const kdValue = (c) => round2(c.rank);
   const diffOf = (p) => p.k - p.d;
-  const record = (id, group, title, hint, result) => ({ id, group, title, hint, top: result.top, more: result.more });
+  const record = (id, group, title, hint, result) => ({ id, group, title, hint, top: result.top, more: result.more, extra: result.extra ?? [] });
   return [
     record("most-kills", "personal", "Больше всего убийств за карту", "личный максимум за одну карту",
       personalTop(maps, { rankOf: (p) => p.k, dir: "desc" })),
