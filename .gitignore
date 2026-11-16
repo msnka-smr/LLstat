@@ -3,3 +3,4 @@ node_modules/
 bot/.dev.vars
 bot/.wrangler/
 .superpowers/
+secrets for prjct.txt
